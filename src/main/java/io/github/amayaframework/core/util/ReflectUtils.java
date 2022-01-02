@@ -1,7 +1,7 @@
 package io.github.amayaframework.core.util;
 
-import io.github.amayaframework.core.methods.HttpMethod;
 import com.github.romanqed.jutils.structs.Pair;
+import io.github.amayaframework.core.methods.HttpMethod;
 import org.atteo.classindex.ClassIndex;
 
 import java.lang.annotation.Annotation;

@@ -1,5 +1,6 @@
 package io.github.amayaframework.core.scanners;
 
+import com.github.romanqed.jutils.structs.Pair;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.controllers.Controller;
@@ -7,7 +8,6 @@ import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routers.Route;
 import io.github.amayaframework.core.util.ReflectUtils;
 import io.github.amayaframework.core.wrapping.Packer;
-import com.github.romanqed.jutils.structs.Pair;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
