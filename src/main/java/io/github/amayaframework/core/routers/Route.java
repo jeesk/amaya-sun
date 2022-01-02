@@ -4,7 +4,7 @@ import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.core.util.Variable;
-import com.github.amayaframework.filters.StringFilter;
+import io.github.amayaframework.filters.StringFilter;
 import com.github.romanqed.jutils.util.Checks;
 
 import java.util.ArrayList;

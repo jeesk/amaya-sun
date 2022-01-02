@@ -1,8 +1,8 @@
 package io.github.amayaframework.core.scanners;
 
 import io.github.amayaframework.core.util.ReflectUtils;
-import com.github.amayaframework.filters.Filter;
-import com.github.amayaframework.filters.NamedFilter;
+import io.github.amayaframework.filters.Filter;
+import io.github.amayaframework.filters.NamedFilter;
 
 import java.util.Map;
 import java.util.Objects;

@@ -3,7 +3,7 @@ package io.github.amayaframework.core.wrapping;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.util.ParseUtil;
-import com.github.amayaframework.filters.ContentFilter;
+import io.github.amayaframework.filters.ContentFilter;
 import net.sf.cglib.reflect.FastMethod;
 
 import java.util.function.Function;

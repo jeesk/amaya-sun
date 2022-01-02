@@ -3,8 +3,8 @@ package io.github.amayaframework.core.util;
 import io.github.amayaframework.core.routers.InvalidFormatException;
 import io.github.amayaframework.core.routers.Route;
 import io.github.amayaframework.core.scanners.FilterScanner;
-import com.github.amayaframework.filters.ContentFilter;
-import com.github.amayaframework.filters.StringFilter;
+import io.github.amayaframework.filters.ContentFilter;
+import io.github.amayaframework.filters.StringFilter;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
