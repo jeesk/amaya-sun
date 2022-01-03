@@ -75,11 +75,12 @@ def customizePom(pom) {
 
         root.children().last() + {
             resolveStrategy = DELEGATE_FIRST
-            description 'A set of basic utilities that make up the core of the framework and are intended for use in subsequent implementations.'
+            description 'A set of basic utilities that make up the core of the framework ' +
+                    'and are intended for use in subsequent implementations.'
             name 'core'
             url 'https://github.com/AmayaFramework/amaya-core'
             organization {
-                name 'io.github.romanqed'
+                name 'io.github.amayaframework'
                 url 'https://github.com/AmayaFramework'
             }
             issueManagement {
