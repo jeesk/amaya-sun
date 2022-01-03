@@ -1,5 +1,7 @@
 package io.github.amayaframework.core.contexts;
 
+import io.github.amayaframework.server.utils.HttpCode;
+
 public class Responses {
     public static HttpResponse responseWithCode(HttpCode code, Object body) {
         HttpResponse ret = new HttpResponse(code);

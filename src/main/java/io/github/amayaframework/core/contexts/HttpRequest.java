@@ -1,6 +1,7 @@
 package io.github.amayaframework.core.contexts;
 
 import io.github.amayaframework.core.wrapping.AbstractViewable;
+import io.github.amayaframework.server.utils.HeaderMap;
 
 import java.util.List;
 import java.util.Map;
