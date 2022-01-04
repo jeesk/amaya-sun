@@ -16,11 +16,7 @@ public abstract class PipelineAction<T, R> implements Function<T, R> {
         return name;
     }
 
-    protected void interrupt(String message, Object ret) {
-        throw new PipelineInterruptException(message, ret);
-    }
-
     protected void interrupt(Object ret) {
-        interrupt(null, ret);
+        throw new PipelineInterruptException(null, ret);
     }
 }
