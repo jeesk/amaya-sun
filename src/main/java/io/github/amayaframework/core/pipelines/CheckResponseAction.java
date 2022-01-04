@@ -23,7 +23,9 @@ public class CheckResponseAction extends PipelineAction<PipelineResult, HttpResp
         try {
             return (HttpResponse) result.getResult();
         } catch (ClassCastException e) {
-            interrupt(new HttpResponse(HttpCode.INTERNAL_SERVER_ERROR));
+            HttpResponse ret = new HttpResponse(HttpCode.INTERNAL_SERVER_ERROR);
+            ret.setBody(HttpCode.INTERNAL_SERVER_ERROR.getMessage());
+            interrupt(ret);
             return null;
         }
     }
