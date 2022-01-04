@@ -5,7 +5,6 @@ import io.github.amayaframework.core.methods.HttpMethod;
 import org.atteo.classindex.ClassIndex;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -56,10 +55,8 @@ public class ReflectUtils {
             if (!castType.isAssignableFrom(clazz)) {
                 continue;
             }
-            Constructor<?> constructor = clazz.getConstructors()[0];
-            constructor.setAccessible(true);
             V key = extractAnnotationValue(clazz.getAnnotation(annotation), value, valueType);
-            T instance = castType.cast(constructor.newInstance());
+            T instance = castType.cast(clazz.newInstance());
             ret.put(key, instance);
         }
         return ret;

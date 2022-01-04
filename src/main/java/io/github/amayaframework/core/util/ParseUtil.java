@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ParseUtil {
-    public static final Map<String, StringFilter> PARAM_FILTERS;
+    public static final Map<String, StringFilter> STRING_FILTERS;
     public static final Map<String, ContentFilter> CONTENT_FILTERS;
     public static final Pattern ROUTE = Pattern.compile("(?:/[^\\s/]+)+");
     private static final String PARAM_DELIMITER = ":";
@@ -24,12 +24,12 @@ public class ParseUtil {
 
     static {
         try {
-            PARAM_FILTERS = new FilterScanner<>(StringFilter.class).find();
+            STRING_FILTERS = Collections.unmodifiableMap(new FilterScanner<>(StringFilter.class).find());
         } catch (Exception e) {
             throw new IllegalStateException("Exception when scanning parameter filters!", e);
         }
         try {
-            CONTENT_FILTERS = new FilterScanner<>(ContentFilter.class).find();
+            CONTENT_FILTERS = Collections.unmodifiableMap(new FilterScanner<>(ContentFilter.class).find());
         } catch (Exception e) {
             throw new IllegalStateException("Exception when scanning content filters!", e);
         }
@@ -44,7 +44,7 @@ public class ParseUtil {
         if (split.length == 1) {
             return new Variable<>(split[0], null);
         }
-        return new Variable<>(split[0], PARAM_FILTERS.get(split[1]));
+        return new Variable<>(split[0], STRING_FILTERS.get(split[1]));
     }
 
     public static Map<String, Object> extractRouteParameters(Route route, String source) {

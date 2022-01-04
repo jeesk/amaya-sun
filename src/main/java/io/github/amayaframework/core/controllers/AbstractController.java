@@ -5,18 +5,20 @@ import io.github.amayaframework.core.routers.DuplicateException;
 import io.github.amayaframework.core.routers.Route;
 import io.github.amayaframework.core.routers.Router;
 import io.github.amayaframework.core.scanners.RouteScanner;
-import io.github.amayaframework.core.util.Config;
+import io.github.amayaframework.core.util.AmayaConfig;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public abstract class AbstractController implements Controller {
     private static final String DUPLICATE_PATTERN = "Method %s with path \"%s\" at controller %s";
     private final Router router;
+    private String route;
 
     public AbstractController() {
-        router = Config.INSTANCE.getRouter();
-        RouteScanner scanner = new RouteScanner(this, Config.INSTANCE.getRouteWrapper());
+        router = AmayaConfig.INSTANCE.getRouter();
+        RouteScanner scanner = new RouteScanner(this, AmayaConfig.INSTANCE.getRouteWrapper());
         Map<HttpMethod, List<Route>> found;
         try {
             found = scanner.find();
@@ -40,5 +42,15 @@ public abstract class AbstractController implements Controller {
     @Override
     public Router router() {
         return router;
+    }
+
+    @Override
+    public String getPath() {
+        return route;
+    }
+
+    @Override
+    public void setPath(String route) {
+        this.route = Objects.requireNonNull(route);
     }
 }

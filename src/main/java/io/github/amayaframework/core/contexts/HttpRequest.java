@@ -1,17 +1,30 @@
 package io.github.amayaframework.core.contexts;
 
-import io.github.amayaframework.core.wrapping.AbstractViewable;
+import io.github.amayaframework.core.wrapping.Viewable;
 import io.github.amayaframework.server.utils.HeaderMap;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class HttpRequest extends AbstractViewable implements HttpTransaction {
-    private HeaderMap headers;
+public class HttpRequest extends AbstractHttpTransaction implements Viewable {
+    private final Map<String, Object> fields;
     private Map<String, List<String>> queryParameters;
     private Map<String, Object> pathParameters;
-    private Object body;
+
+    public HttpRequest() {
+        fields = new ConcurrentHashMap<>();
+    }
+
+    @Override
+    public Object get(String name) {
+        return fields.get(name);
+    }
+
+    private void put(String name, Object value) {
+        this.fields.put(name, value);
+    }
 
     public Map<String, List<String>> getQueryParameters() {
         return queryParameters;
@@ -43,13 +56,9 @@ public class HttpRequest extends AbstractViewable implements HttpTransaction {
     }
 
     @Override
-    public Object getBody() {
-        return body;
-    }
-
-    @Override
-    public HeaderMap getHeaders() {
-        return headers;
+    public void setBody(Object body) {
+        super.setBody(body);
+        put("body", this.body);
     }
 
     public static class Builder {

@@ -37,13 +37,13 @@ public abstract class AbstractPacker implements Packer {
         if (!requireInject && parameters.length > 1) {
             throw new IllegalStateException("Too many parameters!");
         }
-        if (!ALLOWED_RETURN_TYPES.contains(returnType)) {
+        if (!HttpResponse.class.isAssignableFrom(returnType) && !ALLOWED_RETURN_TYPES.contains(returnType)) {
             throw new IllegalStateException(
                     "Invalid return type: " + returnType.getName() + "! Allowed: " + ALLOWED_RETURN_TYPES
             );
         }
         Class<?> first = parameters[0].getType();
-        if (!ALLOWED_TYPES.contains(first)) {
+        if (!HttpRequest.class.isAssignableFrom(first) && !ALLOWED_TYPES.contains(first)) {
             throw new IllegalStateException(
                     "Invalid first parameter type: " + first.getName() + "! Allowed: " + ALLOWED_TYPES
             );

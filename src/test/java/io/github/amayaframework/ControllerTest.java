@@ -61,7 +61,7 @@ class Correct extends AbstractController {
 
     @Post
     public HttpResponse post(HttpRequest request) {
-        return ok( "post");
+        return ok("post");
     }
 
     @Post("/{id}")

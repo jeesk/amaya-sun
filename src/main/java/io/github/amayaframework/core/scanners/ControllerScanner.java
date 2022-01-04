@@ -7,10 +7,12 @@ import io.github.amayaframework.core.util.ReflectUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
-public class ControllerScanner implements Scanner<Map<String, Controller>> {
+public class ControllerScanner implements Scanner<Set<Controller>> {
     private final Class<? extends Annotation> annotationClass;
 
     public ControllerScanner(Class<? extends Annotation> annotationClass) {
@@ -18,11 +20,11 @@ public class ControllerScanner implements Scanner<Map<String, Controller>> {
     }
 
     @Override
-    public Map<String, Controller> find()
+    public Set<Controller> find()
             throws InvocationTargetException, InstantiationException, IllegalAccessException {
-        Map<String, Controller> ret =
+        Map<String, Controller> found =
                 ReflectUtils.foundAnnotatedWithValue(annotationClass, Controller.class, String.class);
-        for (String path : ret.keySet()) {
+        for (String path : found.keySet()) {
             if (path.equals("/")) {
                 path = "";
             }
@@ -30,6 +32,7 @@ public class ControllerScanner implements Scanner<Map<String, Controller>> {
                 throw new InvalidRouteFormatException(path);
             }
         }
-        return ret;
+        found.forEach((path, controller) -> controller.setPath(path));
+        return new HashSet<>(found.values());
     }
 }
