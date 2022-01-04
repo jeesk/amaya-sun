@@ -54,6 +54,7 @@ public class ParseRequestAction extends PipelineAction<HttpExchange, Pair<HttpRe
         BufferedReader reader = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), charset));
         String body = reader.lines().reduce("", (left, right) -> left + right + "\n");
         HttpRequest request = new HttpRequest.Builder().
+                method(method).
                 headers(exchange.getRequestHeaders()).
                 queryParameters(query).
                 pathParameters(params).

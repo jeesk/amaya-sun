@@ -1,5 +1,6 @@
 package io.github.amayaframework.core.contexts;
 
+import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.wrapping.Viewable;
 import io.github.amayaframework.server.utils.HeaderMap;
 
@@ -10,11 +11,16 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class HttpRequest extends AbstractHttpTransaction implements Viewable {
     private final Map<String, Object> fields;
+    private HttpMethod method;
     private Map<String, List<String>> queryParameters;
     private Map<String, Object> pathParameters;
 
     public HttpRequest() {
         fields = new ConcurrentHashMap<>();
+    }
+
+    public HttpMethod getMethod() {
+        return method;
     }
 
     @Override
@@ -70,6 +76,11 @@ public class HttpRequest extends AbstractHttpTransaction implements Viewable {
 
         public Builder headers(HeaderMap headers) {
             request.headers = Objects.requireNonNull(headers);
+            return this;
+        }
+
+        public Builder method(HttpMethod method) {
+            request.method = Objects.requireNonNull(method);
             return this;
         }
 
