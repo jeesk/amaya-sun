@@ -11,26 +11,14 @@ public class CheckResponseAction extends PipelineAction<PipelineResult, HttpResp
 
     @Override
     public HttpResponse apply(PipelineResult result) {
-        Exception exception = result.getException();
-        if (exception != null) {
-            if (exception instanceof IllegalArgumentException) {
-                interrupt(reject(HttpCode.BAD_REQUEST));
-            }
-            if (exception instanceof NotFoundException) {
-                interrupt(reject(HttpCode.NOT_FOUND));
-            }
+        if (result.getException() != null) {
+            reject(HttpCode.INTERNAL_SERVER_ERROR);
         }
         try {
             return (HttpResponse) result.getResult();
         } catch (ClassCastException e) {
-            interrupt(reject(HttpCode.INTERNAL_SERVER_ERROR));
+            reject(HttpCode.INTERNAL_SERVER_ERROR);
             return null;
         }
-    }
-
-    private HttpResponse reject(HttpCode code) {
-        HttpResponse ret = new HttpResponse(code);
-        ret.setBody(code.getMessage());
-        return ret;
     }
 }

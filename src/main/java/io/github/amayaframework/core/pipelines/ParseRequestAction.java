@@ -2,64 +2,44 @@ package io.github.amayaframework.core.pipelines;
 
 import com.github.romanqed.jutils.structs.Pair;
 import io.github.amayaframework.core.contexts.HttpRequest;
-import io.github.amayaframework.core.methods.HttpMethod;
-import io.github.amayaframework.core.routers.InvalidFormatException;
 import io.github.amayaframework.core.routers.Route;
-import io.github.amayaframework.core.routers.Router;
 import io.github.amayaframework.core.util.AmayaConfig;
 import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.server.interfaces.HttpExchange;
+import io.github.amayaframework.server.utils.HttpCode;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
-public class ParseRequestAction extends PipelineAction<HttpExchange, Pair<HttpRequest, Route>> {
-    private final Router router;
-    private final int length;
+public class ParseRequestAction extends PipelineAction<RequestData, Pair<HttpRequest, Route>> {
     private final Charset charset = AmayaConfig.INSTANCE.getCharset();
 
-    public ParseRequestAction(Router router, String path) {
+    public ParseRequestAction() {
         super(ProcessStage.PARSE_REQUEST.name());
-        this.router = Objects.requireNonNull(router);
-        this.length = Objects.requireNonNull(path).length();
     }
 
     @Override
-    public Pair<HttpRequest, Route> apply(HttpExchange exchange) {
-        HttpMethod method;
+    public Pair<HttpRequest, Route> apply(RequestData requestData) {
+        HttpExchange exchange = requestData.exchange;
+        Map<String, List<String>> query = null;
         try {
-            method = HttpMethod.valueOf(exchange.getRequestMethod());
+            query = ParseUtil.parseQueryString(exchange.getRequestURI().getQuery());
         } catch (Exception e) {
-            throw new InvalidFormatException("invalid method", e);
+            reject(HttpCode.BAD_REQUEST);
         }
-        URI uri = exchange.getRequestURI();
-        String path = uri.getPath().substring(length);
-        Route route = router.follow(method, path);
-        if (route == null) {
-            throw new NotFoundException(path);
-        }
-        Map<String, List<String>> query;
-        try {
-            query = ParseUtil.parseQueryString(uri.getQuery());
-        } catch (UnsupportedEncodingException e) {
-            throw new InvalidFormatException("invalid query", e);
-        }
-        Map<String, Object> params = ParseUtil.extractRouteParameters(route, path);
+        Map<String, Object> params = ParseUtil.extractRouteParameters(requestData.route, requestData.path);
         BufferedReader reader = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), charset));
         String body = reader.lines().reduce("", (left, right) -> left + right + "\n");
         HttpRequest request = new HttpRequest.Builder().
-                method(method).
+                method(requestData.method).
                 headers(exchange.getRequestHeaders()).
                 queryParameters(query).
                 pathParameters(params).
                 body(body).
                 build();
-        return new Pair<>(request, route);
+        return new Pair<>(request, requestData.route);
     }
 }
