@@ -36,7 +36,12 @@ public class ParseRequestAction extends PipelineAction<RequestData, Pair<HttpReq
         } catch (Exception e) {
             reject(HttpCode.BAD_REQUEST);
         }
-        Map<String, Object> params = ParseUtil.extractRouteParameters(requestData.route, requestData.path);
+        Map<String, Object> params = null;
+        try {
+            params = ParseUtil.extractRouteParameters(requestData.route, requestData.path);
+        } catch (Exception e) {
+            reject(HttpCode.BAD_REQUEST);
+        }
         BufferedReader reader = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), charset));
         String body = reader.lines().reduce("", (left, right) -> left + right + "\n");
         HttpRequest request = new HttpRequest.Builder().
