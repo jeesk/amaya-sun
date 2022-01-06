@@ -84,6 +84,7 @@ public class HttpResponse extends AbstractHttpTransaction {
      * Remove header from internal header map
      *
      * @param key {@link String} header name
+     * @return {@link List} removed header value
      */
     public List<String> removeHeader(String key) {
         return headers.remove(key);
