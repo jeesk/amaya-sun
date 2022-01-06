@@ -6,6 +6,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Enum describing the list of http methods supported by the framework.
+ */
 public enum HttpMethod {
     GET(Get.class),
     HEAD(Head.class),

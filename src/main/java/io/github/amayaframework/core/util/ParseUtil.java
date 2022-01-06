@@ -18,7 +18,7 @@ public class ParseUtil {
     public static final Map<String, ContentFilter> CONTENT_FILTERS;
     public static final Pattern ROUTE = Pattern.compile("(?:/[^\\s/]+)+");
     private static final String PARAM_DELIMITER = ":";
-    private static final String URL_ENCODING = "utf-8";
+    private static final String URL_ENCODING = AmayaConfig.INSTANCE.getCharset().name();
     private static final Pattern QUERY_VALIDATOR = Pattern.compile("^(?:[^&]+=[^&]+(?:&|$))+$");
     private static final Pattern QUERY = Pattern.compile("([^&]+)=([^&]+)");
 

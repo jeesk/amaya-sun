@@ -9,6 +9,11 @@ import io.github.amayaframework.server.utils.HttpCode;
 import java.net.URI;
 import java.util.Objects;
 
+/**
+ * <p>An input action during which the requested method will be checked and the requested route will be found.</p>
+ * <p>Receives: {@link HttpExchange}</p>
+ * <p>Returns: {@link RequestData}</p>
+ */
 public class FindRouteAction extends PipelineAction<HttpExchange, RequestData> {
     private final Router router;
     private final int length;

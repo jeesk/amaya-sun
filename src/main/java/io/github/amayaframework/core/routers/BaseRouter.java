@@ -4,6 +4,9 @@ import io.github.amayaframework.core.methods.HttpMethod;
 
 import java.util.Map;
 
+/**
+ * A class describing the implementation of the router that does not support the processing of paths with parameters.
+ */
 public class BaseRouter extends AbstractRouter {
     @Override
     public Route follow(HttpMethod method, String route) {

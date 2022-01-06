@@ -9,6 +9,10 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.function.Function;
 
+/**
+ * A class describing the implementation of a packer
+ * that does not support injecting values into the marked route arguments.
+ */
 public class BasePacker extends AbstractPacker {
     @Override
     public Function<HttpRequest, HttpResponse> pack(Object instance, Method method) {

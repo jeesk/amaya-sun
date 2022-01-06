@@ -7,6 +7,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * <p>A class describing the implementation of the router that supports the processing of paths with parameters.</p>
+ * <p>Implemented using regular expressions.</p>
+ */
 public class RegexpRouter extends AbstractRouter {
     private final Map<HttpMethod, Set<Route>> regexpRoutes;
 

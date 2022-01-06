@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * A class representing a http request. Inherited from {@link HttpTransaction} and service interface {@link Viewable}.
+ */
 public class HttpRequest extends AbstractHttpTransaction implements Viewable {
     private final Map<String, Object> fields;
     private HttpMethod method;
@@ -19,6 +22,11 @@ public class HttpRequest extends AbstractHttpTransaction implements Viewable {
         fields = new ConcurrentHashMap<>();
     }
 
+    /**
+     * Returns the used http method.
+     *
+     * @return {@link HttpMethod}
+     */
     public HttpMethod getMethod() {
         return method;
     }
@@ -32,14 +40,31 @@ public class HttpRequest extends AbstractHttpTransaction implements Viewable {
         this.fields.put(name, value);
     }
 
+    /**
+     * Returns all queried parameters extracted from the request URI.
+     *
+     * @return {@link Map}
+     */
     public Map<String, List<String>> getQueryParameters() {
         return queryParameters;
     }
 
+    /**
+     * Returns a specific query parameter.
+     *
+     * @param name of specific query parameter
+     * @return {@link List} of query parameter values
+     */
     public List<String> getQueryParameter(String name) {
         return queryParameters.get(name);
     }
 
+    /**
+     * Returns first value of a specific query parameter.
+     *
+     * @param name of specific query parameter
+     * @return {@link String}
+     */
     public String getFirstQueryParameter(String name) {
         List<String> parameter = queryParameters.get(name);
         if (parameter == null || parameter.size() == 0) {
@@ -48,10 +73,25 @@ public class HttpRequest extends AbstractHttpTransaction implements Viewable {
         return parameter.get(0);
     }
 
+    /**
+     * Returns a map of path parameters that were extracted
+     * from the request URI in accordance with the specification
+     * described in the controller.
+     *
+     * @return {@link Map}
+     */
     public Map<String, Object> getPathParameters() {
         return pathParameters;
     }
 
+    /**
+     * Returns the specified pass parameter, cast to {@link T}, in case of absence of
+     * the parameter or an unsuccessful cast, returns null.
+     *
+     * @param name of the path parameter
+     * @param <T>  the type to which the path parameter will be cast
+     * @return parameter, cast to {@link T}
+     */
     @SuppressWarnings("unchecked")
     public <T> T getPathParameter(String name) {
         try {

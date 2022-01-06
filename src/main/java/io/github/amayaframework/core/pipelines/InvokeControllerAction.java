@@ -6,6 +6,11 @@ import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.routers.Route;
 import io.github.amayaframework.server.utils.HttpCode;
 
+/**
+ * <p>Input action that transfers control to the controller.</p>
+ * <p>Receives: {@link Pair} of {@link HttpRequest} and {@link Route}</p>
+ * <p>Returns: {@link HttpResponse}</p>
+ */
 public class InvokeControllerAction extends PipelineAction<Pair<HttpRequest, Route>, HttpResponse> {
     public InvokeControllerAction() {
         super(ProcessStage.INVOKE_CONTROLLER.name());

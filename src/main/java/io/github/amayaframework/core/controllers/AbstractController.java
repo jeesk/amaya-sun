@@ -11,6 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * <p>An abstract class that describes some necessary implementations for the
+ * correct functioning of user controllers.</p>
+ * <p>Automatically creates an internal router and scans the methods.</p>
+ * <p>All user controllers should inherit from it.</p>
+ */
 public abstract class AbstractController implements Controller {
     private static final String DUPLICATE_PATTERN = "Method %s with path \"%s\" at controller %s";
     private final Router router;
@@ -18,7 +24,7 @@ public abstract class AbstractController implements Controller {
 
     public AbstractController() {
         router = AmayaConfig.INSTANCE.getRouter();
-        RouteScanner scanner = new RouteScanner(this, AmayaConfig.INSTANCE.getRouteWrapper());
+        RouteScanner scanner = new RouteScanner(this, AmayaConfig.INSTANCE.getRoutePacker());
         Map<HttpMethod, List<Route>> found;
         try {
             found = scanner.find();

@@ -2,6 +2,10 @@ package io.github.amayaframework.core.contexts;
 
 import io.github.amayaframework.server.utils.HttpCode;
 
+/**
+ * <p>A class designed to make easier the creation of responses with various codes.</p>
+ * <p>Methods that do not accept arguments will return a response with an empty body.</p>
+ */
 public class Responses {
     public static HttpResponse responseWithCode(HttpCode code, Object body) {
         HttpResponse ret = new HttpResponse(code);

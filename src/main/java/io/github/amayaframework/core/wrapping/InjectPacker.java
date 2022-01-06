@@ -14,6 +14,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
+/**
+ * A class describing the implementation of a packer
+ * that supports injecting values into the marked route arguments.
+ */
 public class InjectPacker extends AbstractPacker {
     private MethodWrapper.Argument findParameterAnnotation(Parameter parameter)
             throws InvocationTargetException, IllegalAccessException {

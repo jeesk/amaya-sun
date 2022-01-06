@@ -42,11 +42,6 @@ public class AmayaServerImpl implements AmayaServer {
     }
 
     @Override
-    public void setExecutor(Executor executor) {
-        server.setExecutor(executor);
-    }
-
-    @Override
     public HttpContext addController(Controller controller) {
         Objects.requireNonNull(controller);
         String path = controller.getPath();
@@ -59,6 +54,7 @@ public class AmayaServerImpl implements AmayaServer {
     @Override
     public void setPipelineConfigurators(List<Consumer<PipelineHandler>> configurators) {
         Objects.requireNonNull(configurators);
+        configurators.forEach(Objects::requireNonNull);
         this.configurators.clear();
         this.configurators.addAll(configurators);
     }

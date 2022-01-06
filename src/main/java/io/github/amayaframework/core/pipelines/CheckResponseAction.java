@@ -4,6 +4,12 @@ import com.github.romanqed.jutils.structs.pipeline.PipelineResult;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.server.utils.HttpCode;
 
+/**
+ * <p>The output action, during which the result of the input pipeline is checked
+ * for the exceptions and the correctness of the type.</p>
+ * <p>Receives: {@link PipelineResult}</p>
+ * <p>Returns: {@link HttpResponse}</p>
+ */
 public class CheckResponseAction extends PipelineAction<PipelineResult, HttpResponse> {
     public CheckResponseAction() {
         super(ProcessStage.CHECK_RESPONSE.name());

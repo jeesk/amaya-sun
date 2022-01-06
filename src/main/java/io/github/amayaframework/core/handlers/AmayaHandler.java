@@ -21,6 +21,11 @@ public abstract class AmayaHandler implements HttpHandler {
         this.controller = Objects.requireNonNull(controller);
     }
 
+    /**
+     * Returns the controller bound to the handler.
+     *
+     * @return {@link Controller}
+     */
     public Controller getController() {
         return controller;
     }

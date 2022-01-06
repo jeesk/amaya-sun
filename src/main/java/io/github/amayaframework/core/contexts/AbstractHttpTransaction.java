@@ -25,8 +25,12 @@ public abstract class AbstractHttpTransaction implements HttpTransaction {
     }
 
     @Override
-    public Map<String, List<String>> getHeaders() {
+    public HeaderMap getHeaders() {
         return headers;
+    }
+
+    public List<String> getHeader(String key) {
+        return headers.get(key);
     }
 
     @Override

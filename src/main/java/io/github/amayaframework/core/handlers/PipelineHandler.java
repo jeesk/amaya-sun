@@ -8,6 +8,12 @@ import io.github.amayaframework.server.interfaces.HttpExchange;
 
 import java.io.IOException;
 
+/**
+ * <p>A class representing the main handler used inside the server. Built on pipelines.</p>
+ * <p>The http connection processing scheme is quite simple: first, the input pipeline is triggered,
+ * resulting in an HttpResponse. Then the output pipeline is triggered, the purpose of which is to
+ * process and verify the received HttpResponse. After that, the server receives a response.</p>
+ */
 public class PipelineHandler extends AmayaHandler {
     private final Pipeline input;
     private final Pipeline output;
@@ -18,10 +24,20 @@ public class PipelineHandler extends AmayaHandler {
         output = new Pipeline();
     }
 
+    /**
+     * Returns pipeline handles input
+     *
+     * @return {@link Pipeline}
+     */
     public Pipeline input() {
         return input;
     }
 
+    /**
+     * Returns pipeline handles output
+     *
+     * @return {@link Pipeline}
+     */
     public Pipeline output() {
         return output;
     }

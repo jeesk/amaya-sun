@@ -11,6 +11,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * <p>Singleton representing the main configuration of the framework.</p>
+ * <p>The values available for customization are listed in {@link Field} enum</p>
+ * <p>All values are set by default, so if the user expects standard behavior, he should not change anything.</p>
+ * <p>To learn more about the config values,
+ * see the documentation in the project repository or javadoc in {@link Field} enum</p>
+ */
 public class AmayaConfig {
     public static final AmayaConfig INSTANCE = new AmayaConfig();
 
@@ -18,7 +25,7 @@ public class AmayaConfig {
 
     public AmayaConfig() {
         fields = new ConcurrentHashMap<>();
-        setRouteWrapper(new InjectPacker());
+        setRoutePacker(new InjectPacker());
         setRouter(RegexpRouter.class);
         setCharset(StandardCharsets.UTF_8);
         setBacklog(0);
@@ -34,13 +41,13 @@ public class AmayaConfig {
         return fields.get(field);
     }
 
-    public Packer getRouteWrapper() {
-        return (Packer) fields.get(Field.ROUTE_WRAPPER);
+    public Packer getRoutePacker() {
+        return (Packer) fields.get(Field.ROUTE_PACKER);
     }
 
-    public void setRouteWrapper(Packer packer) {
+    public void setRoutePacker(Packer packer) {
         Objects.requireNonNull(packer);
-        fields.put(Field.ROUTE_WRAPPER, packer);
+        fields.put(Field.ROUTE_PACKER, packer);
     }
 
     public Router getRouter() {
@@ -75,9 +82,24 @@ public class AmayaConfig {
     }
 
     public enum Field {
-        ROUTE_WRAPPER,
+        /**
+         * The packer that will be used for each route found inside the controllers.
+         * They may differ in the way the route method is called,
+         * support/not support injecting values into the marked arguments,
+         * etc.
+         */
+        ROUTE_PACKER,
+        /**
+         * The router that will be used in the controllers.
+         */
         ROUTER,
+        /**
+         * The encoding that will be used when reading the request and sending the response.
+         */
         CHARSET,
+        /**
+         * The backlog value that will be passed to the sun server.
+         */
         BACKLOG
     }
 }
