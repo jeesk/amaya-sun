@@ -4,6 +4,9 @@ import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routers.Route;
 import io.github.amayaframework.server.interfaces.HttpExchange;
 
+/**
+ * A simple container created to transfer data between FindRouteAction and ParseRequestAction.
+ */
 public class RequestData {
     protected final HttpExchange exchange;
     protected final Route route;
