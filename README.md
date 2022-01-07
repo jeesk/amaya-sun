@@ -1,7 +1,11 @@
 # amaya-core [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.amayaframework/core/badge.svg?style=flat)](https://repo1.maven.org/maven2/io/github/amayaframework/core/)
 
 Amaya is a fairly lightweight web framework for Java, which guarantees speed, ease of creating plugins/addons, 
-flexibility and ease of use. The main goals pursued during the creation were the avoidance of redundant abstractions, 
+flexibility and ease of use. 
+
+![Logo](https://github.com/amayaframework/amaya-core/raw/main/images/logo.png)
+
+The main goals pursued during the creation were the avoidance of redundant abstractions, 
 modularity, simplification of the creation of REST services and sufficient freedom for user configuration 
 and modification. The server part is built on the basis of a repackaged sun server.
 
