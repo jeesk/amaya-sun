@@ -14,7 +14,7 @@ inconvenience is the need to specify classindex in dependencies, but this is the
 other similar libraries are incomparably slow.
 
 To install it, you will need:
-* any version of the JDK no older than version 8
+* any build of the JDK no older than version 8
 * [classindex](https://github.com/atteo/classindex)
 * Maven/Gradle
 
