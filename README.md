@@ -367,6 +367,6 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 ## Acknowledgments
 
-Thanks to all the sun developers who participated in the creation of this server.
-Thanks to max0000402 for good advices and great suggestions.
-Thanks to IntelliJ IDEA creators - this is a really great IDE that saved me a couple of hundred hours.
+<p>Thanks to all the sun developers who participated in the creation of this server.</p>
+<p>Thanks to max0000402 for good advices and great suggestions.</p>
+<p>Thanks to IntelliJ IDEA creators - this is a really great IDE that saved me a couple of hundred hours.</p>
