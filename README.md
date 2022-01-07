@@ -105,11 +105,11 @@ processing incoming requests in accordance with the declared functionality.
 
 There are 4 actions in total, and all their names are described in the ProcessStage enum.
 In this order they are executed:
-Input actions:
+<p>Input actions:</p>
 * FindRouteAction (receives: HttpExchange, returns RequestData)
 * ParseRequestAction (receives: RequestData, returns Pair<HttpRequest, Route>)
 * InvokeControllerAction (receives: Pair<HttpRequest, Route>, returns HttpResponse)
-Output actions:
+<p>Output actions:</p>
 * CheckResponseAction (receives: PipelineResult, returns HttpResponse)
 
 Thanks to this separation, almost any necessary functionality can be added by simply inserting 
