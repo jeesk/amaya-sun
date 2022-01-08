@@ -347,7 +347,7 @@ so he is waiting for your issues.
 
 ## Built With
 
-* [Gradle](https://gradle.org) - Dependency Management
+* [Gradle](https://gradle.org) - Dependency management
 * [classindex](https://github.com/atteo/classindex) - Annotation scanning
 * [cglib](https://github.com/cglib/cglib) - Method wrapping
 * [java-utils](https://github.com/RomanQed/java-utils) - Pipelines and other stuff
