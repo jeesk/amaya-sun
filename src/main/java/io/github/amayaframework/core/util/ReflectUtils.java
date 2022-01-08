@@ -8,7 +8,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class ReflectUtils {
     public static <T> T extractAnnotationValue(Annotation annotation, String value, Class<T> type)
@@ -50,7 +49,7 @@ public class ReflectUtils {
             (Class<? extends Annotation> annotation, Class<T> castType, Class<V> valueType, String value)
             throws InstantiationException, IllegalAccessException, InvocationTargetException {
         Iterable<Class<?>> classes = ClassIndex.getAnnotated(annotation);
-        Map<V, T> ret = new ConcurrentHashMap<>();
+        Map<V, T> ret = new HashMap<>();
         for (Class<?> clazz : classes) {
             if (!castType.isAssignableFrom(clazz)) {
                 continue;

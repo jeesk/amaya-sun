@@ -2,6 +2,8 @@ package io.github.amayaframework.core.contexts;
 
 import io.github.amayaframework.server.utils.HeaderMap;
 
+import java.net.HttpCookie;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -62,4 +64,26 @@ public interface HttpTransaction {
      * @param value which contains attachment
      */
     void setAttachment(String key, Object value);
+
+    /**
+     * Returns a list of cookies that belong to this transaction.
+     *
+     * @return {@link Collection} of {@link HttpCookie}
+     */
+    Collection<HttpCookie> getCookies();
+
+    /**
+     * Sets the cookie for this transaction.
+     *
+     * @param cookie {@link HttpCookie} value to be set. Must be not null.
+     */
+    void setCookie(HttpCookie cookie);
+
+    /**
+     * Returns a cookie (if one exists) by name. If the cookie is not found, returns null.
+     *
+     * @param name the name that will be searched for. Must be not null.
+     * @return found {@link HttpCookie} or null
+     */
+    HttpCookie getCookie(String name);
 }

@@ -4,6 +4,7 @@ import io.github.amayaframework.server.utils.HeaderMap;
 import io.github.amayaframework.server.utils.HttpCode;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,6 +23,7 @@ public class HttpResponse extends AbstractHttpTransaction {
     public HttpResponse(HttpCode code, HeaderMap headers) {
         this.code = Objects.requireNonNull(code);
         this.headers = Objects.requireNonNull(headers);
+        this.cookies = new HashMap<>();
     }
 
     /**

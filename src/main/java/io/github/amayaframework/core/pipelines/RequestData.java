@@ -1,17 +1,19 @@
 package io.github.amayaframework.core.pipelines;
 
+import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routers.Route;
 import io.github.amayaframework.server.interfaces.HttpExchange;
 
 /**
- * A simple container created to transfer data between FindRouteAction and ParseRequestAction.
+ * A simple container created to transfer data between pipeline actions.
  */
 public class RequestData {
     protected final HttpExchange exchange;
     protected final Route route;
     protected final String path;
     protected final HttpMethod method;
+    protected HttpRequest request;
 
     protected RequestData(HttpExchange exchange, Route route, String path, HttpMethod method) {
         this.exchange = exchange;
@@ -34,5 +36,13 @@ public class RequestData {
 
     public HttpMethod getMethod() {
         return method;
+    }
+
+    public HttpRequest getRequest() {
+        return request;
+    }
+
+    public void setRequest(HttpRequest request) {
+        this.request = request;
     }
 }

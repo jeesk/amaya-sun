@@ -107,17 +107,19 @@ This is a simplified diagram of what a typical pipeline data lifecycle looks lik
 The core of the framework provides a basic set of actions for the pipeline, which allows 
 processing incoming requests in accordance with the declared functionality.
 
-There are 4 actions in total, and all their names are described in the ProcessStage enum.
+There are 6 actions in total, and all their names are described in the Stage enum.
 In this order they are executed:
 <p>Input actions:</p>
 
 * FindRouteAction (receives: HttpExchange, returns RequestData)
-* ParseRequestAction (receives: RequestData, returns Pair<HttpRequest, Route>)
-* InvokeControllerAction (receives: Pair<HttpRequest, Route>, returns HttpResponse)
+* ParseRequestAction (receives: RequestData, returns RequestData)
+* ParseRequestCookiesAction (receives: RequestData, returns RequestData)
+* InvokeControllerAction (receives: returns RequestData, returns HttpResponse)
 
 <p>Output actions:</p>
 
 * CheckResponseAction (receives: PipelineResult, returns HttpResponse)
+* ParseResponseCookiesAction (receives: HttpResponse, returns HttpResponse)
 
 Thanks to this separation, almost any necessary functionality can be added by simply inserting 
 the necessary actions between existing ones.
@@ -239,25 +241,19 @@ public enum MyStage {
 <p>For example, so:</p>
 
 ```Java
-public class MyStage1Action extends PipelineAction<Pair<HttpRequest, Route>, Pair<HttpRequest, Route>> {
-    public MyStage1Action() {
-        super(MyStage.MY_STAGE_1.name());
-    }
-
+public class MyStage1Action extends PipelineAction<RequestData, RequestData> {
+    
     @Override
-    public Pair<HttpRequest, Route> apply(Pair<HttpRequest, Route> pair) {
-        HttpRequest request = pair.getKey();
+    public RequestData apply(RequestData requestData) {
+        HttpRequest request = requestData.getRequest();
         request.setBody(new MyBeautifulDataFormat(request.getBody()));
-        return pair;
+        return requestData;
     }
 }
 ```
 
 ```Java
 public class MyStage2Action extends PipelineAction<HttpResponse, HttpResponse> {
-    public MyStage2Action() {
-        super(MyStage.MY_STAGE_2.name());
-    }
 
     @Override
     public HttpResponse apply(HttpResponse response) {
@@ -277,12 +273,12 @@ public class MyPipelineConfigurator implements Consumer<PipelineHandler> {
         Pipeline input = handler.input();
         Pipeline output = handler.output();
         input.insertAfter(
-                ProcessStage.PARSE_REQUEST.name(),
+                Stage.PARSE_REQUEST.name(),
                 MyStage.MY_STAGE_1.name(),
                 new MyStage1Action()
         );
         output.insertAfter(
-                ProcessStage.CHECK_RESPONSE.name(),
+                Stage.CHECK_RESPONSE.name(),
                 MyStage.MY_STAGE_2.name(),
                 new MyStage2Action()
         );

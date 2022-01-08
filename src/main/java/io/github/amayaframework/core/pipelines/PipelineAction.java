@@ -4,7 +4,6 @@ import com.github.romanqed.jutils.structs.pipeline.PipelineInterruptException;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.server.utils.HttpCode;
 
-import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -14,21 +13,6 @@ import java.util.function.Function;
  * <p>@param {@link R} type of parameter to be returned</p>
  */
 public abstract class PipelineAction<T, R> implements Function<T, R> {
-    private final String name;
-
-    public PipelineAction(String name) {
-        this.name = Objects.requireNonNull(name);
-    }
-
-    /**
-     * Returns action name, specified at constructor
-     *
-     * @return {@link String} name can not be null
-     */
-    public String getName() {
-        return name;
-    }
-
     /**
      * <p>A method that allows you to break the pipeline with the given result.</p>
      * <p>Note: Java does not recognize it as return or throw, so in some cases it is necessary to make an

@@ -2,10 +2,7 @@ package io.github.amayaframework.core.handlers;
 
 import com.github.romanqed.jutils.structs.pipeline.Pipeline;
 import io.github.amayaframework.core.controllers.Controller;
-import io.github.amayaframework.core.pipelines.CheckResponseAction;
-import io.github.amayaframework.core.pipelines.FindRouteAction;
-import io.github.amayaframework.core.pipelines.InvokeControllerAction;
-import io.github.amayaframework.core.pipelines.ParseRequestAction;
+import io.github.amayaframework.core.pipelines.*;
 
 import java.util.function.Consumer;
 
@@ -20,13 +17,11 @@ public class BaseHandlerConfigurator implements Consumer<PipelineHandler> {
         Pipeline input = pipelineHandler.input();
         Pipeline output = pipelineHandler.output();
         Controller controller = pipelineHandler.getController();
-        FindRouteAction findAction = new FindRouteAction(controller.router(), controller.getPath());
-        input.put(findAction.getName(), findAction);
-        ParseRequestAction requestAction = new ParseRequestAction();
-        input.put(requestAction.getName(), requestAction);
-        InvokeControllerAction controllerAction = new InvokeControllerAction();
-        input.put(controllerAction.getName(), controllerAction);
-        CheckResponseAction checkAction = new CheckResponseAction();
-        output.put(checkAction.getName(), checkAction);
+        input.put(Stage.FIND_ROUTE.name(), new FindRouteAction(controller.router(), controller.getPath()));
+        input.put(Stage.PARSE_REQUEST.name(), new ParseRequestAction());
+        input.put(Stage.PARSE_REQUEST_COOKIES.name(), new ParseRequestCookiesAction());
+        input.put(Stage.INVOKE_CONTROLLER.name(), new InvokeControllerAction());
+        output.put(Stage.CHECK_RESPONSE.name(), new CheckResponseAction());
+        output.put(Stage.PARSE_RESPONSE_COOKIES.name(), new ParseResponseCookiesAction());
     }
 }

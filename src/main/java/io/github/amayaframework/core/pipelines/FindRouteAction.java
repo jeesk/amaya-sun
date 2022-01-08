@@ -19,7 +19,6 @@ public class FindRouteAction extends PipelineAction<HttpExchange, RequestData> {
     private final int length;
 
     public FindRouteAction(Router router, String path) {
-        super(ProcessStage.FIND_ROUTE.name());
         this.router = Objects.requireNonNull(router);
         this.length = Objects.requireNonNull(path).length();
     }

@@ -26,8 +26,8 @@ dependencies {
     implementation group: 'cglib', name: 'cglib', version: '3.3.0'
     implementation group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
     annotationProcessor group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
-    implementation group: 'com.github.romanqed', name: 'jutils', version: '1.2.2'
-    implementation group: 'io.github.amayaframework', name: 'http-server', version: '1.0.1'
+    implementation group: 'com.github.romanqed', name: 'jutils', version: '1.2.4'
+    implementation group: 'io.github.amayaframework', name: 'http-server', version: '1.0.2'
     implementation group: 'io.github.amayaframework', name: 'filters', version: '1.0.5'
 }
 

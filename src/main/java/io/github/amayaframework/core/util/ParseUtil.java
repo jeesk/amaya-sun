@@ -7,9 +7,9 @@ import io.github.amayaframework.filters.ContentFilter;
 import io.github.amayaframework.filters.StringFilter;
 
 import java.io.UnsupportedEncodingException;
+import java.net.HttpCookie;
 import java.net.URLDecoder;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,7 +48,7 @@ public class ParseUtil {
     }
 
     public static Map<String, Object> extractRouteParameters(Route route, String source) {
-        Map<String, Object> ret = new ConcurrentHashMap<>();
+        Map<String, Object> ret = new HashMap<>();
         if (!route.isRegexp()) {
             return ret;
         }
@@ -70,12 +70,12 @@ public class ParseUtil {
     }
 
     public static Map<String, List<String>> parseQueryString(String source) throws UnsupportedEncodingException {
-        Map<String, List<String>> ret = new ConcurrentHashMap<>();
+        Map<String, List<String>> ret = new HashMap<>();
         if (source == null || source.isEmpty()) {
             return ret;
         }
         if (!QUERY_VALIDATOR.matcher(source).matches()) {
-            throw new InvalidFormatException("Invalid query string format!");
+            return ret;
         }
         Matcher matcher = QUERY.matcher(source);
         while (matcher.find()) {
@@ -83,5 +83,47 @@ public class ParseUtil {
             ret.computeIfAbsent(matcher.group(1), key -> new ArrayList<>()).add(value);
         }
         return ret;
+    }
+
+    public static Map<String, HttpCookie> parseCookieHeader(String header) {
+        Objects.requireNonNull(header);
+        String[] split = header.split("; ");
+        Map<String, HttpCookie> ret = new HashMap<>();
+        for (String rawCookie : split) {
+            int delimIndex = rawCookie.indexOf('=');
+            if (delimIndex < 0) {
+                return ret;
+            }
+            String name = rawCookie.substring(0, delimIndex);
+            String value = rawCookie.substring(delimIndex + 1);
+            ret.put(name, new HttpCookie(name, value));
+        }
+        return ret;
+    }
+
+    public static String cookieToHeader(HttpCookie cookie) {
+        StringBuilder ret = new StringBuilder();
+        ret.append(cookie.getName());
+        ret.append('=');
+        ret.append(cookie.getValue());
+        if (cookie.getMaxAge() != -1) {
+            ret.append("; Max-Age=");
+            ret.append(cookie.getMaxAge());
+        }
+        if (cookie.getDomain() != null) {
+            ret.append("; Domain=");
+            ret.append(cookie.getDomain());
+        }
+        if (cookie.getPath() != null) {
+            ret.append("; Path=");
+            ret.append(cookie.getPath());
+        }
+        if (cookie.getSecure()) {
+            ret.append("; Secure");
+        }
+        if (cookie.isHttpOnly()) {
+            ret.append("; HttpOnly");
+        }
+        return ret.toString();
     }
 }

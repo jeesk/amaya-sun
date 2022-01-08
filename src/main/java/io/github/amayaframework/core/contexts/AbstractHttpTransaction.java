@@ -2,17 +2,17 @@ package io.github.amayaframework.core.contexts;
 
 import io.github.amayaframework.server.utils.HeaderMap;
 
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.net.HttpCookie;
+import java.util.*;
 
 public abstract class AbstractHttpTransaction implements HttpTransaction {
     private final Map<String, Object> attachments;
+    protected Map<String, HttpCookie> cookies;
     protected HeaderMap headers;
     protected Object body;
 
     protected AbstractHttpTransaction() {
-        attachments = new ConcurrentHashMap<>();
+        attachments = new HashMap<>();
     }
 
     @Override
@@ -46,5 +46,21 @@ public abstract class AbstractHttpTransaction implements HttpTransaction {
     @Override
     public void setAttachment(String key, Object value) {
         attachments.put(key, value);
+    }
+
+    @Override
+    public Collection<HttpCookie> getCookies() {
+        return cookies.values();
+    }
+
+    @Override
+    public void setCookie(HttpCookie cookie) {
+        Objects.requireNonNull(cookie);
+        cookies.put(cookie.getName(), cookie);
+    }
+
+    @Override
+    public HttpCookie getCookie(String name) {
+        return cookies.get(name);
     }
 }

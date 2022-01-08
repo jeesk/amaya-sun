@@ -11,10 +11,6 @@ import io.github.amayaframework.server.utils.HttpCode;
  * <p>Returns: {@link HttpResponse}</p>
  */
 public class CheckResponseAction extends PipelineAction<PipelineResult, HttpResponse> {
-    public CheckResponseAction() {
-        super(ProcessStage.CHECK_RESPONSE.name());
-    }
-
     @Override
     public HttpResponse apply(PipelineResult result) {
         if (result.getException() != null) {

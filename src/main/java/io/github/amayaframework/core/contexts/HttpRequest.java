@@ -4,10 +4,11 @@ import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.wrapping.Viewable;
 import io.github.amayaframework.server.utils.HeaderMap;
 
+import java.net.HttpCookie;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A class representing a http request. Inherited from {@link HttpTransaction} and service interface {@link Viewable}.
@@ -19,7 +20,7 @@ public class HttpRequest extends AbstractHttpTransaction implements Viewable {
     private Map<String, Object> pathParameters;
 
     public HttpRequest() {
-        fields = new ConcurrentHashMap<>();
+        fields = new HashMap<>();
     }
 
     /**
@@ -105,6 +106,11 @@ public class HttpRequest extends AbstractHttpTransaction implements Viewable {
     public void setBody(Object body) {
         super.setBody(body);
         put("body", this.body);
+    }
+
+    public void setCookies(Map<String, HttpCookie> cookies) {
+        Objects.requireNonNull(cookies);
+        this.cookies = cookies;
     }
 
     public static class Builder {
