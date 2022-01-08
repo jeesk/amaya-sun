@@ -339,11 +339,10 @@ Specifies the value of the backlog parameter to be passed to the sun server.
 
 As a result, we get a fully customizable framework, similar to an easily shared constructor. 
 And I hope that all the necessary functionality that is missing at the moment will be gradually 
-implemented by the community in the form of free plug-in libraries. In addition, do not be 
+implemented by the community in the form of open source plugin libraries. In addition, do not be 
 surprised by the absence of some familiar things like cookie storage: the framework was developed 
 with an eye to the ideas of the REST philosophy and hopes to remain in this form. Of course, 
-the author might have forgotten to invent or implement some things, like the same cookie parser, 
-so he is waiting for your issues.
+the author might have forgotten to invent or implement some things, so he is waiting for your issues.
 
 ## Built With
 
