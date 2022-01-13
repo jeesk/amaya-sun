@@ -1,6 +1,7 @@
 package io.github.amayaframework.core.contexts;
 
 import io.github.amayaframework.core.methods.HttpMethod;
+import io.github.amayaframework.core.wrapping.Content;
 import io.github.amayaframework.core.wrapping.Viewable;
 import io.github.amayaframework.server.utils.HeaderMap;
 
@@ -39,6 +40,10 @@ public class HttpRequest extends AbstractHttpTransaction implements Viewable {
 
     private void put(String name, Object value) {
         this.fields.put(name, value);
+    }
+
+    private void put(Content content, Object value) {
+        put(content.getFilter(), value);
     }
 
     /**
@@ -111,6 +116,7 @@ public class HttpRequest extends AbstractHttpTransaction implements Viewable {
     public void setCookies(Map<String, HttpCookie> cookies) {
         Objects.requireNonNull(cookies);
         this.cookies = cookies;
+        put(Content.COOKIE, cookies);
     }
 
     public static class Builder {
@@ -122,6 +128,7 @@ public class HttpRequest extends AbstractHttpTransaction implements Viewable {
 
         public Builder headers(HeaderMap headers) {
             request.headers = Objects.requireNonNull(headers);
+            request.put(Content.HEADER, headers);
             return this;
         }
 
@@ -132,19 +139,19 @@ public class HttpRequest extends AbstractHttpTransaction implements Viewable {
 
         public Builder queryParameters(Map<String, List<String>> queryParameters) {
             request.queryParameters = Objects.requireNonNull(queryParameters);
-            request.put("query", request.queryParameters);
+            request.put(Content.QUERY, request.queryParameters);
             return this;
         }
 
         public Builder pathParameters(Map<String, Object> pathParameters) {
             request.pathParameters = Objects.requireNonNull(pathParameters);
-            request.put("path", request.pathParameters);
+            request.put(Content.PATH, request.pathParameters);
             return this;
         }
 
         public Builder body(Object body) {
             request.body = Objects.requireNonNull(body);
-            request.put("body", request.body);
+            request.put(Content.BODY, request.body);
             return this;
         }
 

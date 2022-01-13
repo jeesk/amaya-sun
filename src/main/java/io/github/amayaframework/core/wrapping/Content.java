@@ -8,7 +8,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public enum Content {
     QUERY(Query.class, "query"),
     PATH(Path.class, "path"),
-    BODY(Body.class, "body");
+    BODY(Body.class, "body"),
+    HEADER(Header.class, "header"),
+    COOKIE(Cookie.class, "cookie");
 
     private static final Map<Class<Annotation>, Content> children = toMap();
 
