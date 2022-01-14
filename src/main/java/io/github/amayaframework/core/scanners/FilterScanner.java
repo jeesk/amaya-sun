@@ -5,7 +5,6 @@ import io.github.amayaframework.filters.Filter;
 import io.github.amayaframework.filters.NamedFilter;
 import io.github.amayaframework.filters.NamedFilters;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -21,13 +20,11 @@ public class FilterScanner<T extends Filter> implements Scanner<Map<String, T>> 
         Map<NamedFilter[], T> multiple = ReflectUtils.
                 foundAnnotatedWithValue(NamedFilters.class, clazz, NamedFilter[].class);
         Map<String, T> single = ReflectUtils.foundAnnotatedWithValue(NamedFilter.class, clazz, String.class);
-        Map<String, T> ret = new HashMap<>();
         multiple.forEach((key, value) -> {
             for (NamedFilter filter : key) {
-                ret.put(filter.value(), value);
+                single.put(filter.value(), value);
             }
         });
-        ret.putAll(single);
-        return ret;
+        return single;
     }
 }
