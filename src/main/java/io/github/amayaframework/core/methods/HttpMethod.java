@@ -1,10 +1,7 @@
 package io.github.amayaframework.core.methods;
 
 import java.lang.annotation.Annotation;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 
 /**
  * Enum describing the list of http methods supported by the framework.
@@ -30,11 +27,11 @@ public enum HttpMethod {
     }
 
     private static Map<Class<Annotation>, HttpMethod> toMap() {
-        Map<Class<Annotation>, HttpMethod> ret = new ConcurrentHashMap<>();
+        Map<Class<Annotation>, HttpMethod> ret = new HashMap<>();
         for (HttpMethod method : HttpMethod.values()) {
             ret.put(method.annotationClass, method);
         }
-        return ret;
+        return Collections.unmodifiableMap(ret);
     }
 
     public static Set<Class<Annotation>> annotationTypes() {

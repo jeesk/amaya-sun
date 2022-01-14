@@ -1,9 +1,10 @@
 package io.github.amayaframework.core.wrapping;
 
 import java.lang.annotation.Annotation;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
 public enum Content {
     QUERY(Query.class, "query"),
@@ -28,11 +29,11 @@ public enum Content {
     }
 
     private static Map<Class<Annotation>, Content> toMap() {
-        Map<Class<Annotation>, Content> ret = new ConcurrentHashMap<>();
+        Map<Class<Annotation>, Content> ret = new HashMap<>();
         for (Content content : Content.values()) {
             ret.put(content.annotationClass, content);
         }
-        return ret;
+        return Collections.unmodifiableMap(ret);
     }
 
     public static Content fromAnnotation(Annotation annotation) {
