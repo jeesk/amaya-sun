@@ -1,12 +1,19 @@
 package io.github.amayaframework.core.handlers;
 
-import com.github.romanqed.jutils.structs.pipeline.Pipeline;
-import com.github.romanqed.jutils.structs.pipeline.PipelineResult;
+import io.github.amayaframework.core.configurators.BaseHandlerConfigurator;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.controllers.Controller;
+import io.github.amayaframework.core.util.AmayaConfig;
 import io.github.amayaframework.server.interfaces.HttpExchange;
+import io.github.amayaframework.server.interfaces.HttpHandler;
+import io.github.amayaframework.server.utils.HttpCode;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
+import java.util.Collections;
 
 /**
  * <p>A class representing the main handler used inside the server. Built on pipelines.</p>
@@ -14,38 +21,37 @@ import java.io.IOException;
  * resulting in an HttpResponse. Then the output pipeline is triggered, the purpose of which is to
  * process and verify the received HttpResponse. After that, the server receives a response.</p>
  */
-public class PipelineHandler extends AmayaHandler {
-    private final Pipeline input;
-    private final Pipeline output;
+public class PipelineHandler extends AbstractIOHandler implements HttpHandler {
+    private final Charset charset = AmayaConfig.INSTANCE.getCharset();
 
     public PipelineHandler(Controller controller) {
-        super(controller);
-        input = new Pipeline();
-        output = new Pipeline();
+        super(controller, Collections.singletonList(new BaseHandlerConfigurator()));
     }
 
-    /**
-     * Returns pipeline handles input
-     *
-     * @return {@link Pipeline}
-     */
-    public Pipeline input() {
-        return input;
+    protected void reject(HttpExchange exchange) throws IOException {
+        sendAnswer(exchange, HttpCode.INTERNAL_SERVER_ERROR, HttpCode.INTERNAL_SERVER_ERROR.getMessage());
     }
 
-    /**
-     * Returns pipeline handles output
-     *
-     * @return {@link Pipeline}
-     */
-    public Pipeline output() {
-        return output;
+    protected void sendAnswer(HttpExchange exchange, HttpCode code, String body) throws IOException {
+        if (body == null) {
+            exchange.sendResponseHeaders(code, 0);
+            exchange.close();
+            return;
+        }
+        exchange.sendResponseHeaders(code, body.getBytes(charset).length);
+        BufferedWriter writer = wrapOutputStream(exchange.getResponseBody());
+        writer.write(body);
+        writer.flush();
+        exchange.close();
+    }
+
+    protected BufferedWriter wrapOutputStream(OutputStream stream) {
+        return new BufferedWriter(new OutputStreamWriter(stream, charset));
     }
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        PipelineResult inputResult = input.process(exchange);
-        HttpResponse response = (HttpResponse) output.process(inputResult).getResult();
+        HttpResponse response = (HttpResponse) process(exchange).getResult();
         String body;
         try {
             body = (String) response.getBody();

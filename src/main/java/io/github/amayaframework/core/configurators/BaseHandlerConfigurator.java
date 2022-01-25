@@ -1,22 +1,21 @@
-package io.github.amayaframework.core.handlers;
+package io.github.amayaframework.core.configurators;
 
 import com.github.romanqed.jutils.structs.pipeline.Pipeline;
 import io.github.amayaframework.core.controllers.Controller;
+import io.github.amayaframework.core.handlers.IOHandler;
 import io.github.amayaframework.core.pipelines.*;
-
-import java.util.function.Consumer;
 
 /**
  * <p>A configurator that adds basic handlers to the server pipeline that provide routing,
  * request processing and receiving a response from the controller.</p>
  * <p>In the list of configurators, it should always go first, otherwise the server's operability is not guaranteed.</p>
  */
-public class BaseHandlerConfigurator implements Consumer<PipelineHandler> {
+public class BaseHandlerConfigurator implements Configurator {
     @Override
-    public void accept(PipelineHandler pipelineHandler) {
-        Pipeline input = pipelineHandler.input();
-        Pipeline output = pipelineHandler.output();
-        Controller controller = pipelineHandler.getController();
+    public void accept(IOHandler handler) {
+        Pipeline input = handler.getInput();
+        Pipeline output = handler.getOutput();
+        Controller controller = handler.getController();
         input.put(Stage.FIND_ROUTE.name(), new FindRouteAction(controller.router(), controller.getPath()));
         input.put(Stage.PARSE_REQUEST.name(), new ParseRequestAction());
         input.put(Stage.PARSE_REQUEST_COOKIES.name(), new ParseRequestCookiesAction());
