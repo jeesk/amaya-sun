@@ -1,7 +1,8 @@
-package io.github.amayaframework.core.pipelines;
+package io.github.amayaframework.core.pipelines.sun;
 
 import com.github.romanqed.jutils.util.Checks;
-import io.github.amayaframework.core.contexts.HttpRequest;
+import io.github.amayaframework.core.contexts.SunHttpRequest;
+import io.github.amayaframework.core.pipelines.PipelineAction;
 import io.github.amayaframework.core.util.AmayaConfig;
 import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.server.interfaces.HttpExchange;
@@ -20,7 +21,7 @@ import java.util.Map;
  * <p>Receives: {@link RequestData}</p>
  * <p>Returns: {@link RequestData}</p>
  */
-public class ParseRequestAction extends PipelineAction<RequestData, RequestData> {
+public class SunParseRequestAction extends PipelineAction<RequestData, RequestData> {
     private final Charset charset = AmayaConfig.INSTANCE.getCharset();
 
     @Override
@@ -32,19 +33,19 @@ public class ParseRequestAction extends PipelineAction<RequestData, RequestData>
         );
         Map<String, Object> params = null;
         try {
-            params = ParseUtil.extractRouteParameters(requestData.route, requestData.path);
+            params = ParseUtil.extractRouteParameters(requestData.getRoute(), requestData.getPath());
         } catch (Exception e) {
             reject(HttpCode.BAD_REQUEST);
         }
         BufferedReader reader = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), charset));
         String body = reader.lines().reduce("", (left, right) -> left + right + "\n");
-        requestData.request = new HttpRequest.Builder().
-                method(requestData.method).
-                headers(exchange.getRequestHeaders()).
-                queryParameters(query).
-                pathParameters(params).
-                body(body).
-                build();
+        SunHttpRequest request = new SunHttpRequest();
+        request.setMethod(requestData.getMethod());
+        request.setHeaders(exchange.getRequestHeaders());
+        request.setQueryParameters(query);
+        request.setPathParameters(params);
+        request.setBody(body);
+        requestData.setRequest(request);
         return requestData;
     }
 }

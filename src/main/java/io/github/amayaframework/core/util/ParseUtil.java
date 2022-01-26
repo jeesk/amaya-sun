@@ -6,8 +6,8 @@ import io.github.amayaframework.core.scanners.FilterScanner;
 import io.github.amayaframework.filters.ContentFilter;
 import io.github.amayaframework.filters.StringFilter;
 
+import javax.servlet.http.Cookie;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpCookie;
 import java.net.URLDecoder;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -85,10 +85,10 @@ public class ParseUtil {
         return ret;
     }
 
-    public static Map<String, HttpCookie> parseCookieHeader(String header) {
+    public static Map<String, Cookie> parseCookieHeader(String header) {
         Objects.requireNonNull(header);
         String[] split = header.split("; ");
-        Map<String, HttpCookie> ret = new HashMap<>();
+        Map<String, Cookie> ret = new HashMap<>();
         for (String rawCookie : split) {
             int delimIndex = rawCookie.indexOf('=');
             if (delimIndex < 0) {
@@ -96,12 +96,12 @@ public class ParseUtil {
             }
             String name = rawCookie.substring(0, delimIndex);
             String value = rawCookie.substring(delimIndex + 1);
-            ret.put(name, new HttpCookie(name, value));
+            ret.put(name, new Cookie(name, value));
         }
         return ret;
     }
 
-    public static String cookieToHeader(HttpCookie cookie) {
+    public static String cookieToHeader(Cookie cookie) {
         StringBuilder ret = new StringBuilder();
         ret.append(cookie.getName());
         ret.append('=');

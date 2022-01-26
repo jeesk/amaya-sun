@@ -10,13 +10,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 
-public abstract class AbstractIOHandler implements IOHandler {
+public class BaseIOHandler implements IOHandler {
     private final Pipeline input;
     private final Pipeline output;
     private final Controller controller;
     private final Collection<Configurator> defaultConfigurators;
 
-    public AbstractIOHandler(Controller controller, Collection<Configurator> defaultConfigurators) {
+    public BaseIOHandler(Controller controller, Collection<Configurator> defaultConfigurators) {
         input = new Pipeline();
         output = new Pipeline();
         this.controller = Objects.requireNonNull(controller);

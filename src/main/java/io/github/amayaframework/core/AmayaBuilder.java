@@ -171,7 +171,7 @@ public class AmayaBuilder {
         }
         controllers.forEach((path, controller) -> {
             PipelineHandler handler = new PipelineHandler(controller);
-            handler.configure(configurators);
+            handler.getHandler().configure(configurators);
             server.createContext(path, handler);
         });
         resetValues();

@@ -1,14 +1,12 @@
 package io.github.amayaframework.core.contexts;
 
-import io.github.amayaframework.server.utils.HeaderMap;
-
-import java.net.HttpCookie;
+import javax.servlet.http.Cookie;
 import java.util.*;
 
 public abstract class AbstractHttpTransaction implements HttpTransaction {
     private final Map<String, Object> attachments;
-    protected Map<String, HttpCookie> cookies;
-    protected HeaderMap headers;
+    protected Map<String, Cookie> cookies;
+//    protected HeaderMap headers;
     protected Object body;
 
     protected AbstractHttpTransaction() {
@@ -24,13 +22,17 @@ public abstract class AbstractHttpTransaction implements HttpTransaction {
         this.body = body;
     }
 
-    @Override
-    public HeaderMap getHeaders() {
-        return headers;
-    }
+//    public List<String> getHeaders(String key) {
+//        return headers.get(key);
+//    }
 
-    public List<String> getHeader(String key) {
-        return headers.get(key);
+    @Override
+    public String getHeader(String key) {
+        List<String> header = getHeaders(key);
+        if (header != null) {
+            return header.get(0);
+        }
+        return null;
     }
 
     @Override
@@ -49,18 +51,18 @@ public abstract class AbstractHttpTransaction implements HttpTransaction {
     }
 
     @Override
-    public Collection<HttpCookie> getCookies() {
+    public Collection<Cookie> getCookies() {
         return cookies.values();
     }
 
     @Override
-    public void setCookie(HttpCookie cookie) {
+    public void setCookie(Cookie cookie) {
         Objects.requireNonNull(cookie);
         cookies.put(cookie.getName(), cookie);
     }
 
     @Override
-    public HttpCookie getCookie(String name) {
+    public Cookie getCookie(String name) {
         return cookies.get(name);
     }
 }

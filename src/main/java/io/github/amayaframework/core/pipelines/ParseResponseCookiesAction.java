@@ -4,7 +4,7 @@ import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.server.utils.HeaderMap;
 
-import java.net.HttpCookie;
+import javax.servlet.http.Cookie;
 import java.util.Collection;
 
 /**
@@ -17,12 +17,12 @@ public class ParseResponseCookiesAction extends PipelineAction<HttpResponse, Htt
 
     @Override
     public HttpResponse apply(HttpResponse response) {
-        Collection<HttpCookie> cookies = response.getCookies();
+        Collection<Cookie> cookies = response.getCookies();
         if (cookies.isEmpty()) {
             return response;
         }
-        HeaderMap headers = response.getHeaders();
-        for (HttpCookie cookie : cookies) {
+        HeaderMap headers = response.getHeaderMap();
+        for (Cookie cookie : cookies) {
             headers.add(COOKIE_HEADER, ParseUtil.cookieToHeader(cookie));
         }
         return response;

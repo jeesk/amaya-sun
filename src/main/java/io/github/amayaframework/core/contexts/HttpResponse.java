@@ -13,6 +13,7 @@ import java.util.Objects;
  */
 public class HttpResponse extends AbstractHttpTransaction {
     private HttpCode code;
+    private final HeaderMap headers;
 
     /**
      * Creates HttpResponse with code and header map
@@ -90,5 +91,18 @@ public class HttpResponse extends AbstractHttpTransaction {
      */
     public List<String> removeHeader(String key) {
         return headers.remove(key);
+    }
+
+    /**
+     * Returns map of all headers of response
+     * @return {@link HeaderMap}
+     */
+    public HeaderMap getHeaderMap() {
+        return headers;
+    }
+
+    @Override
+    public List<String> getHeaders(String key) {
+        return headers.get(key);
     }
 }

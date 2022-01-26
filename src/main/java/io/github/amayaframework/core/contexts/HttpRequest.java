@@ -3,9 +3,8 @@ package io.github.amayaframework.core.contexts;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.wrapping.Content;
 import io.github.amayaframework.core.wrapping.Viewable;
-import io.github.amayaframework.server.utils.HeaderMap;
 
-import java.net.HttpCookie;
+import javax.servlet.http.Cookie;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +13,7 @@ import java.util.Objects;
 /**
  * A class representing a http request. Inherited from {@link HttpTransaction} and service interface {@link Viewable}.
  */
-public class HttpRequest extends AbstractHttpTransaction implements Viewable {
+public abstract class HttpRequest extends AbstractHttpTransaction implements Viewable {
     private final Map<String, Object> fields;
     private HttpMethod method;
     private Map<String, List<String>> queryParameters;
@@ -107,58 +106,28 @@ public class HttpRequest extends AbstractHttpTransaction implements Viewable {
         }
     }
 
+    public void setMethod(HttpMethod method) {
+        this.method = Objects.requireNonNull(method);
+    }
+
+    public void setQueryParameters(Map<String, List<String>> queryParameters) {
+        this.queryParameters = Objects.requireNonNull(queryParameters);
+        put(Content.QUERY, queryParameters);
+    }
+
+    public void setPathParameters(Map<String, Object> pathParameters) {
+        this.pathParameters = Objects.requireNonNull(pathParameters);
+        put(Content.PATH, pathParameters);
+    }
+
     @Override
     public void setBody(Object body) {
         super.setBody(body);
-        put("body", this.body);
+        put(Content.BODY, this.body);
     }
 
-    public void setCookies(Map<String, HttpCookie> cookies) {
-        Objects.requireNonNull(cookies);
-        this.cookies = cookies;
+    public void setCookies(Map<String, Cookie> cookies) {
+        this.cookies = Objects.requireNonNull(cookies);
         put(Content.COOKIE, cookies);
-    }
-
-    public static class Builder {
-        private HttpRequest request;
-
-        public Builder() {
-            request = new HttpRequest();
-        }
-
-        public Builder headers(HeaderMap headers) {
-            request.headers = Objects.requireNonNull(headers);
-            request.put(Content.HEADER, headers);
-            return this;
-        }
-
-        public Builder method(HttpMethod method) {
-            request.method = Objects.requireNonNull(method);
-            return this;
-        }
-
-        public Builder queryParameters(Map<String, List<String>> queryParameters) {
-            request.queryParameters = Objects.requireNonNull(queryParameters);
-            request.put(Content.QUERY, request.queryParameters);
-            return this;
-        }
-
-        public Builder pathParameters(Map<String, Object> pathParameters) {
-            request.pathParameters = Objects.requireNonNull(pathParameters);
-            request.put(Content.PATH, request.pathParameters);
-            return this;
-        }
-
-        public Builder body(Object body) {
-            request.body = Objects.requireNonNull(body);
-            request.put(Content.BODY, request.body);
-            return this;
-        }
-
-        public HttpRequest build() {
-            HttpRequest ret = request;
-            request = null;
-            return ret;
-        }
     }
 }

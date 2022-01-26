@@ -5,14 +5,14 @@ import io.github.amayaframework.server.utils.HttpCode;
 
 /**
  * <p>Input action that transfers control to the controller.</p>
- * <p>Receives: {@link RequestData}</p>
+ * <p>Receives: {@link AbstractRequestData}</p>
  * <p>Returns: {@link HttpResponse}</p>
  */
-public class InvokeControllerAction extends PipelineAction<RequestData, HttpResponse> {
+public class InvokeControllerAction extends PipelineAction<AbstractRequestData, HttpResponse> {
     @Override
-    public HttpResponse apply(RequestData requestData) {
+    public HttpResponse apply(AbstractRequestData requestData) {
         try {
-            return requestData.route.apply(requestData.request);
+            return requestData.getRoute().apply(requestData.getRequest());
         } catch (IllegalArgumentException e) {
             reject(HttpCode.BAD_REQUEST);
         } catch (Exception e) {

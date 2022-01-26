@@ -1,6 +1,7 @@
-package io.github.amayaframework.core.pipelines;
+package io.github.amayaframework.core.pipelines.sun;
 
 import io.github.amayaframework.core.methods.HttpMethod;
+import io.github.amayaframework.core.pipelines.PipelineAction;
 import io.github.amayaframework.core.routers.Route;
 import io.github.amayaframework.core.routers.Router;
 import io.github.amayaframework.server.interfaces.HttpExchange;
@@ -14,11 +15,11 @@ import java.util.Objects;
  * <p>Receives: {@link HttpExchange}</p>
  * <p>Returns: {@link RequestData}</p>
  */
-public class FindRouteAction extends PipelineAction<HttpExchange, RequestData> {
+public class SunFindRouteAction extends PipelineAction<HttpExchange, RequestData> {
     private final Router router;
     private final int length;
 
-    public FindRouteAction(Router router, String path) {
+    public SunFindRouteAction(Router router, String path) {
         this.router = Objects.requireNonNull(router);
         this.length = Objects.requireNonNull(path).length();
     }

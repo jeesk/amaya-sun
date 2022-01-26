@@ -1,6 +1,6 @@
 package io.github.amayaframework.core.handlers;
 
-import io.github.amayaframework.core.configurators.BaseHandlerConfigurator;
+import io.github.amayaframework.core.configurators.BaseSunConfigurator;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.util.AmayaConfig;
@@ -21,11 +21,12 @@ import java.util.Collections;
  * resulting in an HttpResponse. Then the output pipeline is triggered, the purpose of which is to
  * process and verify the received HttpResponse. After that, the server receives a response.</p>
  */
-public class PipelineHandler extends AbstractIOHandler implements HttpHandler {
+public class PipelineHandler implements HttpHandler {
     private final Charset charset = AmayaConfig.INSTANCE.getCharset();
+    private final IOHandler handler;
 
     public PipelineHandler(Controller controller) {
-        super(controller, Collections.singletonList(new BaseHandlerConfigurator()));
+        handler = new BaseIOHandler(controller, Collections.singletonList(new BaseSunConfigurator()));
     }
 
     protected void reject(HttpExchange exchange) throws IOException {
@@ -49,9 +50,13 @@ public class PipelineHandler extends AbstractIOHandler implements HttpHandler {
         return new BufferedWriter(new OutputStreamWriter(stream, charset));
     }
 
+    public IOHandler getHandler() {
+        return handler;
+    }
+
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        HttpResponse response = (HttpResponse) process(exchange).getResult();
+        HttpResponse response = (HttpResponse) handler.process(exchange).getResult();
         String body;
         try {
             body = (String) response.getBody();
@@ -59,7 +64,7 @@ public class PipelineHandler extends AbstractIOHandler implements HttpHandler {
             reject(exchange);
             return;
         }
-        exchange.getResponseHeaders().putAll(response.getHeaders());
+        exchange.getResponseHeaders().putAll(response.getHeaderMap());
         sendAnswer(exchange, response.getCode(), body);
     }
 }

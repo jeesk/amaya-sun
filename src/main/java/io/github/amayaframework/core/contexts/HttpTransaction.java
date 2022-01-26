@@ -1,8 +1,6 @@
 package io.github.amayaframework.core.contexts;
 
-import io.github.amayaframework.server.utils.HeaderMap;
-
-import java.net.HttpCookie;
+import javax.servlet.http.Cookie;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -28,19 +26,19 @@ public interface HttpTransaction {
     void setBody(Object body);
 
     /**
-     * Returns {@link HeaderMap} containing all transaction headers.
-     *
-     * @return {@link HeaderMap}
-     */
-    HeaderMap getHeaders();
-
-    /**
-     * Returns values of specified header from internal header map
+     * Returns values of specified header
      *
      * @param key {@link String} header key
      * @return {@link List} header values
      */
-    List<String> getHeader(String key);
+    List<String> getHeaders(String key);
+
+    /**
+     * Returns first value of specified header
+     * @param key
+     * @return
+     */
+    String getHeader(String key);
 
     /**
      * Returns all stored attachments that could have been changed during the transaction processing transaction.
@@ -68,22 +66,22 @@ public interface HttpTransaction {
     /**
      * Returns a list of cookies that belong to this transaction.
      *
-     * @return {@link Collection} of {@link HttpCookie}
+     * @return {@link Collection} of {@link Cookie}
      */
-    Collection<HttpCookie> getCookies();
+    Collection<Cookie> getCookies();
 
     /**
      * Sets the cookie for this transaction.
      *
-     * @param cookie {@link HttpCookie} value to be set. Must be not null.
+     * @param cookie {@link Cookie} value to be set. Must be not null.
      */
-    void setCookie(HttpCookie cookie);
+    void setCookie(Cookie cookie);
 
     /**
      * Returns a cookie (if one exists) by name. If the cookie is not found, returns null.
      *
      * @param name the name that will be searched for. Must be not null.
-     * @return found {@link HttpCookie} or null
+     * @return found {@link Cookie} or null
      */
-    HttpCookie getCookie(String name);
+    Cookie getCookie(String name);
 }
