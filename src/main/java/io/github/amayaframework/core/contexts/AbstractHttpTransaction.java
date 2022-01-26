@@ -6,7 +6,6 @@ import java.util.*;
 public abstract class AbstractHttpTransaction implements HttpTransaction {
     private final Map<String, Object> attachments;
     protected Map<String, Cookie> cookies;
-    //    protected HeaderMap headers;
     protected Object body;
 
     protected AbstractHttpTransaction() {
@@ -21,10 +20,6 @@ public abstract class AbstractHttpTransaction implements HttpTransaction {
     public void setBody(Object body) {
         this.body = body;
     }
-
-//    public List<String> getHeaders(String key) {
-//        return headers.get(key);
-//    }
 
     @Override
     public String getHeader(String key) {
