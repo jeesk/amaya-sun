@@ -1,5 +1,6 @@
 package io.github.amayaframework.core;
 
+import io.github.amayaframework.core.configurators.BaseSunConfigurator;
 import io.github.amayaframework.core.configurators.Configurator;
 import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.handlers.SunHandler;
@@ -27,6 +28,7 @@ public class AmayaBuilder extends AbstractBuilder {
     private HttpsConfigurator configurator;
 
     public AmayaBuilder() {
+        super(new BaseSunConfigurator());
         resetValues();
     }
 
@@ -58,6 +60,25 @@ public class AmayaBuilder extends AbstractBuilder {
     public AmayaBuilder bind(InetSocketAddress address) {
         this.address = Objects.requireNonNull(address);
         return this;
+    }
+
+    /**
+     * Binds server to given address.
+     * @param host Host address
+     * @param port Host port
+     * @return {@link AmayaBuilder} instance
+     */
+    public AmayaBuilder bind(String host, int port) {
+        return bind(new InetSocketAddress(host, port));
+    }
+
+    /**
+     * Binds server to given address.
+     * @param port Host port
+     * @return {@link AmayaBuilder} instance
+     */
+    public AmayaBuilder bind(int port) {
+        return bind(new InetSocketAddress(port));
     }
 
     /**

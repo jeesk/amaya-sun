@@ -4,6 +4,8 @@ import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routers.Route;
 
+import java.util.Objects;
+
 public abstract class AbstractRequestData {
     private Route route;
     private String path;
@@ -21,7 +23,7 @@ public abstract class AbstractRequestData {
     }
 
     public void setRoute(Route route) {
-        this.route = route;
+        this.route = Objects.requireNonNull(route);
     }
 
     public String getPath() {
@@ -29,7 +31,7 @@ public abstract class AbstractRequestData {
     }
 
     public void setPath(String path) {
-        this.path = path;
+        this.path = Objects.requireNonNull(path);
     }
 
     public HttpMethod getMethod() {
@@ -37,7 +39,7 @@ public abstract class AbstractRequestData {
     }
 
     public void setMethod(HttpMethod method) {
-        this.method = method;
+        this.method = Objects.requireNonNull(method);
     }
 
     public HttpRequest getRequest() {
@@ -45,6 +47,6 @@ public abstract class AbstractRequestData {
     }
 
     public void setRequest(HttpRequest request) {
-        this.request = request;
+        this.request = Objects.requireNonNull(request);
     }
 }
