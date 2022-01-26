@@ -6,7 +6,7 @@ import javax.servlet.http.Cookie;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ServletsParseRequestCookiesAction extends PipelineAction<RequestData, RequestData> {
+public class ServletParseRequestCookiesAction extends PipelineAction<RequestData, RequestData> {
     @Override
     public RequestData apply(RequestData requestData) {
         Cookie[] cookies = requestData.servletRequest.getCookies();

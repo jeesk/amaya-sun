@@ -2,9 +2,7 @@ package io.github.amayaframework.core;
 
 import io.github.amayaframework.core.configurators.Configurator;
 import io.github.amayaframework.core.controllers.Controller;
-import io.github.amayaframework.core.controllers.Endpoint;
-import io.github.amayaframework.core.handlers.PipelineHandler;
-import io.github.amayaframework.core.scanners.ControllerScanner;
+import io.github.amayaframework.core.handlers.SunHandler;
 import io.github.amayaframework.core.util.AmayaConfig;
 import io.github.amayaframework.server.interfaces.HttpServer;
 import io.github.amayaframework.server.interfaces.HttpsServer;
@@ -13,8 +11,9 @@ import io.github.amayaframework.server.utils.HttpsConfigurator;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.net.InetSocketAddress;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -22,26 +21,20 @@ import java.util.function.Consumer;
 /**
  * A builder that helps to instantiate a properly configured Amaya Server.
  */
-public class AmayaBuilder {
-    private final Map<String, Controller> controllers;
-    private Collection<Configurator> configurators;
-    private Class<? extends Annotation> annotation;
+public class AmayaBuilder extends AbstractBuilder {
     private InetSocketAddress address;
     private Executor executor;
     private HttpsConfigurator configurator;
 
     public AmayaBuilder() {
-        controllers = new ConcurrentHashMap<>();
         resetValues();
     }
 
-    private void resetValues() {
+    protected void resetValues() {
+        super.resetValues();
         executor = Executors.newWorkStealingPool();
         address = new InetSocketAddress(8000);
         configurator = null;
-        annotation = Endpoint.class;
-        configurators = null;
-        controllers.clear();
     }
 
     /**
@@ -85,10 +78,7 @@ public class AmayaBuilder {
      * @return {@link AmayaBuilder} instance
      */
     public AmayaBuilder pipelineConfigurators(Collection<Configurator> configurators) {
-        Objects.requireNonNull(configurators);
-        configurators.forEach(Objects::requireNonNull);
-        this.configurators = configurators;
-        return this;
+        return (AmayaBuilder) super.pipelineConfigurators(configurators);
     }
 
     /**
@@ -98,12 +88,7 @@ public class AmayaBuilder {
      * @return {@link AmayaBuilder} instance
      */
     public AmayaBuilder addConfigurator(Configurator configurator) {
-        Objects.requireNonNull(configurator);
-        if (configurators == null) {
-            configurators = new LinkedList<>();
-        }
-        configurators.add(configurator);
-        return this;
+        return (AmayaBuilder) super.addConfigurator(configurator);
     }
 
     /**
@@ -113,17 +98,11 @@ public class AmayaBuilder {
      * @return {@link AmayaBuilder} builder instance
      */
     public AmayaBuilder addController(Controller controller) {
-        Objects.requireNonNull(controller);
-        String path = controller.getPath();
-        Objects.requireNonNull(path);
-        controllers.put(path, controller);
-        return this;
+        return (AmayaBuilder) super.addController(controller);
     }
 
     public AmayaBuilder removeController(String path) {
-        Objects.requireNonNull(path);
-        controllers.remove(path);
-        return this;
+        return (AmayaBuilder) super.removeController(path);
     }
 
     /**
@@ -134,8 +113,7 @@ public class AmayaBuilder {
      * @return {@link AmayaBuilder} instance
      */
     public AmayaBuilder controllerAnnotation(Class<? extends Annotation> annotation) {
-        this.annotation = annotation;
-        return this;
+        return (AmayaBuilder) super.controllerAnnotation(annotation);
     }
 
     private HttpServer makeHttpsServer() throws IOException {
@@ -149,7 +127,6 @@ public class AmayaBuilder {
      * and resets the builder to the initial parameters.
      *
      * @return {@link AmayaServer} instance
-     * @throws IOException
      */
     public AmayaServer build() throws IOException {
         HttpServer server;
@@ -160,17 +137,9 @@ public class AmayaBuilder {
         }
         server.setExecutor(executor);
         AmayaServer ret = new AmayaServerImpl(server);
-        if (annotation != null) {
-            Set<Controller> controllers;
-            try {
-                controllers = new ControllerScanner(annotation).find();
-            } catch (Exception e) {
-                throw new IllegalStateException("Exception when scanning controllers!", e);
-            }
-            controllers.forEach(this::addController);
-        }
+        findControllers();
         controllers.forEach((path, controller) -> {
-            PipelineHandler handler = new PipelineHandler(controller);
+            SunHandler handler = new SunHandler(controller);
             handler.getHandler().configure(configurators);
             server.createContext(path, handler);
         });

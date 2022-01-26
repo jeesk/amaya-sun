@@ -32,6 +32,10 @@ public abstract class HttpRequest extends AbstractHttpTransaction implements Vie
         return method;
     }
 
+    public void setMethod(HttpMethod method) {
+        this.method = Objects.requireNonNull(method);
+    }
+
     @Override
     public Object get(String name) {
         return fields.get(name);
@@ -52,6 +56,11 @@ public abstract class HttpRequest extends AbstractHttpTransaction implements Vie
      */
     public Map<String, List<String>> getQueryParameters() {
         return queryParameters;
+    }
+
+    public void setQueryParameters(Map<String, List<String>> queryParameters) {
+        this.queryParameters = Objects.requireNonNull(queryParameters);
+        put(Content.QUERY, queryParameters);
     }
 
     /**
@@ -89,6 +98,11 @@ public abstract class HttpRequest extends AbstractHttpTransaction implements Vie
         return pathParameters;
     }
 
+    public void setPathParameters(Map<String, Object> pathParameters) {
+        this.pathParameters = Objects.requireNonNull(pathParameters);
+        put(Content.PATH, pathParameters);
+    }
+
     /**
      * Returns the specified pass parameter, cast to {@link T}, in case of absence of
      * the parameter or an unsuccessful cast, returns null.
@@ -104,20 +118,6 @@ public abstract class HttpRequest extends AbstractHttpTransaction implements Vie
         } catch (Exception e) {
             return null;
         }
-    }
-
-    public void setMethod(HttpMethod method) {
-        this.method = Objects.requireNonNull(method);
-    }
-
-    public void setQueryParameters(Map<String, List<String>> queryParameters) {
-        this.queryParameters = Objects.requireNonNull(queryParameters);
-        put(Content.QUERY, queryParameters);
-    }
-
-    public void setPathParameters(Map<String, Object> pathParameters) {
-        this.pathParameters = Objects.requireNonNull(pathParameters);
-        put(Content.PATH, pathParameters);
     }
 
     @Override

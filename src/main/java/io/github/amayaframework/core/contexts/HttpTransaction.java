@@ -35,8 +35,9 @@ public interface HttpTransaction {
 
     /**
      * Returns first value of specified header
-     * @param key
-     * @return
+     *
+     * @param key header key
+     * @return first value of header
      */
     String getHeader(String key);
 

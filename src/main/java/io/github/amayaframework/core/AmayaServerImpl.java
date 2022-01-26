@@ -33,16 +33,6 @@ public class AmayaServerImpl implements AmayaServer {
         return server.getExecutor();
     }
 
-//    @Override
-//    public HttpContext addController(Controller controller) {
-//        Objects.requireNonNull(controller);
-//        String path = controller.getPath();
-//        Objects.requireNonNull(path);
-//        PipelineHandler handler = new PipelineHandler(controller);
-//        configurators.forEach(e -> e.accept(handler));
-//        return server.createContext(path, handler);
-//    }
-
     @Override
     public InetSocketAddress getAddress() {
         return server.getAddress();

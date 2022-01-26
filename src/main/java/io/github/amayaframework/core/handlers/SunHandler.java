@@ -16,16 +16,16 @@ import java.nio.charset.Charset;
 import java.util.Collections;
 
 /**
- * <p>A class representing the main handler used inside the server. Built on pipelines.</p>
+ * <p>A class representing the sun handler used inside the server. Built on pipelines.</p>
  * <p>The http connection processing scheme is quite simple: first, the input pipeline is triggered,
  * resulting in an HttpResponse. Then the output pipeline is triggered, the purpose of which is to
  * process and verify the received HttpResponse. After that, the server receives a response.</p>
  */
-public class PipelineHandler implements HttpHandler {
+public class SunHandler implements HttpHandler {
     private final Charset charset = AmayaConfig.INSTANCE.getCharset();
     private final IOHandler handler;
 
-    public PipelineHandler(Controller controller) {
+    public SunHandler(Controller controller) {
         handler = new BaseIOHandler(controller, Collections.singletonList(new BaseSunConfigurator()));
     }
 

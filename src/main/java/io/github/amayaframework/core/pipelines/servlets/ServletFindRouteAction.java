@@ -7,11 +7,11 @@ import io.github.amayaframework.server.utils.HttpCode;
 
 import java.util.Objects;
 
-public class ServletsFindRouteAction extends PipelineAction<RequestData, RequestData> {
+public class ServletFindRouteAction extends PipelineAction<RequestData, RequestData> {
     private final Router router;
     private final int length;
 
-    public ServletsFindRouteAction(Router router, String path) {
+    public ServletFindRouteAction(Router router, String path) {
         this.router = Objects.requireNonNull(router);
         this.length = Objects.requireNonNull(path).length();
     }

@@ -12,8 +12,8 @@ import java.util.Objects;
  * A class representing a http response. Inherited from {@link HttpTransaction}.
  */
 public class HttpResponse extends AbstractHttpTransaction {
-    private HttpCode code;
     private final HeaderMap headers;
+    private HttpCode code;
 
     /**
      * Creates HttpResponse with code and header map
@@ -95,6 +95,7 @@ public class HttpResponse extends AbstractHttpTransaction {
 
     /**
      * Returns map of all headers of response
+     *
      * @return {@link HeaderMap}
      */
     public HeaderMap getHeaderMap() {

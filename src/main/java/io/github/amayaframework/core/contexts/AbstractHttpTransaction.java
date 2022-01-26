@@ -6,7 +6,7 @@ import java.util.*;
 public abstract class AbstractHttpTransaction implements HttpTransaction {
     private final Map<String, Object> attachments;
     protected Map<String, Cookie> cookies;
-//    protected HeaderMap headers;
+    //    protected HeaderMap headers;
     protected Object body;
 
     protected AbstractHttpTransaction() {
