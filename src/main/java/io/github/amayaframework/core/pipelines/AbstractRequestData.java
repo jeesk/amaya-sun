@@ -6,6 +6,10 @@ import io.github.amayaframework.core.routers.Route;
 
 import java.util.Objects;
 
+/**
+ * A simple container created to transfer data between pipeline actions.
+ * Common form.
+ */
 public abstract class AbstractRequestData {
     private Route route;
     private String path;

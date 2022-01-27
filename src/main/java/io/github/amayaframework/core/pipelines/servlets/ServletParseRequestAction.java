@@ -16,6 +16,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <p>An input action during which the basic components of the request will be checked and parsed:
+ * query parameters, path parameters, headers and the request body.</p>
+ * <p>Receives: {@link RequestData}</p>
+ * <p>Returns: {@link RequestData}</p>
+ */
 public class ServletParseRequestAction extends PipelineAction<RequestData, RequestData> {
     private final Charset charset = AmayaConfig.INSTANCE.getCharset();
 

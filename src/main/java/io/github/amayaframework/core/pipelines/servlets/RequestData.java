@@ -6,6 +6,9 @@ import io.github.amayaframework.core.routers.Route;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * A simple container created to transfer data between pipeline actions.
+ */
 public class RequestData extends AbstractRequestData {
     protected final HttpServletRequest servletRequest;
 

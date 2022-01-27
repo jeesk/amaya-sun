@@ -6,6 +6,11 @@ import javax.servlet.http.Cookie;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * <p>The input action during which the request cookies are parsed.</p>
+ * <p>Receives: {@link RequestData}</p>
+ * <p>Returns: {@link RequestData}</p>
+ */
 public class ServletParseRequestCookiesAction extends PipelineAction<RequestData, RequestData> {
     @Override
     public RequestData apply(RequestData requestData) {
