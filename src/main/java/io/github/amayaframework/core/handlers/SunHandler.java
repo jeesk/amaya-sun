@@ -57,12 +57,10 @@ public class SunHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         HttpResponse response = (HttpResponse) handler.process(exchange).getResult();
-        String body;
-        try {
-            body = (String) response.getBody();
-        } catch (Exception e) {
-            reject(exchange);
-            return;
+        String body = null;
+        Object rawBody = response.getBody();
+        if (rawBody != null) {
+            body = rawBody.toString();
         }
         exchange.getResponseHeaders().putAll(response.getHeaderMap());
         sendAnswer(exchange, response.getCode(), body);

@@ -6,7 +6,6 @@ import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.pipelines.servlets.RequestData;
 import io.github.amayaframework.core.util.AmayaConfig;
-import io.github.amayaframework.server.utils.HttpCode;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -43,13 +42,10 @@ public class ServletHandler extends HttpServlet {
     protected void doMethod(HttpMethod method, HttpServletRequest req, HttpServletResponse resp) throws IOException {
         RequestData requestData = new RequestData(req, method);
         HttpResponse response = (HttpResponse) handler.process(requestData).getResult();
-        String body;
-        try {
-            body = (String) response.getBody();
-        } catch (Exception e) {
-            HttpCode code = HttpCode.INTERNAL_SERVER_ERROR;
-            resp.sendError(code.getCode(), code.getMessage());
-            return;
+        String body = null;
+        Object rawBody = response.getBody();
+        if (rawBody != null) {
+            body = rawBody.toString();
         }
         response.getHeaderMap().forEach((key, value) -> value.forEach(e -> resp.addHeader(key, e)));
         resp.setStatus(response.getCode().getCode());
