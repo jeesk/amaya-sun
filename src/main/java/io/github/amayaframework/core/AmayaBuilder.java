@@ -161,6 +161,7 @@ public class AmayaBuilder extends AbstractBuilder {
      * and resets the builder to the initial parameters.
      *
      * @return {@link AmayaServer} instance
+     * @throws IOException in case of unsuccessful initialization of the server
      */
     public AmayaServer build() throws IOException {
         HttpServer server;
