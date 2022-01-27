@@ -80,4 +80,9 @@ public class ServletHandler extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         doMethod(HttpMethod.DELETE, req, resp);
     }
+
+    @Override
+    protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        doMethod(HttpMethod.OPTIONS, req, resp);
+    }
 }

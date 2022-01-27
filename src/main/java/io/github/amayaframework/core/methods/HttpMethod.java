@@ -12,7 +12,8 @@ public enum HttpMethod {
     POST(Post.class),
     PUT(Put.class),
     PATCH(Patch.class),
-    DELETE(Delete.class);
+    DELETE(Delete.class),
+    OPTIONS(Options.class);
 
     private static final Map<Class<Annotation>, HttpMethod> children = toMap();
     private final Class<Annotation> annotationClass;

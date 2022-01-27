@@ -24,15 +24,16 @@ public class ControllerScanner implements Scanner<Set<Controller>> {
             throws InvocationTargetException, InstantiationException, IllegalAccessException {
         Map<String, Controller> found =
                 ReflectUtils.foundAnnotatedWithValue(annotationClass, Controller.class, String.class);
-        for (String path : found.keySet()) {
-            if (path.equals("/")) {
-                path = "";
+        for (Map.Entry<String, Controller> entry : found.entrySet()) {
+            String path = entry.getKey();
+            if (path.equals("")) {
+                path = "/";
             }
-            if (!path.isEmpty() && !ParseUtil.ROUTE.matcher(path).matches()) {
+            if (!path.isEmpty() && !path.equals("/") && !ParseUtil.ROUTE.matcher(path).matches()) {
                 throw new InvalidRouteFormatException(path);
             }
+            entry.getValue().setPath(path);
         }
-        found.forEach((path, controller) -> controller.setPath(path));
         return new HashSet<>(found.values());
     }
 }

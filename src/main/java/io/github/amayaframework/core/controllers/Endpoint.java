@@ -13,5 +13,5 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 @IndexAnnotated
 public @interface Endpoint {
-    String value();
+    String value() default "";
 }
