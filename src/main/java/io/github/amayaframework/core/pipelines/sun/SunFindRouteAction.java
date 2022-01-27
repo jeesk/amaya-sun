@@ -35,7 +35,6 @@ public class SunFindRouteAction extends PipelineAction<HttpExchange, RequestData
         URI uri = exchange.getRequestURI();
         String path = uri.getPath().substring(length);
         Route route = router.follow(method, path);
-        System.out.println(path);
         if (route == null) {
             reject(HttpCode.NOT_FOUND);
         }
