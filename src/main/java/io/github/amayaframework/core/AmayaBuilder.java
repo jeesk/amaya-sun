@@ -64,6 +64,7 @@ public class AmayaBuilder extends AbstractBuilder {
 
     /**
      * Binds server to given address.
+     *
      * @param host Host address
      * @param port Host port
      * @return {@link AmayaBuilder} instance
@@ -74,6 +75,7 @@ public class AmayaBuilder extends AbstractBuilder {
 
     /**
      * Binds server to given address.
+     *
      * @param port Host port
      * @return {@link AmayaBuilder} instance
      */
@@ -98,6 +100,7 @@ public class AmayaBuilder extends AbstractBuilder {
      * @param configurators {@link List} configurators to be set. Must be not null.
      * @return {@link AmayaBuilder} instance
      */
+    @Override
     public AmayaBuilder pipelineConfigurators(Collection<Configurator> configurators) {
         return (AmayaBuilder) super.pipelineConfigurators(configurators);
     }
@@ -108,6 +111,7 @@ public class AmayaBuilder extends AbstractBuilder {
      * @param configurator {@link Consumer} configurator to be added. Must be not null.
      * @return {@link AmayaBuilder} instance
      */
+    @Override
     public AmayaBuilder addConfigurator(Configurator configurator) {
         return (AmayaBuilder) super.addConfigurator(configurator);
     }
@@ -118,10 +122,18 @@ public class AmayaBuilder extends AbstractBuilder {
      * @param controller {@link Controller} controller to be added. Must be not null.
      * @return {@link AmayaBuilder} builder instance
      */
+    @Override
     public AmayaBuilder addController(Controller controller) {
         return (AmayaBuilder) super.addController(controller);
     }
 
+    /**
+     * Removes the controller from the list of processed
+     *
+     * @param path controller path
+     * @return {@link AmayaBuilder} instance
+     */
+    @Override
     public AmayaBuilder removeController(String path) {
         return (AmayaBuilder) super.removeController(path);
     }
@@ -133,6 +145,7 @@ public class AmayaBuilder extends AbstractBuilder {
      * @param annotation {@link Class} of annotation
      * @return {@link AmayaBuilder} instance
      */
+    @Override
     public AmayaBuilder controllerAnnotation(Class<? extends Annotation> annotation) {
         return (AmayaBuilder) super.controllerAnnotation(annotation);
     }

@@ -64,14 +64,15 @@ public abstract class AbstractBuilder {
     }
 
     protected void findControllers() {
-        if (annotation != null) {
-            Set<Controller> controllers;
-            try {
-                controllers = new ControllerScanner(annotation).find();
-            } catch (Exception e) {
-                throw new IllegalStateException("Exception when scanning controllers!", e);
-            }
-            controllers.forEach(this::addController);
+        if (annotation == null) {
+            return;
         }
+        Set<Controller> controllers;
+        try {
+            controllers = new ControllerScanner(annotation).find();
+        } catch (Exception e) {
+            throw new IllegalStateException("Exception when scanning controllers!", e);
+        }
+        controllers.forEach(this::addController);
     }
 }
