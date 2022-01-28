@@ -41,12 +41,8 @@ public abstract class HttpRequest extends AbstractHttpTransaction implements Vie
         return fields.get(name);
     }
 
-    private void put(String name, Object value) {
+    protected void put(String name, Object value) {
         this.fields.put(name, value);
-    }
-
-    private void put(Content content, Object value) {
-        put(content.getFilter(), value);
     }
 
     /**
