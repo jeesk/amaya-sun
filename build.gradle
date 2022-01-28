@@ -26,12 +26,11 @@ dependencies {
     implementation group: 'cglib', name: 'cglib', version: '3.3.0'
     implementation group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
     annotationProcessor group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.35'
     implementation group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
     implementation group: 'com.github.romanqed', name: 'jutils', version: '1.2.5'
     implementation group: 'io.github.amayaframework', name: 'http-server', version: '1.0.2'
     implementation group: 'io.github.amayaframework', name: 'filters', version: '1.0.7'
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.35'
-    implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.35'
 }
 
 test {
