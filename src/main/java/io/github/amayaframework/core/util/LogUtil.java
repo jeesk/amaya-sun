@@ -34,7 +34,7 @@ public class LogUtil {
         return "Code: " + response.getCode() + "\n" +
                 "Body: " + response.getBody() + "\n" +
                 "Attachments: " + response.getAttachments() + "\n" +
-                "Headers: " + response.getHeaderMap().toString() + "\n" +
+                "Headers: " + response.getHeaderMap() + "\n" +
                 "Cookies: " + response.getCookies() + "\n";
     }
 }

@@ -53,7 +53,7 @@ public abstract class AbstractController implements Controller {
     private void debugLog(Map<HttpMethod, List<Route>> found) {
         StringBuilder message = new StringBuilder("Controller successfully initialized\nAdded methods: ");
         found.forEach((method, routes) -> {
-            message.append(method.toString()).append('[');
+            message.append(method).append('[');
             routes.forEach(route -> message.append('"').append(route.route()).append('"').append(", "));
             int position = message.lastIndexOf(", ");
             if (position > 0) {
