@@ -32,7 +32,6 @@ dependencies {
     implementation group: 'io.github.amayaframework', name: 'core-api', version: '1.0.2'
     implementation group: 'io.github.amayaframework', name: 'http-server', version: '1.0.4'
     implementation group: 'io.github.amayaframework', name: 'filters', version: '1.0.7'
-    implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.35'
 }
 
 test {

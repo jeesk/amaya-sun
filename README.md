@@ -1,4 +1,4 @@
-# amaya-core-sun [![maven-central](https://img.shields.io/maven-central/v/io.github.amayaframework/core?color=blue)](https://repo1.maven.org/maven2/io/github/amayaframework/core/)
+# amaya-core-sun [![maven-central](https://img.shields.io/maven-central/v/io.github.amayaframework/core-sun?color=blue)](https://repo1.maven.org/maven2/io/github/amayaframework/core-sun/)
 
 Amaya is a fairly lightweight web framework for Java, which guarantees speed, ease of creating plugins/addons, 
 flexibility and ease of use. 
@@ -31,7 +31,7 @@ To install it, you will need:
 dependencies {
     implementation group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
     annotationProcessor group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
-    implementation group: 'io.github.amayaframework', name: 'core', version: 'LATEST'
+    implementation group: 'io.github.amayaframework', name: 'core-sun', version: 'LATEST'
 }
 ```
 
