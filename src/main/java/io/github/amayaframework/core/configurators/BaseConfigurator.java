@@ -7,6 +7,8 @@ import io.github.amayaframework.core.pipelines.CheckResponseAction;
 import io.github.amayaframework.core.pipelines.InvokeControllerAction;
 import io.github.amayaframework.core.pipelines.ParseResponseCookiesAction;
 import io.github.amayaframework.core.pipelines.Stage;
+import io.github.amayaframework.core.pipelines.debug.*;
+import io.github.amayaframework.core.util.AmayaConfig;
 
 abstract class BaseConfigurator implements Configurator {
     @Override
@@ -17,6 +19,17 @@ abstract class BaseConfigurator implements Configurator {
         input.insertBefore(Stage.INVOKE_CONTROLLER.name(), difference(handler.getController()));
         output.put(Stage.CHECK_RESPONSE.name(), new CheckResponseAction());
         output.put(Stage.PARSE_RESPONSE_COOKIES.name(), new ParseResponseCookiesAction());
+        if (AmayaConfig.INSTANCE.getDebug()) {
+            addDebugActions(input, output);
+        }
+    }
+
+    protected void addDebugActions(Pipeline input, Pipeline output) {
+        input.insertAfter(Stage.FIND_ROUTE.name(), DebugStage.ROUTE_DEBUG.name(), new RouteDebugAction());
+        input.insertAfter(Stage.PARSE_REQUEST.name(), DebugStage.REQUEST_DEBUG.name(), new RequestDebugAction());
+        input.insertAfter(Stage.INVOKE_CONTROLLER.name(), DebugStage.RESPONSE_DEBUG.name(), new ResponseDebugAction());
+        output.insertBefore(Stage.CHECK_RESPONSE.name(), DebugStage.INPUT_RESULT_DEBUG.name(),
+                new InputResultDebugAction());
     }
 
     protected abstract Pipeline difference(Controller controller);

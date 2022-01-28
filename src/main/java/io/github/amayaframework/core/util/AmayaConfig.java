@@ -4,6 +4,8 @@ import io.github.amayaframework.core.routers.RegexpRouter;
 import io.github.amayaframework.core.routers.Router;
 import io.github.amayaframework.core.wrapping.InjectPacker;
 import io.github.amayaframework.core.wrapping.Packer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -19,12 +21,19 @@ import java.util.concurrent.ConcurrentHashMap;
  * see the documentation in the project repository or javadoc in {@link Field} enum</p>
  */
 public class AmayaConfig {
-    public static final AmayaConfig INSTANCE = new AmayaConfig();
+    public static final AmayaConfig INSTANCE;
+    private static final Logger logger;
+
+    static {
+        logger = LoggerFactory.getLogger(AmayaConfig.class);
+        INSTANCE = new AmayaConfig();
+    }
 
     private final Map<Field, Object> fields;
 
     public AmayaConfig() {
         fields = new ConcurrentHashMap<>();
+        setDebug(logger.isDebugEnabled());
         setRoutePacker(new InjectPacker());
         setRouter(RegexpRouter.class);
         setCharset(StandardCharsets.UTF_8);
@@ -34,6 +43,9 @@ public class AmayaConfig {
     public void setField(Field field, Object value) {
         Objects.requireNonNull(field);
         fields.put(field, value);
+        if (getDebug()) {
+            logger.debug("Field " + field + " set with value " + value);
+        }
     }
 
     public Object getField(Field field) {
@@ -81,6 +93,14 @@ public class AmayaConfig {
         this.setField(Field.BACKLOG, backlog);
     }
 
+    public Boolean getDebug() {
+        return (Boolean) fields.get(Field.DEBUG);
+    }
+
+    public void setDebug(boolean debug) {
+        this.setField(Field.DEBUG, debug);
+    }
+
     public enum Field {
         /**
          * The packer that will be used for each route found inside the controllers.
@@ -100,6 +120,10 @@ public class AmayaConfig {
         /**
          * The backlog value that will be passed to the sun server.
          */
-        BACKLOG
+        BACKLOG,
+        /**
+         * Determines whether debugging mode will be enabled
+         */
+        DEBUG
     }
 }

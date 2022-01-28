@@ -59,6 +59,9 @@ public class AmayaBuilder extends AbstractBuilder {
      */
     public AmayaBuilder bind(InetSocketAddress address) {
         this.address = Objects.requireNonNull(address);
+        if (AmayaConfig.INSTANCE.getDebug()) {
+            logger.debug("Bind server to " + address);
+        }
         return this;
     }
 
@@ -91,6 +94,9 @@ public class AmayaBuilder extends AbstractBuilder {
      */
     public AmayaBuilder executor(Executor executor) {
         this.executor = Objects.requireNonNull(executor);
+        if (AmayaConfig.INSTANCE.getDebug()) {
+            logger.debug("Set Executor to " + executor.getClass().getSimpleName());
+        }
         return this;
     }
 
@@ -153,6 +159,9 @@ public class AmayaBuilder extends AbstractBuilder {
     private HttpServer makeHttpsServer() throws IOException {
         HttpsServer ret = HttpsServer.create(address, AmayaConfig.INSTANCE.getBacklog());
         ret.setHttpsConfigurator(configurator);
+        if (AmayaConfig.INSTANCE.getDebug()) {
+            logger.debug("Create https server");
+        }
         return ret;
     }
 
@@ -176,9 +185,13 @@ public class AmayaBuilder extends AbstractBuilder {
         controllers.forEach((path, controller) -> {
             SunHandler handler = new SunHandler(controller);
             handler.getHandler().configure(configurators);
+            if (path.equals("")) {
+                path = "/";
+            }
             server.createContext(path, handler);
         });
         resetValues();
+        printLogMessage();
         return ret;
     }
 }

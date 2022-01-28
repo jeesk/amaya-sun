@@ -6,6 +6,9 @@ import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.pipelines.servlets.RequestData;
 import io.github.amayaframework.core.util.AmayaConfig;
+import io.github.amayaframework.server.utils.HttpCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +27,7 @@ import java.util.Collections;
  * process and verify the received HttpResponse. After that, the server receives a response.</p>
  */
 public class ServletHandler extends HttpServlet {
+    private static final Logger logger = LoggerFactory.getLogger(ServletHandler.class);
     private final Charset charset = AmayaConfig.INSTANCE.getCharset();
     private final IOHandler handler;
 
@@ -41,7 +45,15 @@ public class ServletHandler extends HttpServlet {
 
     protected void doMethod(HttpMethod method, HttpServletRequest req, HttpServletResponse resp) throws IOException {
         RequestData requestData = new RequestData(req, method);
-        HttpResponse response = (HttpResponse) handler.process(requestData).getResult();
+        HttpResponse response;
+        try {
+            response = (HttpResponse) handler.process(requestData).getResult();
+        } catch (Exception e) {
+            logger.error("Error when receiving a response from I/O pipelines: " + e.getMessage());
+            HttpCode code = HttpCode.INTERNAL_SERVER_ERROR;
+            resp.sendError(code.getCode(), code.getMessage());
+            return;
+        }
         String body = null;
         Object rawBody = response.getBody();
         if (rawBody != null) {

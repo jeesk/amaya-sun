@@ -7,6 +7,8 @@ import io.github.amayaframework.core.util.AmayaConfig;
 import io.github.amayaframework.server.interfaces.HttpExchange;
 import io.github.amayaframework.server.interfaces.HttpHandler;
 import io.github.amayaframework.server.utils.HttpCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -22,6 +24,7 @@ import java.util.Collections;
  * process and verify the received HttpResponse. After that, the server receives a response.</p>
  */
 public class SunHandler implements HttpHandler {
+    private static final Logger logger = LoggerFactory.getLogger(SunHandler.class);
     private final Charset charset = AmayaConfig.INSTANCE.getCharset();
     private final IOHandler handler;
 
@@ -56,7 +59,14 @@ public class SunHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        HttpResponse response = (HttpResponse) handler.process(exchange).getResult();
+        HttpResponse response;
+        try {
+            response = (HttpResponse) handler.process(exchange).getResult();
+        } catch (Exception e) {
+            logger.error("Error when receiving a response from I/O pipelines: " + e.getMessage());
+            reject(exchange);
+            return;
+        }
         String body = null;
         Object rawBody = response.getBody();
         if (rawBody != null) {

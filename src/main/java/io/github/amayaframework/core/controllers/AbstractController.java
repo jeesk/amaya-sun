@@ -6,6 +6,8 @@ import io.github.amayaframework.core.routers.Route;
 import io.github.amayaframework.core.routers.Router;
 import io.github.amayaframework.core.scanners.RouteScanner;
 import io.github.amayaframework.core.util.AmayaConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,7 @@ import java.util.Objects;
  */
 public abstract class AbstractController implements Controller {
     private static final String DUPLICATE_PATTERN = "Method %s with path \"%s\" at controller %s";
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private final Router router;
     private String route;
 
@@ -29,20 +32,41 @@ public abstract class AbstractController implements Controller {
         try {
             found = scanner.find();
         } catch (Exception e) {
-            throw new IllegalStateException("Exception when scanning routes at " + getClass().getSimpleName(), e);
+            String error = "Exception when scanning routes at " + getClass().getSimpleName();
+            logger.error(error);
+            throw new IllegalStateException(error, e);
         }
         found.forEach((method, routes) -> routes.forEach(route -> {
             try {
                 router.addRoute(method, route);
             } catch (DuplicateException e) {
-                throw new DuplicateException(String.format(
-                        DUPLICATE_PATTERN,
-                        method,
-                        route.route(),
-                        getClass().getSimpleName()
-                ));
+                String error = String.format(DUPLICATE_PATTERN, method, route.route(), getClass().getSimpleName());
+                logger.error(error);
+                throw new DuplicateException(error);
             }
         }));
+        if (AmayaConfig.INSTANCE.getDebug()) {
+            debugLog(found);
+        }
+    }
+
+    private void debugLog(Map<HttpMethod, List<Route>> found) {
+        StringBuilder message = new StringBuilder("Controller successfully initialized\nAdded methods: ");
+        found.forEach((method, routes) -> {
+            message.append(method.toString()).append('[');
+            routes.forEach(route -> message.append('"').append(route.route()).append('"').append(", "));
+            int position = message.lastIndexOf(", ");
+            if (position > 0) {
+                message.delete(position, position + 2);
+            }
+            message.append(']').append(',').append(' ');
+        });
+        int position = message.lastIndexOf(", ");
+        if (position > 0) {
+            message.delete(position, position + 2);
+        }
+        message.append("\nUsed router: ").append(router.getClass().getSimpleName());
+        logger.debug(message.toString());
     }
 
     @Override

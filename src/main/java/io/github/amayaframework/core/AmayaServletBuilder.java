@@ -4,6 +4,7 @@ import io.github.amayaframework.core.configurators.BaseServletConfigurator;
 import io.github.amayaframework.core.configurators.Configurator;
 import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.handlers.ServletHandler;
+import io.github.amayaframework.core.util.AmayaConfig;
 
 import javax.servlet.Servlet;
 import java.lang.annotation.Annotation;
@@ -87,6 +88,9 @@ public class AmayaServletBuilder extends AbstractBuilder {
     public AmayaServletBuilder useUrlPattern(String urlPattern) {
         this.useUrlPattern = true;
         this.urlPattern = Objects.requireNonNull(urlPattern);
+        if (AmayaConfig.INSTANCE.getDebug()) {
+            logger.debug("Set url pattern to " + urlPattern);
+        }
         return this;
     }
 
@@ -113,10 +117,11 @@ public class AmayaServletBuilder extends AbstractBuilder {
         controllers.forEach((path, controller) -> {
             ServletHandler handler = new ServletHandler(controller);
             handler.getHandler().configure(configurators);
-            String pathToAdd = useUrlPattern ? path + urlPattern : path;
+            String pathToAdd = (useUrlPattern && urlPattern != null) ? path + urlPattern : path;
             ret.put(pathToAdd, handler);
         });
         resetValues();
+        printLogMessage();
         return ret;
     }
 }
