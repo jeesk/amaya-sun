@@ -7,6 +7,11 @@ import io.github.amayaframework.core.pipelines.servlets.ServletFindRouteAction;
 import io.github.amayaframework.core.pipelines.servlets.ServletParseRequestAction;
 import io.github.amayaframework.core.pipelines.servlets.ServletParseRequestCookiesAction;
 
+/**
+ * <p>A configurator that adds basic handlers to the servlet pipeline that provide routing,
+ * request processing and receiving a response from the controller.</p>
+ * <p>In the list of configurators, it should always go first, otherwise the servlet's operability is not guaranteed.</p>
+ */
 public class BaseServletConfigurator extends BaseConfigurator {
 
     @Override

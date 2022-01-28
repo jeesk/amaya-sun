@@ -8,7 +8,7 @@ import io.github.amayaframework.core.pipelines.sun.SunParseRequestAction;
 import io.github.amayaframework.core.pipelines.sun.SunParseRequestCookiesAction;
 
 /**
- * <p>A configurator that adds basic handlers to the server pipeline that provide routing,
+ * <p>A configurator that adds basic handlers to the sun server pipeline that provide routing,
  * request processing and receiving a response from the controller.</p>
  * <p>In the list of configurators, it should always go first, otherwise the server's operability is not guaranteed.</p>
  */
