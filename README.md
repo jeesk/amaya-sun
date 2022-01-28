@@ -164,9 +164,39 @@ the universal RequestData.
 Thanks to this separation, almost any necessary functionality can be added by simply inserting 
 the necessary actions between existing ones.
 
-To change the corresponding pipeline handlers, the framework provides a simple tool - 
-a list of consumers who accept the handler to be changed as an argument. 
-Set once, this list will be executed for each handler being added.
+For the configuration of pipelines, and in particular, the interface containing them, 
+it is necessary to create an heir (or just a lambda) the Configurator interface.
+
+```Java
+class MyConfigurator implements Configurator {
+
+    @Override
+    public void accept(IOHandler handler) {
+        Pipeline input = handler.getInput();
+        Pipeline output = handler.getOutput();
+        // Do something
+    }
+}
+```
+
+The framework uses exactly the same mechanism for default pipeline configuration.
+
+Then you just add your configurator to the builder.
+
+```Java
+public class Main {
+    public static void main(String[] args) throws IOException {
+        AmayaServer server = new AmayaBuilder().
+                bind(8080).
+                addConfigurator(new MyConfigurator()).
+                build();
+        server.start();
+    }
+}
+```
+
+Also, you can add a collection of configurators at once, which will overwrite the one set earlier, 
+or add configurators one by one - they will be executed in the order of addition.
 
 ## Filter concept
 
@@ -297,7 +327,7 @@ public class MyStage2Action extends PipelineAction<HttpResponse, HttpResponse> {
 
     @Override
     public HttpResponse apply(HttpResponse response) {
-        response.setBody(((MyBeautifulDataFormat) response.getBody()).toString());
+        response.setBody(((MyBeautifulDataFormat) response.getBody()).makeString());
         return response;
     }
 }
@@ -307,9 +337,9 @@ public class MyStage2Action extends PipelineAction<HttpResponse, HttpResponse> {
 <p>Example code:</p>
 
 ```Java
-public class MyPipelineConfigurator implements Consumer<PipelineHandler> {
+public class MyPipelineConfigurator implements Configurator {
     @Override
-    public void accept(PipelineHandler handler) {
+    public void accept(IOHandler handler) {
         Pipeline input = handler.input();
         Pipeline output = handler.output();
         input.insertAfter(

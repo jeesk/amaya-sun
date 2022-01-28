@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 /**
  * Basic interface for {@link IOHandler} configurators
  */
+@FunctionalInterface
 public interface Configurator extends Consumer<IOHandler> {
     default void configure(IOHandler configurable) {
         Objects.requireNonNull(configurable);
