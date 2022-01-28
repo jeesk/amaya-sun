@@ -1,25 +1,24 @@
-package io.github.amayaframework.core.pipelines.sun;
+package io.github.amayaframework.core.pipelines;
 
+import com.github.romanqed.jutils.http.HttpCode;
 import io.github.amayaframework.core.methods.HttpMethod;
-import io.github.amayaframework.core.pipelines.PipelineAction;
 import io.github.amayaframework.core.routers.Route;
 import io.github.amayaframework.core.routers.Router;
 import io.github.amayaframework.server.interfaces.HttpExchange;
-import io.github.amayaframework.server.utils.HttpCode;
 
 import java.net.URI;
 import java.util.Objects;
 
 /**
- * <p>An input action during which the requested method will be checked and the requested route will be found.</p>
+ * <p>An input action that queries the request body according to the passed headers.</p>
  * <p>Receives: {@link SunRequestData}</p>
  * <p>Returns: {@link SunRequestData}</p>
  */
-public class SunFindRouteAction extends PipelineAction<SunRequestData, SunRequestData> {
+public class FindRouteAction extends PipelineAction<SunRequestData, SunRequestData> {
     private final Router router;
     private final int length;
 
-    public SunFindRouteAction(Router router, String path) {
+    public FindRouteAction(Router router, String path) {
         this.router = Objects.requireNonNull(router);
         this.length = Objects.requireNonNull(path).length();
     }
@@ -27,10 +26,8 @@ public class SunFindRouteAction extends PipelineAction<SunRequestData, SunReques
     @Override
     public SunRequestData apply(SunRequestData requestData) {
         HttpExchange exchange = requestData.exchange;
-        HttpMethod method = null;
-        try {
-            method = HttpMethod.valueOf(exchange.getRequestMethod());
-        } catch (Exception e) {
+        HttpMethod method = HttpMethod.fromName(exchange.getRequestMethod());
+        if (method == null) {
             reject(HttpCode.NOT_IMPLEMENTED);
         }
         URI uri = exchange.getRequestURI();

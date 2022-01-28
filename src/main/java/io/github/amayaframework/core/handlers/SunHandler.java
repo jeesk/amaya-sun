@@ -1,16 +1,16 @@
 package io.github.amayaframework.core.handlers;
 
+import com.github.romanqed.jutils.http.HttpCode;
 import io.github.amayaframework.core.configurators.BaseSunConfigurator;
 import io.github.amayaframework.core.contexts.ContentType;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.contexts.StreamHandler;
 import io.github.amayaframework.core.controllers.Controller;
-import io.github.amayaframework.core.pipelines.sun.SunRequestData;
+import io.github.amayaframework.core.pipelines.SunRequestData;
 import io.github.amayaframework.core.util.AmayaConfig;
 import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.server.interfaces.HttpExchange;
 import io.github.amayaframework.server.interfaces.HttpHandler;
-import io.github.amayaframework.server.utils.HttpCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

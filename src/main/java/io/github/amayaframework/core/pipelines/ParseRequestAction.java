@@ -1,12 +1,11 @@
-package io.github.amayaframework.core.pipelines.servlets;
+package io.github.amayaframework.core.pipelines;
 
+import com.github.romanqed.jutils.http.HttpCode;
 import com.github.romanqed.jutils.util.Checks;
-import io.github.amayaframework.core.contexts.ServletHttpRequest;
-import io.github.amayaframework.core.pipelines.PipelineAction;
+import io.github.amayaframework.core.contexts.SunHttpRequest;
 import io.github.amayaframework.core.util.ParseUtil;
-import io.github.amayaframework.server.utils.HttpCode;
+import io.github.amayaframework.server.interfaces.HttpExchange;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,16 +13,16 @@ import java.util.Map;
 /**
  * <p>An input action during which the basic components of the request will be checked and parsed:
  * query parameters, path parameters, headers and the request body.</p>
- * <p>Receives: {@link ServletRequestData}</p>
- * <p>Returns: {@link ServletRequestData}</p>
+ * <p>Receives: {@link SunRequestData}</p>
+ * <p>Returns: {@link SunRequestData}</p>
  */
-public class ServletParseRequestAction extends PipelineAction<ServletRequestData, ServletRequestData> {
+public class ParseRequestAction extends PipelineAction<SunRequestData, SunRequestData> {
 
     @Override
-    public ServletRequestData apply(ServletRequestData requestData) {
-        HttpServletRequest servletRequest = requestData.servletRequest;
+    public SunRequestData apply(SunRequestData requestData) {
+        HttpExchange exchange = requestData.exchange;
         Map<String, List<String>> query = Checks.requireNonException(
-                () -> ParseUtil.parseQueryString(servletRequest.getQueryString()),
+                () -> ParseUtil.parseQueryString(exchange.getRequestURI().getQuery()),
                 HashMap::new
         );
         Map<String, Object> params = null;
@@ -32,7 +31,8 @@ public class ServletParseRequestAction extends PipelineAction<ServletRequestData
         } catch (Exception e) {
             reject(HttpCode.BAD_REQUEST);
         }
-        ServletHttpRequest request = new ServletHttpRequest(servletRequest);
+        SunHttpRequest request = new SunHttpRequest();
+        request.setHeaders(exchange.getRequestHeaders());
         request.setMethod(requestData.getMethod());
         request.setQueryParameters(query);
         request.setPathParameters(params);

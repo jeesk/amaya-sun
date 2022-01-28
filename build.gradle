@@ -13,7 +13,7 @@ java {
 }
 
 group 'io.github.amayaframework'
-archivesBaseName = 'core'
+archivesBaseName = 'core-sun'
 version = System.getenv('RELEASE_VERSION') ?: '1.0.0'
 
 repositories {
@@ -28,11 +28,11 @@ dependencies {
     annotationProcessor group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.35'
     implementation group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
-    implementation group: 'com.github.romanqed', name: 'jutils', version: '1.2.5'
-    implementation group: 'io.github.amayaframework', name: 'http-server', version: '1.0.3'
+    implementation group: 'com.github.romanqed', name: 'jutils', version: '1.2.7'
+    implementation group: 'io.github.amayaframework', name: 'core-api', version: '1.0.2'
+    implementation group: 'io.github.amayaframework', name: 'http-server', version: '1.0.4'
     implementation group: 'io.github.amayaframework', name: 'filters', version: '1.0.7'
     implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.35'
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '8.5.75'
 }
 
 test {
@@ -80,28 +80,28 @@ def customizePom(pom) {
 
         root.children().last() + {
             resolveStrategy = DELEGATE_FIRST
-            description 'A set of basic utilities that make up the core of the framework ' +
-                    'and are intended for use in subsequent implementations.'
-            name 'core'
-            url 'https://github.com/AmayaFramework/amaya-core'
+            description 'Amaya is a fairly lightweight web framework for Java, which guarantees speed, ' +
+                    'ease of creating plugins/addons, flexibility and ease of use. Sun server implementation.'
+            name 'core-sun'
+            url 'https://github.com/AmayaFramework/amaya-core-sun'
             organization {
                 name 'io.github.amayaframework'
                 url 'https://github.com/AmayaFramework'
             }
             issueManagement {
                 system 'GitHub'
-                url 'https://github.com/AmayaFramework/amaya-core/issues'
+                url 'https://github.com/AmayaFramework/amaya-core-sun/issues'
             }
             licenses {
                 license {
                     name 'GNU General Public License v3.0'
-                    url 'https://github.com/AmayaFramework/amaya-core/blob/main/LICENSE'
+                    url 'https://github.com/AmayaFramework/amaya-core-sun/blob/main/LICENSE'
                 }
             }
             scm {
-                url 'https://github.com/AmayaFramework/amaya-core'
-                connection 'scm:https://github.com/AmayaFramework/amaya-core.git'
-                developerConnection 'scm:https://github.com/AmayaFramework/amaya-core.git'
+                url 'https://github.com/AmayaFramework/amaya-core-sun'
+                connection 'scm:https://github.com/AmayaFramework/amaya-core-sun.git'
+                developerConnection 'scm:https://github.com/AmayaFramework/amaya-core-sun.git'
             }
             developers {
                 developer {

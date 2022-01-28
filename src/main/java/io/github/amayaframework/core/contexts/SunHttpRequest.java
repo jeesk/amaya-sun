@@ -1,6 +1,6 @@
 package io.github.amayaframework.core.contexts;
 
-import io.github.amayaframework.server.utils.HeaderMap;
+import com.github.romanqed.jutils.http.HeaderMap;
 
 import java.util.List;
 import java.util.Objects;

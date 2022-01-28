@@ -2,23 +2,31 @@ package io.github.amayaframework.core.configurators;
 
 import com.github.romanqed.jutils.structs.pipeline.Pipeline;
 import io.github.amayaframework.core.controllers.Controller;
-import io.github.amayaframework.core.pipelines.Stage;
-import io.github.amayaframework.core.pipelines.sun.SunFindRouteAction;
-import io.github.amayaframework.core.pipelines.sun.SunParseRequestAction;
-import io.github.amayaframework.core.pipelines.sun.SunParseRequestCookiesAction;
+import io.github.amayaframework.core.handlers.IOHandler;
+import io.github.amayaframework.core.pipelines.*;
+import io.github.amayaframework.core.util.AmayaConfig;
 
 /**
  * <p>A configurator that adds basic handlers to the sun server pipeline that provide routing,
  * request processing and receiving a response from the controller.</p>
  * <p>In the list of configurators, it should always go first, otherwise the server's operability is not guaranteed.</p>
  */
-public class BaseSunConfigurator extends BaseConfigurator {
+public class BaseSunConfigurator extends AbstractConfigurator {
+
     @Override
-    protected Pipeline difference(Controller controller) {
-        Pipeline toAdd = new Pipeline();
-        toAdd.put(Stage.FIND_ROUTE.name(), new SunFindRouteAction(controller.router(), controller.getPath()));
-        toAdd.put(Stage.PARSE_REQUEST.name(), new SunParseRequestAction());
-        toAdd.put(Stage.PARSE_REQUEST_COOKIES.name(), new SunParseRequestCookiesAction());
-        return toAdd;
+    public void accept(IOHandler handler) {
+        Pipeline input = handler.getInput();
+        Pipeline output = handler.getOutput();
+        Controller controller = handler.getController();
+        input.put(Stage.FIND_ROUTE.name(), new FindRouteAction(controller.router(), controller.getPath()));
+        input.put(Stage.PARSE_REQUEST.name(), new ParseRequestAction());
+        input.put(Stage.PARSE_REQUEST_BODY.name(), new ParseRequestBodyAction());
+        input.put(Stage.PARSE_REQUEST_COOKIES.name(), new ParseRequestCookiesAction());
+        input.put(Stage.INVOKE_CONTROLLER.name(), new InvokeControllerAction());
+        output.put(Stage.CHECK_RESPONSE.name(), new CheckResponseAction());
+        output.put(Stage.PARSE_RESPONSE_COOKIES.name(), new ParseResponseCookiesAction());
+        if (AmayaConfig.INSTANCE.getDebug()) {
+            addDebugActions(input, output);
+        }
     }
 }

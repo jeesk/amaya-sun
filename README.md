@@ -1,4 +1,4 @@
-# amaya-core [![maven-central](https://img.shields.io/maven-central/v/io.github.amayaframework/core?color=blue)](https://repo1.maven.org/maven2/io/github/amayaframework/core/)
+# amaya-core-sun [![maven-central](https://img.shields.io/maven-central/v/io.github.amayaframework/core?color=blue)](https://repo1.maven.org/maven2/io/github/amayaframework/core/)
 
 Amaya is a fairly lightweight web framework for Java, which guarantees speed, ease of creating plugins/addons, 
 flexibility and ease of use. 
@@ -51,16 +51,6 @@ dependencies {
 ```
 
 ## Usage example
-
-### Builders
-
-By default, two different builders are bundled with the core. 
-One of them will create a ready-to-run server built on the basis of a sun server, and the other will 
-prepare a map of servlets readies to be placed in your servlet container.
-
-The code below will start the server associated with the address localhost:8000.
-The server will contain only one controller with the GET method, which will return 
-the string "Hello, world!" repeated as many times as specified in the path parameter.
 
 ### Server class
 ```Java

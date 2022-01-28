@@ -1,7 +1,6 @@
-package io.github.amayaframework.core.pipelines.sun;
+package io.github.amayaframework.core.pipelines;
 
 import io.github.amayaframework.core.methods.HttpMethod;
-import io.github.amayaframework.core.pipelines.RequestData;
 import io.github.amayaframework.core.routers.Route;
 import io.github.amayaframework.core.util.AmayaConfig;
 import io.github.amayaframework.core.util.ParseUtil;
