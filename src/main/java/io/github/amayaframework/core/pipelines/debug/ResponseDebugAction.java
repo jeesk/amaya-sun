@@ -17,8 +17,10 @@ public class ResponseDebugAction extends PipelineAction<HttpResponse, HttpRespon
     @Override
     public HttpResponse apply(HttpResponse response) {
         String message = "HttpResponse was received successfully\n" +
-                "Implementation used: " + response.getClass().getSimpleName() + "\n";
-        logger.debug(message + LogUtil.getResponseData(response));
+                "Implementation used: " + (response != null ? response.getClass().getSimpleName() : null) + "\n";
+        if (response != null) {
+            logger.debug(message + LogUtil.getResponseData(response));
+        }
         return response;
     }
 }

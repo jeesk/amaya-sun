@@ -1,6 +1,7 @@
 package io.github.amayaframework.core.contexts;
 
 import javax.servlet.http.Cookie;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,20 @@ public interface HttpTransaction {
      * @param body body object
      */
     void setBody(Object body);
+
+    /**
+     * Transform body into {@link String} and returns it.
+     *
+     * @return {@link String} body
+     */
+    String getBodyAsString();
+
+    /**
+     * Transform body into {@link InputStream} and returns it.
+     *
+     * @return {@link InputStream} body
+     */
+    InputStream getBodyAsInputStream();
 
     /**
      * Returns values of specified header
@@ -85,4 +100,18 @@ public interface HttpTransaction {
      * @return found {@link Cookie} or null
      */
     Cookie getCookie(String name);
+
+    /**
+     * Returns content type of transaction
+     *
+     * @return {@link ContentType} enum
+     */
+    ContentType getContentType();
+
+    /**
+     * Sets content type of transaction
+     *
+     * @param type {@link ContentType} enum
+     */
+    void setContentType(ContentType type);
 }

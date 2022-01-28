@@ -3,15 +3,10 @@ package io.github.amayaframework.core.pipelines.servlets;
 import com.github.romanqed.jutils.util.Checks;
 import io.github.amayaframework.core.contexts.ServletHttpRequest;
 import io.github.amayaframework.core.pipelines.PipelineAction;
-import io.github.amayaframework.core.util.AmayaConfig;
 import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.server.utils.HttpCode;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +18,6 @@ import java.util.Map;
  * <p>Returns: {@link ServletRequestData}</p>
  */
 public class ServletParseRequestAction extends PipelineAction<ServletRequestData, ServletRequestData> {
-    private final Charset charset = AmayaConfig.INSTANCE.getCharset();
 
     @Override
     public ServletRequestData apply(ServletRequestData requestData) {
@@ -38,21 +32,10 @@ public class ServletParseRequestAction extends PipelineAction<ServletRequestData
         } catch (Exception e) {
             reject(HttpCode.BAD_REQUEST);
         }
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new InputStreamReader(servletRequest.getInputStream(), charset));
-        } catch (IOException e) {
-            reject(HttpCode.INTERNAL_SERVER_ERROR);
-        }
-        String body = null;
-        if (reader != null) {
-            body = reader.lines().reduce("", (left, right) -> left + right + "\n");
-        }
         ServletHttpRequest request = new ServletHttpRequest(servletRequest);
         request.setMethod(requestData.getMethod());
         request.setQueryParameters(query);
         request.setPathParameters(params);
-        request.setBody(body);
         requestData.setRequest(request);
         return requestData;
     }

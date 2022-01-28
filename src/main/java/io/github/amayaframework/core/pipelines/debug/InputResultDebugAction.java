@@ -19,13 +19,15 @@ public class InputResultDebugAction extends PipelineAction<PipelineResult, Pipel
     public PipelineResult apply(PipelineResult result) {
         String message = "The input pipeline is completed\n" +
                 "Interrupted: " + result.isInterrupted() + "\n" +
-                "Exception: " + result.getException() + "\n" +
-                "Result: " + result.getResult().getClass().getSimpleName() + "\n";
+                "Exception: " + result.getException() + "\n";
         Object toCheck = result.getResult();
+        if (toCheck != null) {
+            message += "Result: " + result.getResult().getClass().getSimpleName() + "\n";
+        }
         if (toCheck instanceof HttpResponse) {
             message += LogUtil.getResponseData((HttpResponse) toCheck);
         }
-        logger.debug(message);
+        logger.debug(message, result.getException());
         return result;
     }
 }

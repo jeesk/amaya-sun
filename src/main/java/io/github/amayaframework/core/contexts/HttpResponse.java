@@ -1,19 +1,21 @@
 package io.github.amayaframework.core.contexts;
 
+import io.github.amayaframework.core.util.AmayaConfig;
+import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.server.utils.HeaderMap;
 import io.github.amayaframework.server.utils.HttpCode;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.nio.charset.Charset;
+import java.util.*;
 
 /**
  * A class representing a http response. Inherited from {@link HttpTransaction}.
  */
 public class HttpResponse extends AbstractHttpTransaction {
+    private final Charset charset = AmayaConfig.INSTANCE.getCharset();
     private final HeaderMap headers;
     private HttpCode code;
+    private StreamHandler handler;
 
     /**
      * Creates HttpResponse with code and header map
@@ -105,5 +107,40 @@ public class HttpResponse extends AbstractHttpTransaction {
     @Override
     public List<String> getHeaders(String key) {
         return headers.get(key);
+    }
+
+    @Override
+    public void setBody(Object body) {
+        if (type == null || !type.isString()) {
+            String message = "Illegal content type, use stream handler or configure content type correctly";
+            throw new IllegalStateException(message);
+        }
+        super.setBody(body);
+    }
+
+    /**
+     * Returns contained stream handler
+     *
+     * @return {@link StreamHandler} instance
+     */
+    public StreamHandler getOutputStreamHandler() {
+        return handler;
+    }
+
+    /**
+     * Sets output stream handler
+     *
+     * @param handler {@link StreamHandler} handler to be set
+     */
+    public void setOutputStreamHandler(StreamHandler handler) {
+        this.handler = Objects.requireNonNull(handler);
+    }
+
+    @Override
+    public void setContentType(ContentType type) {
+        super.setContentType(type);
+        String headerValue = type.getHeader();
+        headerValue += "; " + ParseUtil.CONTENT_CHARSET + charset.name().toLowerCase(Locale.ROOT);
+        headers.set(ParseUtil.CONTENT_HEADER, headerValue);
     }
 }

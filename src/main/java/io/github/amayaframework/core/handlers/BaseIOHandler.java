@@ -5,12 +5,16 @@ import com.github.romanqed.jutils.structs.pipeline.PipelineResult;
 import com.github.romanqed.jutils.util.Checks;
 import io.github.amayaframework.core.configurators.Configurator;
 import io.github.amayaframework.core.controllers.Controller;
+import io.github.amayaframework.core.util.AmayaConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 
 public class BaseIOHandler implements IOHandler {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private final Pipeline input;
     private final Pipeline output;
     private final Controller controller;
@@ -39,6 +43,12 @@ public class BaseIOHandler implements IOHandler {
     public void configure(Collection<Configurator> configurators) {
         configurators = Checks.requireNonNullElse(configurators, defaultConfigurators);
         configurators.forEach(e -> e.configure(this));
+        if (AmayaConfig.INSTANCE.getDebug()) {
+            String message = "Handler pipelines have been successfully configured\n" +
+                    "Input: " + input + "\n" +
+                    "Output: " + output + "\n";
+            logger.debug(message);
+        }
     }
 
     @Override

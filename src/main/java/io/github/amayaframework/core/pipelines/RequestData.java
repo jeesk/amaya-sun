@@ -4,6 +4,8 @@ import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routers.Route;
 
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.Objects;
 
 /**
@@ -53,4 +55,10 @@ public abstract class RequestData {
     public void setRequest(HttpRequest request) {
         this.request = Objects.requireNonNull(request);
     }
+
+    public abstract InputStream getInputStream();
+
+    public abstract String getContentType();
+
+    public abstract Charset getCharset();
 }

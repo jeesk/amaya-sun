@@ -1,7 +1,7 @@
 package io.github.amayaframework.core.pipelines;
 
 import com.github.romanqed.jutils.structs.pipeline.PipelineInterruptException;
-import io.github.amayaframework.core.contexts.HttpResponse;
+import io.github.amayaframework.core.contexts.Responses;
 import io.github.amayaframework.server.utils.HttpCode;
 
 import java.util.function.Function;
@@ -34,8 +34,6 @@ public abstract class PipelineAction<T, R> implements Function<T, R> {
      * @param code {@link HttpCode} code to be returned
      */
     protected void reject(HttpCode code) {
-        HttpResponse ret = new HttpResponse(code);
-        ret.setBody(code.getMessage());
-        interrupt(ret);
+        interrupt(Responses.responseWithCode(code, code.getMessage()));
     }
 }

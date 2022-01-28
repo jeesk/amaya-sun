@@ -1,10 +1,13 @@
 package io.github.amayaframework.core.handlers;
 
 import io.github.amayaframework.core.configurators.BaseSunConfigurator;
+import io.github.amayaframework.core.contexts.ContentType;
 import io.github.amayaframework.core.contexts.HttpResponse;
+import io.github.amayaframework.core.contexts.StreamHandler;
 import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.pipelines.sun.SunRequestData;
 import io.github.amayaframework.core.util.AmayaConfig;
+import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.server.interfaces.HttpExchange;
 import io.github.amayaframework.server.interfaces.HttpHandler;
 import io.github.amayaframework.server.utils.HttpCode;
@@ -33,19 +36,22 @@ public class SunHandler implements HttpHandler {
         handler = new BaseIOHandler(controller, Collections.singletonList(new BaseSunConfigurator()));
     }
 
-    protected void reject(HttpExchange exchange) throws IOException {
+    protected void reject(HttpExchange exchange, Exception e) throws IOException {
+        logger.error("Internal server error", e);
+        exchange.getResponseHeaders().set(ParseUtil.CONTENT_HEADER, ContentType.PLAIN.getHeader());
         sendAnswer(exchange, HttpCode.INTERNAL_SERVER_ERROR, HttpCode.INTERNAL_SERVER_ERROR.getMessage());
     }
 
-    protected void sendAnswer(HttpExchange exchange, HttpCode code, String body) throws IOException {
+    protected void sendAnswer(HttpExchange exchange, HttpCode code, Object body) throws IOException {
         if (body == null) {
             exchange.sendResponseHeaders(code, 0);
             exchange.close();
             return;
         }
-        exchange.sendResponseHeaders(code, body.getBytes(charset).length);
+        String stringBody = body.toString();
+        exchange.sendResponseHeaders(code, stringBody.getBytes(charset).length);
         BufferedWriter writer = wrapOutputStream(exchange.getResponseBody());
-        writer.write(body);
+        writer.write(stringBody);
         writer.flush();
         exchange.close();
     }
@@ -65,16 +71,34 @@ public class SunHandler implements HttpHandler {
         try {
             response = (HttpResponse) handler.process(requestData).getResult();
         } catch (Exception e) {
-            logger.error("Error when receiving a response from I/O pipelines: " + e.getMessage());
-            reject(exchange);
+            reject(exchange, e);
             return;
         }
-        String body = null;
-        Object rawBody = response.getBody();
-        if (rawBody != null) {
-            body = rawBody.toString();
+        if (response == null) {
+            reject(exchange, null);
+            return;
+        }
+        ContentType type = response.getContentType();
+        if (type != null && type.isString()) {
+            Object body = response.getBody();
+            exchange.getResponseHeaders().putAll(response.getHeaderMap());
+            sendAnswer(exchange, response.getCode(), body);
+            return;
+        }
+        StreamHandler handler = response.getOutputStreamHandler();
+        if (handler == null) {
+            exchange.getResponseHeaders().putAll(response.getHeaderMap());
+            sendAnswer(exchange, response.getCode(), null);
+            return;
+        }
+        handler.accept(exchange.getResponseBody());
+        if (!handler.isSuccessful()) {
+            reject(exchange, handler.getException());
+            return;
         }
         exchange.getResponseHeaders().putAll(response.getHeaderMap());
-        sendAnswer(exchange, response.getCode(), body);
+        exchange.sendResponseHeaders(response.getCode(), handler.getContentLength());
+        handler.flush();
+        exchange.close();
     }
 }

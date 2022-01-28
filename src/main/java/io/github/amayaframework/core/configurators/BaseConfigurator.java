@@ -3,10 +3,7 @@ package io.github.amayaframework.core.configurators;
 import com.github.romanqed.jutils.structs.pipeline.Pipeline;
 import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.handlers.IOHandler;
-import io.github.amayaframework.core.pipelines.CheckResponseAction;
-import io.github.amayaframework.core.pipelines.InvokeControllerAction;
-import io.github.amayaframework.core.pipelines.ParseResponseCookiesAction;
-import io.github.amayaframework.core.pipelines.Stage;
+import io.github.amayaframework.core.pipelines.*;
 import io.github.amayaframework.core.pipelines.debug.*;
 import io.github.amayaframework.core.util.AmayaConfig;
 
@@ -17,6 +14,7 @@ abstract class BaseConfigurator implements Configurator {
         Pipeline output = handler.getOutput();
         input.put(Stage.INVOKE_CONTROLLER.name(), new InvokeControllerAction());
         input.insertBefore(Stage.INVOKE_CONTROLLER.name(), difference(handler.getController()));
+        input.insertAfter(Stage.PARSE_REQUEST.name(), Stage.PARSE_REQUEST_BODY.name(), new ParseRequestBodyAction());
         output.put(Stage.CHECK_RESPONSE.name(), new CheckResponseAction());
         output.put(Stage.PARSE_RESPONSE_COOKIES.name(), new ParseResponseCookiesAction());
         if (AmayaConfig.INSTANCE.getDebug()) {

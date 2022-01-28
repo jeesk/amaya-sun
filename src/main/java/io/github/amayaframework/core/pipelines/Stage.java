@@ -6,6 +6,7 @@ package io.github.amayaframework.core.pipelines;
 public enum Stage {
     FIND_ROUTE,
     PARSE_REQUEST,
+    PARSE_REQUEST_BODY,
     PARSE_REQUEST_COOKIES,
     INVOKE_CONTROLLER,
     CHECK_RESPONSE,

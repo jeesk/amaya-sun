@@ -7,13 +7,19 @@ import io.github.amayaframework.filters.ContentFilter;
 import io.github.amayaframework.filters.StringFilter;
 
 import javax.servlet.http.Cookie;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ParseUtil {
+    public static final String CONTENT_HEADER = "Content-Type";
+    public static final String CONTENT_CHARSET = "charset=";
     public static final Map<String, StringFilter> STRING_FILTERS;
     public static final Map<String, ContentFilter> CONTENT_FILTERS;
     public static final Pattern ROUTE = Pattern.compile("(?:/[^\\s/]+)+");
@@ -125,5 +131,29 @@ public class ParseUtil {
             ret.append("; HttpOnly");
         }
         return ret.toString();
+    }
+
+    public static Charset parseCharsetHeader(String header, Charset defaultCharset) {
+        if (header == null) {
+            return defaultCharset;
+        }
+        header = header.trim();
+        if (!header.startsWith("charset")) {
+            return defaultCharset;
+        }
+        int position = header.indexOf('=');
+        if (position < 0) {
+            return defaultCharset;
+        }
+        try {
+            return Charset.forName(header.substring(position + 1));
+        } catch (Exception e) {
+            return defaultCharset;
+        }
+    }
+
+    public static String readInputStream(InputStream stream, Charset charset) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream, charset));
+        return reader.lines().reduce("", (left, right) -> left + right + "\n");
     }
 }
