@@ -165,7 +165,7 @@ Thanks to this separation, almost any necessary functionality can be added by si
 the necessary actions between existing ones.
 
 For the configuration of pipelines, and in particular, the interface containing them, 
-it is necessary to create an heir (or just a lambda) the Configurator interface.
+it is necessary to create an inherited class (or just a lambda) from the Configurator interface.
 
 ```Java
 class MyConfigurator implements Configurator {
