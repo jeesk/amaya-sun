@@ -1,12 +1,13 @@
 package io.github.amayaframework.core.filters;
 
+import io.github.amayaframework.core.wrapping.Content;
 import io.github.amayaframework.filters.ContentFilter;
 import io.github.amayaframework.filters.NamedFilter;
 
 import javax.servlet.http.Cookie;
 import java.util.Map;
 
-@NamedFilter("cookie")
+@NamedFilter(Content.COOKIE)
 public class CookieFilter implements ContentFilter {
     @Override
     @SuppressWarnings("unchecked")

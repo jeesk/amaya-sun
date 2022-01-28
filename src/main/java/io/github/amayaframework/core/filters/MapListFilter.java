@@ -1,5 +1,6 @@
 package io.github.amayaframework.core.filters;
 
+import io.github.amayaframework.core.wrapping.Content;
 import io.github.amayaframework.filters.ContentFilter;
 import io.github.amayaframework.filters.NamedFilter;
 
@@ -41,7 +42,7 @@ enum Position {
     }
 }
 
-@NamedFilter("query")
+@NamedFilter(Content.QUERY)
 public class MapListFilter implements ContentFilter {
     private static final char SPLIT = ':';
 
