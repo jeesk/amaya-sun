@@ -19,14 +19,14 @@ import java.util.Map;
 /**
  * <p>An input action during which the basic components of the request will be checked and parsed:
  * query parameters, path parameters, headers and the request body.</p>
- * <p>Receives: {@link RequestData}</p>
- * <p>Returns: {@link RequestData}</p>
+ * <p>Receives: {@link ServletRequestData}</p>
+ * <p>Returns: {@link ServletRequestData}</p>
  */
-public class ServletParseRequestAction extends PipelineAction<RequestData, RequestData> {
+public class ServletParseRequestAction extends PipelineAction<ServletRequestData, ServletRequestData> {
     private final Charset charset = AmayaConfig.INSTANCE.getCharset();
 
     @Override
-    public RequestData apply(RequestData requestData) {
+    public ServletRequestData apply(ServletRequestData requestData) {
         HttpServletRequest servletRequest = requestData.servletRequest;
         Map<String, List<String>> query = Checks.requireNonException(
                 () -> ParseUtil.parseQueryString(servletRequest.getQueryString()),

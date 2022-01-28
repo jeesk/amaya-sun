@@ -9,10 +9,10 @@ import java.util.Objects;
 
 /**
  * <p>An input action during which the requested method will be checked and the requested route will be found.</p>
- * <p>Receives: {@link RequestData}</p>
- * <p>Returns: {@link RequestData}</p>
+ * <p>Receives: {@link ServletRequestData}</p>
+ * <p>Returns: {@link ServletRequestData}</p>
  */
-public class ServletFindRouteAction extends PipelineAction<RequestData, RequestData> {
+public class ServletFindRouteAction extends PipelineAction<ServletRequestData, ServletRequestData> {
     private final Router router;
     private final int length;
 
@@ -22,7 +22,7 @@ public class ServletFindRouteAction extends PipelineAction<RequestData, RequestD
     }
 
     @Override
-    public RequestData apply(RequestData requestData) {
+    public ServletRequestData apply(ServletRequestData requestData) {
         String path = requestData.servletRequest.getRequestURI().substring(length);
         Route route = router.follow(requestData.getMethod(), path);
         if (route == null) {

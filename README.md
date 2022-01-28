@@ -20,6 +20,7 @@ other similar libraries are incomparably slow.
 To install it, you will need:
 * any build of the JDK no older than version 8
 * [classindex](https://github.com/atteo/classindex)
+* some implementation of slf4j
 * Maven/Gradle
 
 ## Installing
@@ -51,6 +52,12 @@ dependencies {
 
 ## Usage example
 
+### Builders
+
+By default, two different builders are bundled with the core. 
+One of them will create a ready-to-run server built on the basis of a sun server, and the other will 
+prepare a map of servlets readies to be placed in your servlet container.
+
 The code below will start the server associated with the address localhost:8000.
 The server will contain only one controller with the GET method, which will return 
 the string "Hello, world!" repeated as many times as specified in the path parameter.
@@ -60,7 +67,7 @@ the string "Hello, world!" repeated as many times as specified in the path param
 public class Server {
     public static void main(String[] args) throws IOException {
         AmayaServer server = new AmayaBuilder().
-                bind(new InetSocketAddress(8000)).
+                bind(8080).
                 build();
         server.start();
     }
@@ -95,6 +102,18 @@ There is nothing complicated or requiring a long study in this construction. How
 provided with a convenient tool that allows you to quickly and easily create an api without thinking 
 about unnecessary things.
 
+And an example for servlets.
+
+### Server class
+```Java
+public class Server {
+    public static void main(String[] args) {
+        Map<String, Servlet> servlets = new AmayaServletBuilder().build();
+        // Process servlets...
+    }
+}
+```
+
 ## Pipeline concept
 
 To process incoming http requests, the Amaya framework uses a simple and flexible concept of actions performed 
@@ -107,19 +126,40 @@ This is a simplified diagram of what a typical pipeline data lifecycle looks lik
 The core of the framework provides a basic set of actions for the pipeline, which allows 
 processing incoming requests in accordance with the declared functionality.
 
-There are 6 actions in total, and all their names are described in the Stage enum.
+There are 6 actions in total, but for the first 3 there are 2 different variations: for the sun server and for servlets.
+All their names are described in the Stage enum.
 In this order they are executed:
 <p>Input actions:</p>
 
-* FindRouteAction (receives: HttpExchange, returns RequestData)
-* ParseRequestAction (receives: RequestData, returns RequestData)
-* ParseRequestCookiesAction (receives: RequestData, returns RequestData)
+* SunFindRouteAction (receives: SunRequestData, returns SunRequestData) / 
+ServletFindRouteAction (receives: ServletRequestData, returns ServletRequestData)
+* SunParseRequestAction (receives: SunRequestData, returns SunRequestData) / 
+ServletParseRequestAction (receives: ServletRequestData, returns ServletRequestData)
+* SunParseRequestCookiesAction (receives: SunRequestData, returns SunRequestData) / 
+ParseRequestCookiesAction (receives: ServletRequestData, returns ServletRequestData)
 * InvokeControllerAction (receives: returns RequestData, returns HttpResponse)
 
 <p>Output actions:</p>
 
 * CheckResponseAction (receives: PipelineResult, returns HttpResponse)
 * ParseResponseCookiesAction (receives: HttpResponse, returns HttpResponse)
+
+Also included in the standard delivery are 4 additional debugging actions that will be automatically 
+added when the appropriate configuration is enabled in the config.
+
+<p>Input actions:</p>
+
+* RouteDebugAction (receives: RequestData, returns RequestData)
+* RequestDebugAction (receives: RequestData, returns RequestData)
+* ResponseDebugAction (receives: HttpResponse, returns HttpResponse)
+
+<p>Output actions:</p>
+
+* InputResultDebugAction (receives: PipelineResult, returns PipelineResult)
+
+Note: in order to avoid the need to create two different variations of pipeline actions when creating plugins, 
+SunRequestData and ServletRequestData containing data about the server implementation were inherited from 
+the universal RequestData.
 
 Thanks to this separation, almost any necessary functionality can be added by simply inserting 
 the necessary actions between existing ones.
@@ -335,6 +375,10 @@ Specifies the encoding that will be used when processing the request and respons
 (In enum: BACKLOG)
 Specifies the value of the backlog parameter to be passed to the sun server.
 
+#### Debug
+(In enum: DEBUG)
+Specifies whether debugging mode will be enabled
+
 ## Results
 
 As a result, we get a fully customizable framework, similar to an easily shared constructor. 
@@ -349,6 +393,8 @@ the author might have forgotten to invent or implement some things, so he is wai
 * [Gradle](https://gradle.org) - Dependency management
 * [classindex](https://github.com/atteo/classindex) - Annotation scanning
 * [cglib](https://github.com/cglib/cglib) - Method wrapping
+* [slf4j](https://www.slf4j.org) - Logging facade
+* [javax.servet](https://docs.oracle.com/javaee/7/api/javax/servlet/Servlet.html) - Servlets
 * [java-utils](https://github.com/RomanQed/java-utils) - Pipelines and other stuff
 * [sun-http-server](https://github.com/AmayaFramework/sun-http-server) - Server part
 * [amaya-filters](https://github.com/AmayaFramework/amaya-filters) - Implementation of string and content filters

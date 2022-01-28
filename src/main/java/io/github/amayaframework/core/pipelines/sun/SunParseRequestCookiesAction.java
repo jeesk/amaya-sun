@@ -11,14 +11,14 @@ import java.util.Map;
 
 /**
  * <p>The input action during which the request cookies are parsed.</p>
- * <p>Receives: {@link RequestData}</p>
- * <p>Returns: {@link RequestData}</p>
+ * <p>Receives: {@link SunRequestData}</p>
+ * <p>Returns: {@link SunRequestData}</p>
  */
-public class SunParseRequestCookiesAction extends PipelineAction<RequestData, RequestData> {
+public class SunParseRequestCookiesAction extends PipelineAction<SunRequestData, SunRequestData> {
     private static final String COOKIE_HEADER = "Cookie";
 
     @Override
-    public RequestData apply(RequestData requestData) {
+    public SunRequestData apply(SunRequestData requestData) {
         String header = requestData.getRequest().getHeader(COOKIE_HEADER);
         if (header == null) {
             return requestData;

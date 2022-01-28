@@ -12,10 +12,10 @@ import java.util.Objects;
 
 /**
  * <p>An input action during which the requested method will be checked and the requested route will be found.</p>
- * <p>Receives: {@link HttpExchange}</p>
- * <p>Returns: {@link RequestData}</p>
+ * <p>Receives: {@link SunRequestData}</p>
+ * <p>Returns: {@link SunRequestData}</p>
  */
-public class SunFindRouteAction extends PipelineAction<HttpExchange, RequestData> {
+public class SunFindRouteAction extends PipelineAction<SunRequestData, SunRequestData> {
     private final Router router;
     private final int length;
 
@@ -25,7 +25,8 @@ public class SunFindRouteAction extends PipelineAction<HttpExchange, RequestData
     }
 
     @Override
-    public RequestData apply(HttpExchange exchange) {
+    public SunRequestData apply(SunRequestData requestData) {
+        HttpExchange exchange = requestData.exchange;
         HttpMethod method = null;
         try {
             method = HttpMethod.valueOf(exchange.getRequestMethod());
@@ -38,6 +39,9 @@ public class SunFindRouteAction extends PipelineAction<HttpExchange, RequestData
         if (route == null) {
             reject(HttpCode.NOT_FOUND);
         }
-        return new RequestData(exchange, route, path, method);
+        requestData.setRoute(route);
+        requestData.setPath(path);
+        requestData.setMethod(method);
+        return requestData;
     }
 }

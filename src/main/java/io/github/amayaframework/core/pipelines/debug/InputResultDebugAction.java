@@ -7,6 +7,11 @@ import io.github.amayaframework.core.util.LogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * <p>An input action which outputs information about the input pipeline result.</p>
+ * <p>Receives: {@link PipelineResult}</p>
+ * <p>Returns: {@link PipelineResult}</p>
+ */
 public class InputResultDebugAction extends PipelineAction<PipelineResult, PipelineResult> {
     private static final Logger logger = LoggerFactory.getLogger(InputResultDebugAction.class);
 

@@ -3,6 +3,7 @@ package io.github.amayaframework.core.handlers;
 import io.github.amayaframework.core.configurators.BaseSunConfigurator;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.controllers.Controller;
+import io.github.amayaframework.core.pipelines.sun.SunRequestData;
 import io.github.amayaframework.core.util.AmayaConfig;
 import io.github.amayaframework.server.interfaces.HttpExchange;
 import io.github.amayaframework.server.interfaces.HttpHandler;
@@ -59,9 +60,10 @@ public class SunHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
+        SunRequestData requestData = new SunRequestData(exchange);
         HttpResponse response;
         try {
-            response = (HttpResponse) handler.process(exchange).getResult();
+            response = (HttpResponse) handler.process(requestData).getResult();
         } catch (Exception e) {
             logger.error("Error when receiving a response from I/O pipelines: " + e.getMessage());
             reject(exchange);

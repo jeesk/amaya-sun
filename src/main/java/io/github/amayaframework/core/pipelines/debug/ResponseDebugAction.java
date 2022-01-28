@@ -6,6 +6,11 @@ import io.github.amayaframework.core.util.LogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * <p>An input action which outputs information about the response received.</p>
+ * <p>Receives: {@link HttpResponse}</p>
+ * <p>Returns: {@link HttpResponse}</p>
+ */
 public class ResponseDebugAction extends PipelineAction<HttpResponse, HttpResponse> {
     private static final Logger logger = LoggerFactory.getLogger(ResponseDebugAction.class);
 

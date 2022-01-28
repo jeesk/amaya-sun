@@ -10,13 +10,13 @@ import java.util.Objects;
  * A simple container created to transfer data between pipeline actions.
  * Common form.
  */
-public abstract class AbstractRequestData {
+public abstract class RequestData {
     private Route route;
     private String path;
     private HttpMethod method;
     private HttpRequest request;
 
-    protected AbstractRequestData(Route route, String path, HttpMethod method) {
+    protected RequestData(Route route, String path, HttpMethod method) {
         this.route = route;
         this.path = path;
         this.method = method;

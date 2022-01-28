@@ -18,14 +18,14 @@ import java.util.Map;
 /**
  * <p>An input action during which the basic components of the request will be checked and parsed:
  * query parameters, path parameters, headers and the request body.</p>
- * <p>Receives: {@link RequestData}</p>
- * <p>Returns: {@link RequestData}</p>
+ * <p>Receives: {@link SunRequestData}</p>
+ * <p>Returns: {@link SunRequestData}</p>
  */
-public class SunParseRequestAction extends PipelineAction<RequestData, RequestData> {
+public class SunParseRequestAction extends PipelineAction<SunRequestData, SunRequestData> {
     private final Charset charset = AmayaConfig.INSTANCE.getCharset();
 
     @Override
-    public RequestData apply(RequestData requestData) {
+    public SunRequestData apply(SunRequestData requestData) {
         HttpExchange exchange = requestData.exchange;
         Map<String, List<String>> query = Checks.requireNonException(
                 () -> ParseUtil.parseQueryString(exchange.getRequestURI().getQuery()),
