@@ -31,6 +31,8 @@ To install it, you will need:
 dependencies {
     implementation group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
     annotationProcessor group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
+    implementation group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+    implementation group: 'com.github.romanqed', name: 'jutils', version: '1.2.7'
     implementation group: 'io.github.amayaframework', name: 'core-sun', version: 'LATEST'
 }
 ```
