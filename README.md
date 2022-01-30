@@ -38,12 +38,6 @@ dependencies {
 
 ```
 <dependency>
-    <groupId>org.atteo.classindex</groupId>
-    <artifactId>classindex</artifactId>
-    <version>3.4</version>
-</dependency>
-
-<dependency>
     <groupId>io.github.amayaframework</groupId>
     <artifactId>core-sun</artifactId>
     <version>LATEST</version>
