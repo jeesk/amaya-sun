@@ -29,11 +29,7 @@ To install it, you will need:
 
 ```Groovy
 dependencies {
-    implementation group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
     annotationProcessor group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
-    implementation group: 'com.github.romanqed', name: 'jutils', version: '1.2.7'
-    implementation group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
-    implementation group: 'io.github.amayaframework', name: 'core-api', version: '1.0.2'
     implementation group: 'io.github.amayaframework', name: 'core-sun', version: 'LATEST'
 }
 ```
@@ -45,24 +41,6 @@ dependencies {
     <groupId>org.atteo.classindex</groupId>
     <artifactId>classindex</artifactId>
     <version>3.4</version>
-</dependency>
-
-<dependency>
-    <groupId>com.github.romanqed</groupId>
-    <artifactId>jutils</artifactId>
-    <version>1.2.7</version>
-</dependency>
-
-<dependency>
-    <groupId>javax.servlet</groupId>
-    <artifactId>javax.servlet-api</artifactId>
-    <version>4.0.1</version>
-</dependency>
-
-<dependency>
-    <groupId>io.github.amayaframework</groupId>
-    <artifactId>core-api</artifactId>
-    <version>1.0.2</version>
 </dependency>
 
 <dependency>
