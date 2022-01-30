@@ -32,6 +32,9 @@ public class FindRouteAction extends PipelineAction<SunRequestData, SunRequestDa
         }
         URI uri = exchange.getRequestURI();
         String path = uri.getPath().substring(length);
+        if (path.equals("/")) {
+            path = "";
+        }
         Route route = router.follow(method, path);
         if (route == null) {
             reject(HttpCode.NOT_FOUND);

@@ -38,6 +38,9 @@ public class SunRequestData extends RequestData {
 
     @Override
     public String getContentType() {
+        if (contentHeader == null) {
+            return null;
+        }
         int position = contentHeader.indexOf(';');
         if (position < 0) {
             return contentHeader;
