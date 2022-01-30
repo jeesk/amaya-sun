@@ -57,7 +57,7 @@ dependencies {
 ```Java
 public class Server {
     public static void main(String[] args) throws IOException {
-        AmayaServer server = new AmayaBuilder().
+        HttpServer server = new AmayaBuilder().
                 bind(8080).
                 build();
         server.start();
