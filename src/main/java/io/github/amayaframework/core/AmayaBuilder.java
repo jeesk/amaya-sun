@@ -5,6 +5,7 @@ import io.github.amayaframework.core.configurators.Configurator;
 import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.handlers.SunHandler;
 import io.github.amayaframework.core.util.AmayaConfig;
+import io.github.amayaframework.server.Servers;
 import io.github.amayaframework.server.interfaces.HttpServer;
 import io.github.amayaframework.server.interfaces.HttpsServer;
 import io.github.amayaframework.server.utils.HttpsConfigurator;
@@ -157,7 +158,7 @@ public class AmayaBuilder extends AbstractBuilder {
     }
 
     private HttpServer makeHttpsServer() throws IOException {
-        HttpsServer ret = HttpsServer.create(address, AmayaConfig.INSTANCE.getBacklog());
+        HttpsServer ret = Servers.httpsServer(address, AmayaConfig.INSTANCE.getBacklog());
         ret.setHttpsConfigurator(configurator);
         if (AmayaConfig.INSTANCE.getDebug()) {
             logger.debug("Create https server");
@@ -169,18 +170,17 @@ public class AmayaBuilder extends AbstractBuilder {
      * Creates an Amaya Server instance corresponding to the specified parameters
      * and resets the builder to the initial parameters.
      *
-     * @return {@link AmayaServer} instance
+     * @return {@link HttpServer} instance
      * @throws IOException in case of unsuccessful initialization of the server
      */
-    public AmayaServer build() throws IOException {
-        HttpServer server;
+    public HttpServer build() throws IOException {
+        HttpServer ret;
         if (configurator != null) {
-            server = makeHttpsServer();
+            ret = makeHttpsServer();
         } else {
-            server = HttpServer.create(address, AmayaConfig.INSTANCE.getBacklog());
+            ret = Servers.httpServer(address, AmayaConfig.INSTANCE.getBacklog());
         }
-        server.setExecutor(executor);
-        AmayaServer ret = new AmayaServerImpl(server);
+        ret.setExecutor(executor);
         findControllers();
         controllers.forEach((path, controller) -> {
             SunHandler handler = new SunHandler(controller);
@@ -188,7 +188,7 @@ public class AmayaBuilder extends AbstractBuilder {
             if (path.equals("")) {
                 path = "/";
             }
-            server.createContext(path, handler);
+            ret.createContext(path, handler);
         });
         resetValues();
         printLogMessage();

@@ -27,9 +27,9 @@ dependencies {
     annotationProcessor group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
     implementation group: 'cglib', name: 'cglib', version: '3.3.0'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.35'
+    implementation group: 'io.github.amayaframework', name: 'http-server', version: '1.0.5'
     implementation group: 'io.github.amayaframework', name: 'filters', version: '1.0.7'
     api group: 'io.github.amayaframework', name: 'core-api', version: '1.0.3'
-    implementation group: 'io.github.amayaframework', name: 'http-server', version: '1.0.4'
 }
 
 test {

@@ -30,6 +30,7 @@ To install it, you will need:
 ```Groovy
 dependencies {
     annotationProcessor group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
+    implementation group: 'io.github.amayaframework', name: 'http-server', version: '1.0.5'
     implementation group: 'io.github.amayaframework', name: 'core-sun', version: 'LATEST'
 }
 ```
@@ -37,6 +38,12 @@ dependencies {
 ### Maven dependency
 
 ```
+<dependency>
+    <groupId>io.github.amayaframework</groupId>
+    <artifactId>http-server</artifactId>
+    <version>1.0.5</version>
+</dependency>
+
 <dependency>
     <groupId>io.github.amayaframework</groupId>
     <artifactId>core-sun</artifactId>
