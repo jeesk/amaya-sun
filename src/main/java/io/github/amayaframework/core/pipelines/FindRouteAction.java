@@ -4,6 +4,7 @@ import com.github.romanqed.jutils.http.HttpCode;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routers.Route;
 import io.github.amayaframework.core.routers.Router;
+import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.server.interfaces.HttpExchange;
 
 import java.net.URI;
@@ -32,12 +33,7 @@ public class FindRouteAction extends PipelineAction<SunRequestData, SunRequestDa
         }
         URI uri = exchange.getRequestURI();
         String path = uri.getPath().substring(length);
-        if (path.equals("/")) {
-            path = "";
-        }
-        if (path.endsWith("/")) {
-            path = path.substring(0, path.length() - 1);
-        }
+        path = ParseUtil.normalizePath(path);
         Route route = router.follow(method, path);
         if (route == null) {
             reject(HttpCode.NOT_FOUND);

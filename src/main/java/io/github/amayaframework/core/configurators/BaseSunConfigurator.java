@@ -4,7 +4,6 @@ import com.github.romanqed.jutils.structs.pipeline.Pipeline;
 import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.handlers.IOHandler;
 import io.github.amayaframework.core.pipelines.*;
-import io.github.amayaframework.core.util.AmayaConfig;
 
 /**
  * <p>A configurator that adds basic handlers to the sun server pipeline that provide routing,
@@ -25,8 +24,5 @@ public class BaseSunConfigurator extends AbstractConfigurator {
         input.put(Stage.INVOKE_CONTROLLER.name(), new InvokeControllerAction());
         output.put(Stage.CHECK_RESPONSE.name(), new CheckResponseAction());
         output.put(Stage.PARSE_RESPONSE_COOKIES.name(), new ParseResponseCookiesAction());
-        if (AmayaConfig.INSTANCE.getDebug()) {
-            addDebugActions(input, output);
-        }
     }
 }
