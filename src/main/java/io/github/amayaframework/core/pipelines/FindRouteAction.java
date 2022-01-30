@@ -35,6 +35,9 @@ public class FindRouteAction extends PipelineAction<SunRequestData, SunRequestDa
         if (path.equals("/")) {
             path = "";
         }
+        if (path.endsWith("/")) {
+            path = path.substring(0, path.length() - 1);
+        }
         Route route = router.follow(method, path);
         if (route == null) {
             reject(HttpCode.NOT_FOUND);
