@@ -1,7 +1,7 @@
 package io.github.amayaframework.core.pipelines;
 
 import io.github.amayaframework.core.methods.HttpMethod;
-import io.github.amayaframework.core.routers.Route;
+import io.github.amayaframework.core.routes.MethodRoute;
 import io.github.amayaframework.core.util.AmayaConfig;
 import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.server.interfaces.HttpExchange;
@@ -17,7 +17,7 @@ public class SunRequestData extends RequestData {
     private final String contentHeader;
     private final Charset charset = AmayaConfig.INSTANCE.getCharset();
 
-    public SunRequestData(HttpExchange exchange, Route route, String path, HttpMethod method) {
+    public SunRequestData(HttpExchange exchange, MethodRoute route, String path, HttpMethod method) {
         super(route, path, method);
         this.exchange = exchange;
         this.contentHeader = exchange.getRequestHeaders().getFirst(ParseUtil.CONTENT_HEADER);

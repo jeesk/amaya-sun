@@ -17,7 +17,7 @@ public class BaseSunConfigurator extends AbstractConfigurator {
         Pipeline input = handler.getInput();
         Pipeline output = handler.getOutput();
         Controller controller = handler.getController();
-        input.put(Stage.FIND_ROUTE.name(), new FindRouteAction(controller.router(), controller.getPath()));
+        input.put(Stage.FIND_ROUTE.name(), new FindRouteAction(controller.getRouter(), controller.getPath()));
         input.put(Stage.PARSE_REQUEST.name(), new ParseRequestAction());
         input.put(Stage.PARSE_REQUEST_BODY.name(), new ParseRequestBodyAction());
         input.put(Stage.PARSE_REQUEST_COOKIES.name(), new ParseRequestCookiesAction());
