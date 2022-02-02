@@ -11,7 +11,7 @@ import java.net.URI;
 import java.util.Objects;
 
 /**
- * <p>An input action that queries the request body according to the passed headers.</p>
+ * <p>The action that queries the request body according to the passed headers.</p>
  * <p>Receives: {@link SunRequestData}</p>
  * <p>Returns: {@link SunRequestData}</p>
  */
@@ -25,7 +25,7 @@ public class FindRouteAction extends PipelineAction<SunRequestData, SunRequestDa
     }
 
     @Override
-    public SunRequestData apply(SunRequestData requestData) {
+    public SunRequestData execute(SunRequestData requestData) {
         HttpExchange exchange = requestData.exchange;
         HttpMethod method = HttpMethod.fromName(exchange.getRequestMethod());
         if (method == null) {

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <p>An input action during which the basic components of the request will be checked and parsed:
+ * <p>The action during which the basic components of the request will be checked and parsed:
  * query parameters, path parameters, headers and the request body.</p>
  * <p>Receives: {@link SunRequestData}</p>
  * <p>Returns: {@link SunRequestData}</p>
@@ -19,7 +19,7 @@ import java.util.Map;
 public class ParseRequestAction extends PipelineAction<SunRequestData, SunRequestData> {
 
     @Override
-    public SunRequestData apply(SunRequestData requestData) {
+    public SunRequestData execute(SunRequestData requestData) {
         HttpExchange exchange = requestData.exchange;
         Map<String, List<String>> query = Checks.requireNonException(
                 () -> ParseUtil.parseQueryString(exchange.getRequestURI().getQuery()),

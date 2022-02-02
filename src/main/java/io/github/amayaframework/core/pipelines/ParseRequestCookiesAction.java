@@ -9,14 +9,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <p>The input action during which the request cookies are parsed.</p>
+ * <p>The action during which the request cookies are parsed.</p>
  * <p>Receives: {@link SunRequestData}</p>
  * <p>Returns: {@link SunRequestData}</p>
  */
 public class ParseRequestCookiesAction extends PipelineAction<SunRequestData, SunRequestData> {
 
     @Override
-    public SunRequestData apply(SunRequestData requestData) {
+    public SunRequestData execute(SunRequestData requestData) {
         String header = requestData.getRequest().getHeader(ParseUtil.COOKIE_HEADER);
         if (header == null) {
             return requestData;
