@@ -5,7 +5,7 @@ import com.github.romanqed.jutils.http.HeaderMap;
 import java.util.List;
 import java.util.Objects;
 
-public class SunHttpRequest extends HttpRequest {
+public class SunHttpRequest extends AbstractHttpRequest {
     protected HeaderMap headers;
 
     @Override

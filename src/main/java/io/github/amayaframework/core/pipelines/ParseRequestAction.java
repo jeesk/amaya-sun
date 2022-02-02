@@ -34,7 +34,7 @@ public class ParseRequestAction extends PipelineAction<SunRequestData, SunReques
         SunHttpRequest request = new SunHttpRequest();
         request.setHeaders(exchange.getRequestHeaders());
         request.setMethod(requestData.getMethod());
-        request.setQueryParameters(query);
+        request.setQuery(query);
         request.setPathParameters(params);
         requestData.setRequest(request);
         return requestData;
