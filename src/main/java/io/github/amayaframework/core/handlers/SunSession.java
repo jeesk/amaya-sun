@@ -8,7 +8,6 @@ import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.contexts.Responses;
 import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.methods.HttpMethod;
-import io.github.amayaframework.core.pipelines.RequestData;
 import io.github.amayaframework.core.pipelines.SunRequestData;
 import io.github.amayaframework.core.pipelines.SunResponseData;
 import io.github.amayaframework.core.routers.MethodRouter;
@@ -63,7 +62,7 @@ public class SunSession implements Session {
             HttpCode code = HttpCode.NOT_FOUND;
             return Responses.responseWithCode(code, code.getMessage());
         }
-        RequestData requestData = new SunRequestData(exchange, method, path, route);
+        SunRequestData requestData = new SunRequestData(exchange, method, path, route);
         return (HttpResponse) handler.execute(requestData);
     }
 
