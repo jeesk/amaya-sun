@@ -5,6 +5,7 @@ import com.github.romanqed.jutils.util.Action;
 import io.github.amayaframework.core.config.AmayaConfig;
 import io.github.amayaframework.core.contexts.ContentType;
 import io.github.amayaframework.core.contexts.HttpResponse;
+import io.github.amayaframework.core.contexts.Responses;
 import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.pipelines.RequestData;
@@ -48,20 +49,22 @@ public class SunSession implements Session {
     }
 
     @Override
-    public RequestData handleInput(Action<Object, Object> handler) throws Exception {
+    public HttpResponse handleInput(Action<Object, Object> handler) throws Exception {
         HttpMethod method = HttpMethod.fromName(exchange.getRequestMethod());
         if (method == null) {
-            reject(HttpCode.NOT_IMPLEMENTED);
+            HttpCode code = HttpCode.NOT_IMPLEMENTED;
+            return Responses.responseWithCode(code, code.getMessage());
         }
         URI uri = exchange.getRequestURI();
         String path = uri.getPath().substring(length);
         path = ParseUtil.normalizePath(path);
         MethodRoute route = router.follow(method, path);
         if (route == null) {
-            reject(HttpCode.NOT_FOUND);
+            HttpCode code = HttpCode.NOT_FOUND;
+            return Responses.responseWithCode(code, code.getMessage());
         }
         RequestData requestData = new SunRequestData(exchange, method, path, route);
-        return (RequestData) handler.execute(requestData);
+        return (HttpResponse) handler.execute(requestData);
     }
 
     @Override
