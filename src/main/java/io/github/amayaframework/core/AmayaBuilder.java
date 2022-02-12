@@ -1,10 +1,9 @@
 package io.github.amayaframework.core;
 
-import io.github.amayaframework.core.configurators.BaseSunConfigurator;
-import io.github.amayaframework.core.configurators.Configurator;
+import com.github.romanqed.jutils.util.Checks;
+import io.github.amayaframework.core.configurators.PipelineConfigurator;
 import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.handlers.SunHandler;
-import io.github.amayaframework.core.util.AmayaConfig;
 import io.github.amayaframework.server.Servers;
 import io.github.amayaframework.server.interfaces.HttpServer;
 import io.github.amayaframework.server.interfaces.HttpsServer;
@@ -23,13 +22,14 @@ import java.util.function.Consumer;
 /**
  * A builder that helps to instantiate a properly configured Amaya Server.
  */
-public class AmayaBuilder extends AbstractBuilder {
+public class AmayaBuilder extends AbstractBuilder<HttpServer> {
     private InetSocketAddress address;
     private Executor executor;
     private HttpsConfigurator configurator;
+    private int backlog;
 
     public AmayaBuilder() {
-        super(new BaseSunConfigurator());
+        super();
         resetValues();
     }
 
@@ -38,6 +38,7 @@ public class AmayaBuilder extends AbstractBuilder {
         executor = Executors.newWorkStealingPool();
         address = new InetSocketAddress(8000);
         configurator = null;
+        backlog = 0;
     }
 
     /**
@@ -60,7 +61,7 @@ public class AmayaBuilder extends AbstractBuilder {
      */
     public AmayaBuilder bind(InetSocketAddress address) {
         this.address = Objects.requireNonNull(address);
-        if (AmayaConfig.INSTANCE.getDebug()) {
+        if (config.isDebug()) {
             logger.debug("Bind server to " + address);
         }
         return this;
@@ -95,7 +96,7 @@ public class AmayaBuilder extends AbstractBuilder {
      */
     public AmayaBuilder executor(Executor executor) {
         this.executor = Objects.requireNonNull(executor);
-        if (AmayaConfig.INSTANCE.getDebug()) {
+        if (config.isDebug()) {
             logger.debug("Set Executor to " + executor.getClass().getSimpleName());
         }
         return this;
@@ -108,7 +109,7 @@ public class AmayaBuilder extends AbstractBuilder {
      * @return {@link AmayaBuilder} instance
      */
     @Override
-    public AmayaBuilder pipelineConfigurators(Collection<Configurator> configurators) {
+    public AmayaBuilder pipelineConfigurators(Collection<PipelineConfigurator> configurators) {
         return (AmayaBuilder) super.pipelineConfigurators(configurators);
     }
 
@@ -119,7 +120,7 @@ public class AmayaBuilder extends AbstractBuilder {
      * @return {@link AmayaBuilder} instance
      */
     @Override
-    public AmayaBuilder addConfigurator(Configurator configurator) {
+    public AmayaBuilder addConfigurator(PipelineConfigurator configurator) {
         return (AmayaBuilder) super.addConfigurator(configurator);
     }
 
@@ -157,10 +158,15 @@ public class AmayaBuilder extends AbstractBuilder {
         return (AmayaBuilder) super.controllerAnnotation(annotation);
     }
 
+    public AmayaBuilder setBacklog(int backlog) {
+        this.backlog = Checks.requireCorrectValue(backlog, e -> e >= 0);
+        return this;
+    }
+
     private HttpServer makeHttpsServer() throws IOException {
-        HttpsServer ret = Servers.httpsServer(address, AmayaConfig.INSTANCE.getBacklog());
+        HttpsServer ret = Servers.httpsServer(address, backlog);
         ret.setHttpsConfigurator(configurator);
-        if (AmayaConfig.INSTANCE.getDebug()) {
+        if (config.isDebug()) {
             logger.debug("Create https server");
         }
         return ret;
@@ -178,7 +184,7 @@ public class AmayaBuilder extends AbstractBuilder {
         if (configurator != null) {
             ret = makeHttpsServer();
         } else {
-            ret = Servers.httpServer(address, AmayaConfig.INSTANCE.getBacklog());
+            ret = Servers.httpServer(address, backlog);
         }
         ret.setExecutor(executor);
         findControllers();

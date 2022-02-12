@@ -1,17 +1,12 @@
 package io.github.amayaframework.core.handlers;
 
-import com.github.romanqed.jutils.pipeline.PipelineResult;
-import io.github.amayaframework.core.configurators.BaseSunConfigurator;
+import io.github.amayaframework.core.config.AmayaConfig;
+import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.controllers.Controller;
-import io.github.amayaframework.core.pipelines.SunRequestData;
-import io.github.amayaframework.core.util.AmayaConfig;
 import io.github.amayaframework.server.interfaces.HttpExchange;
 import io.github.amayaframework.server.interfaces.HttpHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Collections;
 
 /**
  * <p>A class representing the sun handler used inside the server. Built on pipelines.</p>
@@ -20,23 +15,24 @@ import java.util.Collections;
  * process and verify the received HttpResponse. After that, the server receives a response.</p>
  */
 public class SunHandler implements HttpHandler {
-    private final IOHandler handler;
-    private final SunWrapper wrapper;
+    private final PipelineHandler handler;
+    private final Controller controller;
+    private final AmayaConfig config;
 
     public SunHandler(Controller controller) {
-        handler = new BaseIOHandler(controller, Collections.singletonList(new BaseSunConfigurator()));
-        Logger logger = LoggerFactory.getLogger(getClass());
-        wrapper = new SunWrapper(logger, AmayaConfig.INSTANCE.getCharset());
+        handler = new PipelineHandler(controller);
+        this.controller = controller;
+        config = ConfigProvider.getConfig();
     }
 
-    public IOHandler getHandler() {
+    public PipelineHandler getHandler() {
         return handler;
     }
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        SunRequestData requestData = new SunRequestData(exchange);
-        PipelineResult processResult = handler.process(requestData);
-        wrapper.process(exchange, processResult);
+        Session session = new SunSession(exchange, controller, config);
+        handler.handle(session);
+        exchange.close();
     }
 }

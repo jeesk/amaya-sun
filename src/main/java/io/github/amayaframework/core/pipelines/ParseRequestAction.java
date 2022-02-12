@@ -16,13 +16,13 @@ import java.util.Map;
  * <p>Receives: {@link SunRequestData}</p>
  * <p>Returns: {@link SunRequestData}</p>
  */
-public class ParseRequestAction extends PipelineAction<SunRequestData, SunRequestData> {
+public class ParseRequestAction extends InputAction<SunRequestData, SunRequestData> {
 
     @Override
     public SunRequestData execute(SunRequestData requestData) {
         HttpExchange exchange = requestData.exchange;
         Map<String, List<String>> query = Checks.requireNonException(
-                () -> ParseUtil.parseQueryString(exchange.getRequestURI().getQuery()),
+                () -> ParseUtil.parseQueryString(exchange.getRequestURI().getQuery(), requestData.getCharset()),
                 HashMap::new
         );
         Map<String, Object> params = null;

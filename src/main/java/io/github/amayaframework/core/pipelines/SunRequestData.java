@@ -1,8 +1,8 @@
 package io.github.amayaframework.core.pipelines;
 
+import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routes.MethodRoute;
-import io.github.amayaframework.core.util.AmayaConfig;
 import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.server.interfaces.HttpExchange;
 
@@ -10,21 +10,17 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 
 /**
- * A simple container created to transfer data between pipeline actions.
+ * A simple container created to transfer data between input pipeline actions.
  */
 public class SunRequestData extends AbstractRequestData {
     protected final HttpExchange exchange;
     private final String contentHeader;
-    private final Charset charset = AmayaConfig.INSTANCE.getCharset();
+    private final Charset charset = ConfigProvider.getConfig().getCharset();
 
-    public SunRequestData(HttpExchange exchange, MethodRoute route, String path, HttpMethod method) {
-        super(route, path, method);
+    public SunRequestData(HttpExchange exchange, HttpMethod method, String path, MethodRoute route) {
+        super(method, path, route);
         this.exchange = exchange;
         this.contentHeader = exchange.getRequestHeaders().getFirst(ParseUtil.CONTENT_HEADER);
-    }
-
-    public SunRequestData(HttpExchange exchange) {
-        this(exchange, null, null, null);
     }
 
     public HttpExchange getExchange() {
@@ -50,6 +46,9 @@ public class SunRequestData extends AbstractRequestData {
 
     @Override
     public Charset getCharset() {
+        if (contentHeader == null) {
+            return charset;
+        }
         int position = contentHeader.indexOf(';');
         if (position < 0) {
             return charset;
