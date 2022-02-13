@@ -19,6 +19,7 @@ public class ParseRequestCookiesAction extends PipelineAction<SunRequestData, Su
     public SunRequestData execute(SunRequestData requestData) {
         String header = requestData.getRequest().getHeader(ParseUtil.COOKIE_HEADER);
         if (header == null) {
+            requestData.getRequest().setCookies(Collections.unmodifiableMap(new HashMap<>()));
             return requestData;
         }
         Map<String, Cookie> cookies = Checks.requireNonException(
