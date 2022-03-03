@@ -1,9 +1,10 @@
-package io.github.amayaframework.core.pipelines;
+package io.github.amayaframework.core.actions;
 
 import com.github.romanqed.jutils.http.HeaderMap;
 import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.contexts.ContentType;
 import io.github.amayaframework.core.contexts.HttpResponse;
+import io.github.amayaframework.core.pipeline.PipelineAction;
 import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.server.interfaces.HttpExchange;
 
@@ -20,7 +21,7 @@ public class ProcessHeadersAction extends PipelineAction<SunResponseData, SunRes
     private final Charset charset = ConfigProvider.getConfig().getCharset();
 
     @Override
-    public SunResponseData execute(SunResponseData responseData) throws Exception {
+    public SunResponseData execute(SunResponseData responseData) {
         HttpExchange exchange = responseData.exchange;
         HttpResponse response = responseData.response;
         HeaderMap headers = exchange.getResponseHeaders();

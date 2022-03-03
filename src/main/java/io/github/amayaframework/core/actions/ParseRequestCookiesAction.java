@@ -1,6 +1,7 @@
-package io.github.amayaframework.core.pipelines;
+package io.github.amayaframework.core.actions;
 
 import com.github.romanqed.jutils.util.Checks;
+import io.github.amayaframework.core.pipeline.InputAction;
 import io.github.amayaframework.core.util.ParseUtil;
 
 import javax.servlet.http.Cookie;
@@ -13,7 +14,7 @@ import java.util.Map;
  * <p>Receives: {@link SunRequestData}</p>
  * <p>Returns: {@link SunRequestData}</p>
  */
-public class ParseRequestCookiesAction extends PipelineAction<SunRequestData, SunRequestData> {
+public class ParseRequestCookiesAction extends InputAction<SunRequestData, SunRequestData> {
 
     @Override
     public SunRequestData execute(SunRequestData requestData) {

@@ -1,7 +1,7 @@
 package io.github.amayaframework.core;
 
 import com.github.romanqed.jutils.util.Checks;
-import io.github.amayaframework.core.configurators.PipelineConfigurator;
+import io.github.amayaframework.core.configurators.Configurator;
 import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.handlers.SunHandler;
 import io.github.amayaframework.server.Servers;
@@ -12,8 +12,6 @@ import io.github.amayaframework.server.utils.HttpsConfigurator;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.net.InetSocketAddress;
-import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -103,25 +101,25 @@ public class AmayaBuilder extends AbstractBuilder<HttpServer> {
     }
 
     /**
-     * Sets a list of configurators that will be used when adding each controller.
-     *
-     * @param configurators {@link List} configurators to be set. Must be not null.
-     * @return {@link AmayaBuilder} instance
-     */
-    @Override
-    public AmayaBuilder pipelineConfigurators(Collection<PipelineConfigurator> configurators) {
-        return (AmayaBuilder) super.pipelineConfigurators(configurators);
-    }
-
-    /**
      * Adds the configurator to the end of the current list of configurators.
      *
      * @param configurator {@link Consumer} configurator to be added. Must be not null.
      * @return {@link AmayaBuilder} instance
      */
     @Override
-    public AmayaBuilder addConfigurator(PipelineConfigurator configurator) {
+    public AmayaBuilder addConfigurator(Configurator configurator) {
         return (AmayaBuilder) super.addConfigurator(configurator);
+    }
+
+    /**
+     * Deletes all configurators whose class matches the specified class.
+     *
+     * @param clazz with which to delete
+     * @return {@link AmayaBuilder} instance
+     */
+    @Override
+    public AmayaBuilder removeConfigurator(Class<? extends Configurator> clazz) {
+        return (AmayaBuilder) super.removeConfigurator(clazz);
     }
 
     /**
@@ -190,7 +188,7 @@ public class AmayaBuilder extends AbstractBuilder<HttpServer> {
         findControllers();
         controllers.forEach((path, controller) -> {
             SunHandler handler = new SunHandler(controller);
-            handler.getHandler().configure(configurators);
+            configure(handler.getHandler(), controller);
             if (path.equals("")) {
                 path = "/";
             }

@@ -20,7 +20,7 @@ public class SunHandler implements HttpHandler {
     private final AmayaConfig config;
 
     public SunHandler(Controller controller) {
-        handler = new PipelineHandler(controller);
+        handler = new PipelineHandler();
         this.controller = controller;
         config = ConfigProvider.getConfig();
     }

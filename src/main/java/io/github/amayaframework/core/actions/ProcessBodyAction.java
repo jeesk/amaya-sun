@@ -1,10 +1,11 @@
-package io.github.amayaframework.core.pipelines;
+package io.github.amayaframework.core.actions;
 
 import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.contexts.ContentType;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.contexts.StreamHandler;
 import io.github.amayaframework.core.handlers.SunSession;
+import io.github.amayaframework.core.pipeline.PipelineAction;
 import io.github.amayaframework.server.interfaces.HttpExchange;
 
 import java.nio.charset.Charset;
