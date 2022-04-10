@@ -1,13 +1,15 @@
 package io.github.amayaframework.core.actions;
 
+import com.github.romanqed.jutils.util.Handler;
 import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.contexts.ContentType;
+import io.github.amayaframework.core.contexts.FixedOutputStream;
 import io.github.amayaframework.core.contexts.HttpResponse;
-import io.github.amayaframework.core.contexts.StreamHandler;
 import io.github.amayaframework.core.handlers.SunSession;
 import io.github.amayaframework.core.pipeline.PipelineAction;
 import io.github.amayaframework.server.interfaces.HttpExchange;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 
 /**
@@ -23,11 +25,16 @@ public class ProcessBodyAction extends PipelineAction<SunResponseData, Void> {
         HttpExchange exchange = responseData.exchange;
         HttpResponse response = responseData.response;
         ContentType type = response.getContentType();
-        StreamHandler handler = response.getOutputStreamHandler();
+        Handler<FixedOutputStream> handler = response.getOutputStreamHandler();
         if (handler != null) {
-            handler.handle(exchange.getResponseBody());
-            exchange.sendResponseHeaders(response.getCode(), handler.getContentLength());
-            handler.flush();
+            FixedOutputStream outputStream = new FixedOutputStream(exchange.getResponseBody()) {
+                @Override
+                public void specifyLength(long length) throws IOException {
+                    exchange.sendResponseHeaders(response.getCode(), length);
+                }
+            };
+            handler.handle(outputStream);
+            outputStream.flush();
             return null;
         }
         if (type != null && type.isString()) {
