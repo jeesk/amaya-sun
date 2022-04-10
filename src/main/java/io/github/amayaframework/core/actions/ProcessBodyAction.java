@@ -23,18 +23,18 @@ public class ProcessBodyAction extends PipelineAction<SunResponseData, Void> {
         HttpExchange exchange = responseData.exchange;
         HttpResponse response = responseData.response;
         ContentType type = response.getContentType();
+        StreamHandler handler = response.getOutputStreamHandler();
+        if (handler != null) {
+            handler.handle(exchange.getResponseBody());
+            exchange.sendResponseHeaders(response.getCode(), handler.getContentLength());
+            handler.flush();
+            return null;
+        }
         if (type != null && type.isString()) {
             SunSession.send(exchange, charset, response.getCode(), response.getBody());
             return null;
         }
-        StreamHandler handler = response.getOutputStreamHandler();
-        if (handler == null) {
-            exchange.sendResponseHeaders(response.getCode(), 0);
-            return null;
-        }
-        handler.handle(exchange.getResponseBody());
-        exchange.sendResponseHeaders(response.getCode(), handler.getContentLength());
-        handler.flush();
+        exchange.sendResponseHeaders(response.getCode(), 0);
         return null;
     }
 }
