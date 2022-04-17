@@ -11,7 +11,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
 public class SunAmaya implements Amaya<HttpServer> {
-    private static final Logger logger = LoggerFactory.getLogger(SunAmaya.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SunAmaya.class);
     private final HttpServer server;
 
     protected SunAmaya(HttpServer server) {
@@ -19,10 +19,10 @@ public class SunAmaya implements Amaya<HttpServer> {
     }
 
     private static void printHelloMessage() throws IOException {
-        logger.info("Amaya started successfully");
-        logger.info("\n" + IOUtil.readLogo());
-        logger.info("We are glad to welcome you, senpai!");
-        logger.info("\n" + IOUtil.readArt());
+        LOGGER.info("Amaya started successfully");
+        LOGGER.info("\n" + IOUtil.readLogo());
+        LOGGER.info("We are glad to welcome you, senpai!");
+        LOGGER.info("\n" + IOUtil.readArt());
     }
 
     @Override
@@ -41,7 +41,7 @@ public class SunAmaya implements Amaya<HttpServer> {
     }
 
     @Override
-    public void start() throws Throwable {
+    public void start() throws IOException {
         server.start();
         printHelloMessage();
     }
@@ -53,6 +53,6 @@ public class SunAmaya implements Amaya<HttpServer> {
         if (executor instanceof ExecutorService) {
             ((ExecutorService) executor).shutdown();
         }
-        logger.info("Amaya server stopped");
+        LOGGER.info("Amaya server stopped");
     }
 }
