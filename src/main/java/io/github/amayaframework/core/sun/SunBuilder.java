@@ -1,9 +1,11 @@
-package io.github.amayaframework.core;
+package io.github.amayaframework.core.sun;
 
 import com.github.romanqed.jutils.util.Checks;
+import io.github.amayaframework.core.Amaya;
+import io.github.amayaframework.core.AmayaBuilder;
 import io.github.amayaframework.core.configurators.Configurator;
 import io.github.amayaframework.core.controllers.Controller;
-import io.github.amayaframework.core.handlers.SunHandler;
+import io.github.amayaframework.core.sun.handlers.SunHandler;
 import io.github.amayaframework.server.Servers;
 import io.github.amayaframework.server.interfaces.HttpServer;
 import io.github.amayaframework.server.interfaces.HttpsServer;
@@ -20,14 +22,15 @@ import java.util.function.Consumer;
 /**
  * A builder that helps to instantiate a properly configured Amaya Server.
  */
-public class AmayaBuilder extends AbstractBuilder<HttpServer> {
+public class SunBuilder extends AmayaBuilder<HttpServer> {
+    private static final String ACTIONS_PREFIX = "io.github.amayaframework.core.sun.actions";
     private InetSocketAddress address;
     private Executor executor;
     private HttpsConfigurator configurator;
     private int backlog;
 
-    public AmayaBuilder() {
-        super();
+    public SunBuilder() {
+        super(ACTIONS_PREFIX);
         resetValues();
     }
 
@@ -44,9 +47,9 @@ public class AmayaBuilder extends AbstractBuilder<HttpServer> {
      * If not specified, the http server will be created.
      *
      * @param configurator {@link HttpsConfigurator} configurator to be used. Must be not null.
-     * @return {@link AmayaBuilder} instance
+     * @return {@link SunBuilder} instance
      */
-    public AmayaBuilder httpsConfigurator(HttpsConfigurator configurator) {
+    public SunBuilder httpsConfigurator(HttpsConfigurator configurator) {
         this.configurator = Objects.requireNonNull(configurator);
         return this;
     }
@@ -55,9 +58,9 @@ public class AmayaBuilder extends AbstractBuilder<HttpServer> {
      * Binds server to given address.
      *
      * @param address {@link InetSocketAddress} Must be not null.
-     * @return {@link AmayaBuilder} instance
+     * @return {@link SunBuilder} instance
      */
-    public AmayaBuilder bind(InetSocketAddress address) {
+    public SunBuilder bind(InetSocketAddress address) {
         this.address = Objects.requireNonNull(address);
         if (config.isDebug()) {
             logger.debug("Bind server to " + address);
@@ -70,9 +73,9 @@ public class AmayaBuilder extends AbstractBuilder<HttpServer> {
      *
      * @param host Host address
      * @param port Host port
-     * @return {@link AmayaBuilder} instance
+     * @return {@link SunBuilder} instance
      */
-    public AmayaBuilder bind(String host, int port) {
+    public SunBuilder bind(String host, int port) {
         return bind(new InetSocketAddress(host, port));
     }
 
@@ -80,9 +83,9 @@ public class AmayaBuilder extends AbstractBuilder<HttpServer> {
      * Binds server to given address.
      *
      * @param port Host port
-     * @return {@link AmayaBuilder} instance
+     * @return {@link SunBuilder} instance
      */
-    public AmayaBuilder bind(int port) {
+    public SunBuilder bind(int port) {
         return bind(new InetSocketAddress(port));
     }
 
@@ -90,9 +93,9 @@ public class AmayaBuilder extends AbstractBuilder<HttpServer> {
      * Sets the executor to be used when processing http transactions.
      *
      * @param executor {@link Executor} can be easily created with {@link Executors}. Must be not null.
-     * @return {@link AmayaBuilder} instance
+     * @return {@link SunBuilder} instance
      */
-    public AmayaBuilder executor(Executor executor) {
+    public SunBuilder executor(Executor executor) {
         this.executor = Objects.requireNonNull(executor);
         if (config.isDebug()) {
             logger.debug("Set Executor to " + executor.getClass().getSimpleName());
@@ -104,44 +107,44 @@ public class AmayaBuilder extends AbstractBuilder<HttpServer> {
      * Adds the configurator to the end of the current list of configurators.
      *
      * @param configurator {@link Consumer} configurator to be added. Must be not null.
-     * @return {@link AmayaBuilder} instance
+     * @return {@link SunBuilder} instance
      */
     @Override
-    public AmayaBuilder addConfigurator(Configurator configurator) {
-        return (AmayaBuilder) super.addConfigurator(configurator);
+    public SunBuilder addConfigurator(Configurator configurator) {
+        return (SunBuilder) super.addConfigurator(configurator);
     }
 
     /**
      * Deletes all configurators whose class matches the specified class.
      *
      * @param clazz with which to delete
-     * @return {@link AmayaBuilder} instance
+     * @return {@link SunBuilder} instance
      */
     @Override
-    public AmayaBuilder removeConfigurator(Class<? extends Configurator> clazz) {
-        return (AmayaBuilder) super.removeConfigurator(clazz);
+    public SunBuilder removeConfigurator(Class<? extends Configurator> clazz) {
+        return (SunBuilder) super.removeConfigurator(clazz);
     }
 
     /**
      * Adds the controller to the list of processed
      *
      * @param controller {@link Controller} controller to be added. Must be not null.
-     * @return {@link AmayaBuilder} builder instance
+     * @return {@link SunBuilder} builder instance
      */
     @Override
-    public AmayaBuilder addController(Controller controller) {
-        return (AmayaBuilder) super.addController(controller);
+    public SunBuilder addController(Controller controller) {
+        return (SunBuilder) super.addController(controller);
     }
 
     /**
      * Removes the controller from the list of processed
      *
      * @param path controller path
-     * @return {@link AmayaBuilder} instance
+     * @return {@link SunBuilder} instance
      */
     @Override
-    public AmayaBuilder removeController(String path) {
-        return (AmayaBuilder) super.removeController(path);
+    public SunBuilder removeController(String path) {
+        return (SunBuilder) super.removeController(path);
     }
 
     /**
@@ -149,14 +152,14 @@ public class AmayaBuilder extends AbstractBuilder<HttpServer> {
      * If value will be null, the scan will not be performed.
      *
      * @param annotation {@link Class} of annotation
-     * @return {@link AmayaBuilder} instance
+     * @return {@link SunBuilder} instance
      */
     @Override
-    public AmayaBuilder controllerAnnotation(Class<? extends Annotation> annotation) {
-        return (AmayaBuilder) super.controllerAnnotation(annotation);
+    public SunBuilder controllerAnnotation(Class<? extends Annotation> annotation) {
+        return (SunBuilder) super.controllerAnnotation(annotation);
     }
 
-    public AmayaBuilder setBacklog(int backlog) {
+    public SunBuilder setBacklog(int backlog) {
         this.backlog = Checks.requireCorrectValue(backlog, e -> e >= 0);
         return this;
     }
@@ -177,14 +180,14 @@ public class AmayaBuilder extends AbstractBuilder<HttpServer> {
      * @return {@link HttpServer} instance
      * @throws IOException in case of unsuccessful initialization of the server
      */
-    public HttpServer build() throws IOException {
-        HttpServer ret;
+    public Amaya<HttpServer> build() throws IOException {
+        HttpServer server;
         if (configurator != null) {
-            ret = makeHttpsServer();
+            server = makeHttpsServer();
         } else {
-            ret = Servers.httpServer(address, backlog);
+            server = Servers.httpServer(address, backlog);
         }
-        ret.setExecutor(executor);
+        server.setExecutor(executor);
         findControllers();
         controllers.forEach((path, controller) -> {
             SunHandler handler = new SunHandler(controller);
@@ -192,10 +195,9 @@ public class AmayaBuilder extends AbstractBuilder<HttpServer> {
             if (path.equals("")) {
                 path = "/";
             }
-            ret.createContext(path, handler);
+            server.createContext(path, handler);
         });
         resetValues();
-        printLogMessage();
-        return ret;
+        return new SunAmaya(server);
     }
 }

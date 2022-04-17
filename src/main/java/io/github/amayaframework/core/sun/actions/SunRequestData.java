@@ -1,4 +1,4 @@
-package io.github.amayaframework.core.actions;
+package io.github.amayaframework.core.sun.actions;
 
 import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.methods.HttpMethod;

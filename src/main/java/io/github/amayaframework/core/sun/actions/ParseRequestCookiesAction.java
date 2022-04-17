@@ -1,4 +1,4 @@
-package io.github.amayaframework.core.actions;
+package io.github.amayaframework.core.sun.actions;
 
 import com.github.romanqed.jutils.util.Checks;
 import io.github.amayaframework.core.pipeline.InputAction;

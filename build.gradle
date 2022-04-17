@@ -18,6 +18,9 @@ version = System.getenv('RELEASE_VERSION') ?: '1.0.0'
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://s01.oss.sonatype.org/content/repositories/iogithubamayaframework-1125"
+    }
 }
 
 dependencies {
@@ -29,7 +32,7 @@ dependencies {
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.35'
     implementation group: 'io.github.amayaframework', name: 'http-server', version: '1.0.5'
     implementation group: 'io.github.amayaframework', name: 'filters', version: '1.0.7'
-    implementation group: 'io.github.amayaframework', name: 'core-api', version: '3.1.1'
+    implementation group: 'io.github.amayaframework', name: 'core-api', version: '5-DEV'
 }
 
 test {
@@ -48,12 +51,44 @@ signing {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            customizePom(pom)
-            groupId group
-            artifactId archivesBaseName
-            version version
-
+            // Specify artifacts
+            groupId = group
+            artifactId = archivesBaseName
+            version = version
             from components.java
+            // Configure pom
+            pom {
+                name.set('core-sun')
+                description.set('Amaya is a fairly lightweight web framework for Java, which guarantees speed, ' +
+                        'ease of creating plugins/addons, flexibility and ease of use. Sun server implementation.')
+                url.set('https://github.com/AmayaFramework/amaya-core-sun')
+                organization {
+                    name.set('io.github.amayaframework')
+                    url.set('https://github.com/AmayaFramework')
+                }
+                issueManagement {
+                    system.set('GitHub')
+                    url.set('https://github.com/AmayaFramework/amaya-core-sun/issues')
+                }
+                licenses {
+                    license {
+                        name.set('GNU General Public License v3.0')
+                        url.set('https://github.com/AmayaFramework/amaya-core-sun/blob/main/LICENSE')
+                    }
+                }
+                scm {
+                    url.set('https://github.com/AmayaFramework/amaya-core-sun')
+                    connection.set('scm:https://github.com/AmayaFramework/amaya-core-sun.git')
+                    developerConnection.set('scm:https://github.com/AmayaFramework/amaya-core-sun.git')
+                }
+                developers {
+                    developer {
+                        id.set('RomanQed')
+                        name.set('Roman Bakaldin')
+                        email.set('gbakaldin@gmail.com')
+                    }
+                }
+            }
         }
     }
     repositories {
@@ -62,50 +97,6 @@ publishing {
             credentials {
                 username System.getenv('SONATYPE_USERNAME')
                 password System.getenv('SONATYPE_PASSWORD')
-            }
-        }
-    }
-}
-
-def customizePom(pom) {
-    pom.withXml {
-        def root = asNode()
-
-        root.dependencies.removeAll { dep ->
-            dep.scope == "test"
-        }
-
-        root.children().last() + {
-            resolveStrategy = DELEGATE_FIRST
-            description 'Amaya is a fairly lightweight web framework for Java, which guarantees speed, ' +
-                    'ease of creating plugins/addons, flexibility and ease of use. Sun server implementation.'
-            name 'core-sun'
-            url 'https://github.com/AmayaFramework/amaya-core-sun'
-            organization {
-                name 'io.github.amayaframework'
-                url 'https://github.com/AmayaFramework'
-            }
-            issueManagement {
-                system 'GitHub'
-                url 'https://github.com/AmayaFramework/amaya-core-sun/issues'
-            }
-            licenses {
-                license {
-                    name 'GNU General Public License v3.0'
-                    url 'https://github.com/AmayaFramework/amaya-core-sun/blob/main/LICENSE'
-                }
-            }
-            scm {
-                url 'https://github.com/AmayaFramework/amaya-core-sun'
-                connection 'scm:https://github.com/AmayaFramework/amaya-core-sun.git'
-                developerConnection 'scm:https://github.com/AmayaFramework/amaya-core-sun.git'
-            }
-            developers {
-                developer {
-                    id 'dev'
-                    name 'RomanQed'
-                    email 'gbakaldin@gmail.com'
-                }
             }
         }
     }

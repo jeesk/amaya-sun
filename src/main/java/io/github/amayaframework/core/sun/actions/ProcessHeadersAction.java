@@ -1,4 +1,4 @@
-package io.github.amayaframework.core.actions;
+package io.github.amayaframework.core.sun.actions;
 
 import com.github.romanqed.jutils.http.HeaderMap;
 import io.github.amayaframework.core.config.ConfigProvider;

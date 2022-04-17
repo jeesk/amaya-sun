@@ -1,6 +1,7 @@
-package io.github.amayaframework.core.contexts;
+package io.github.amayaframework.core.sun.contexts;
 
 import com.github.romanqed.jutils.http.HeaderMap;
+import io.github.amayaframework.core.contexts.AbstractHttpRequest;
 
 import java.util.List;
 import java.util.Objects;

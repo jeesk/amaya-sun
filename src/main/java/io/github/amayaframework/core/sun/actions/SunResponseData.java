@@ -1,4 +1,4 @@
-package io.github.amayaframework.core.actions;
+package io.github.amayaframework.core.sun.actions;
 
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.pipeline.ResponseData;

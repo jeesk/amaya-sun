@@ -1,12 +1,12 @@
-package io.github.amayaframework.core.actions;
+package io.github.amayaframework.core.sun.actions;
 
 import com.github.romanqed.jutils.util.Handler;
 import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.contexts.ContentType;
 import io.github.amayaframework.core.contexts.FixedOutputStream;
 import io.github.amayaframework.core.contexts.HttpResponse;
-import io.github.amayaframework.core.handlers.SunSession;
 import io.github.amayaframework.core.pipeline.PipelineAction;
+import io.github.amayaframework.core.sun.handlers.SunSession;
 import io.github.amayaframework.server.interfaces.HttpExchange;
 
 import java.io.IOException;
@@ -21,7 +21,7 @@ public class ProcessBodyAction extends PipelineAction<SunResponseData, Void> {
     private final Charset charset = ConfigProvider.getConfig().getCharset();
 
     @Override
-    public Void execute(SunResponseData responseData) throws Exception {
+    public Void execute(SunResponseData responseData) throws Throwable {
         HttpExchange exchange = responseData.exchange;
         HttpResponse response = responseData.response;
         ContentType type = response.getContentType();

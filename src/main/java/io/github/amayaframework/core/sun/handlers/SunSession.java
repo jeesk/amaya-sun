@@ -1,17 +1,18 @@
-package io.github.amayaframework.core.handlers;
+package io.github.amayaframework.core.sun.handlers;
 
 import com.github.romanqed.jutils.http.HttpCode;
 import com.github.romanqed.jutils.util.Action;
-import io.github.amayaframework.core.actions.SunRequestData;
-import io.github.amayaframework.core.actions.SunResponseData;
 import io.github.amayaframework.core.config.AmayaConfig;
 import io.github.amayaframework.core.contexts.ContentType;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.contexts.Responses;
 import io.github.amayaframework.core.controllers.Controller;
+import io.github.amayaframework.core.handlers.Session;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routers.MethodRouter;
 import io.github.amayaframework.core.routes.MethodRoute;
+import io.github.amayaframework.core.sun.actions.SunRequestData;
+import io.github.amayaframework.core.sun.actions.SunResponseData;
 import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.server.interfaces.HttpExchange;
 
@@ -48,7 +49,7 @@ public class SunSession implements Session {
     }
 
     @Override
-    public HttpResponse handleInput(Action<Object, Object> handler) throws Exception {
+    public HttpResponse handleInput(Action<Object, Object> handler) throws Throwable {
         HttpMethod method = HttpMethod.fromName(exchange.getRequestMethod());
         if (method == null) {
             HttpCode code = HttpCode.NOT_IMPLEMENTED;
@@ -67,13 +68,13 @@ public class SunSession implements Session {
     }
 
     @Override
-    public void handleOutput(Action<Object, Object> handler, HttpResponse response) throws Exception {
+    public void handleOutput(Action<Object, Object> handler, HttpResponse response) throws Throwable {
         SunResponseData responseData = new SunResponseData(exchange, response);
         handler.execute(responseData);
     }
 
     @Override
-    public void reject(Exception e) throws IOException {
+    public void reject(Throwable e) throws IOException {
         HttpCode code = HttpCode.INTERNAL_SERVER_ERROR;
         String message = code.getMessage() + "\n";
         if (e != null && config.isDebug()) {
