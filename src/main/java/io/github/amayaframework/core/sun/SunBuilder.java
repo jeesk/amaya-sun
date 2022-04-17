@@ -180,6 +180,7 @@ public class SunBuilder extends AmayaBuilder<HttpServer> {
      * @return {@link HttpServer} instance
      * @throws IOException in case of unsuccessful initialization of the server
      */
+    @Override
     public Amaya<HttpServer> build() throws IOException {
         HttpServer server;
         if (configurator != null) {
