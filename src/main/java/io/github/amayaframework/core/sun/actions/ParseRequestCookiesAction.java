@@ -17,17 +17,17 @@ import java.util.Map;
 public class ParseRequestCookiesAction extends InputAction<SunRequestData, SunRequestData> {
 
     @Override
-    public SunRequestData execute(SunRequestData requestData) {
-        String header = requestData.getRequest().getHeader(ParseUtil.COOKIE_HEADER);
+    public SunRequestData execute(SunRequestData data) {
+        String header = data.getRequest().getHeader(ParseUtil.COOKIE_HEADER);
         if (header == null) {
-            requestData.getRequest().setCookies(Collections.unmodifiableMap(new HashMap<>()));
-            return requestData;
+            data.getRequest().setCookies(Collections.unmodifiableMap(new HashMap<>()));
+            return data;
         }
         Map<String, Cookie> cookies = Checks.requireNonException(
                 () -> ParseUtil.parseCookieHeader(header),
                 HashMap::new
         );
-        requestData.getRequest().setCookies(Collections.unmodifiableMap(cookies));
-        return requestData;
+        data.getRequest().setCookies(Collections.unmodifiableMap(cookies));
+        return data;
     }
 }

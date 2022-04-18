@@ -23,7 +23,7 @@ public class ProcessBodyAction extends PipelineAction<SunResponseData, Void> {
     @Override
     public Void execute(SunResponseData responseData) throws Throwable {
         HttpExchange exchange = responseData.exchange;
-        HttpResponse response = responseData.response;
+        HttpResponse response = responseData.getResponse();
         ContentType type = response.getContentType();
         Handler<FixedOutputStream> handler = response.getOutputStreamHandler();
         if (handler != null) {

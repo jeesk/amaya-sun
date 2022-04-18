@@ -20,15 +20,15 @@ import java.util.Map;
 public class ParseRequestAction extends InputAction<SunRequestData, SunRequestData> {
 
     @Override
-    public SunRequestData execute(SunRequestData requestData) {
-        HttpExchange exchange = requestData.exchange;
+    public SunRequestData execute(SunRequestData data) {
+        HttpExchange exchange = data.exchange;
         Map<String, List<String>> query = Checks.requireNonException(
-                () -> ParseUtil.parseQueryString(exchange.getRequestURI().getQuery(), requestData.getCharset()),
+                () -> ParseUtil.parseQueryString(exchange.getRequestURI().getQuery(), data.getCharset()),
                 HashMap::new
         );
         Map<String, Object> params = null;
         try {
-            params = ParseUtil.extractRouteParameters(requestData.getRoute(), requestData.getPath());
+            params = ParseUtil.extractRouteParameters(data.getRoute(), data.getPath());
         } catch (Exception e) {
             reject(HttpCode.BAD_REQUEST);
         }
@@ -36,7 +36,7 @@ public class ParseRequestAction extends InputAction<SunRequestData, SunRequestDa
         request.setHeaders(exchange.getRequestHeaders());
         request.setQuery(query);
         request.setPathParameters(params);
-        requestData.setRequest(request);
-        return requestData;
+        data.setRequest(request);
+        return data;
     }
 }

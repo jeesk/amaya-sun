@@ -21,9 +21,9 @@ public class ProcessHeadersAction extends PipelineAction<SunResponseData, SunRes
     private final Charset charset = ConfigProvider.getConfig().getCharset();
 
     @Override
-    public SunResponseData execute(SunResponseData responseData) {
-        HttpExchange exchange = responseData.exchange;
-        HttpResponse response = responseData.response;
+    public SunResponseData execute(SunResponseData data) {
+        HttpExchange exchange = data.exchange;
+        HttpResponse response = data.getResponse();
         HeaderMap headers = exchange.getResponseHeaders();
         headers.putAll(response.getHeaderMap());
         ContentType type = response.getContentType();
@@ -34,6 +34,6 @@ public class ProcessHeadersAction extends PipelineAction<SunResponseData, SunRes
         for (Cookie cookie : cookies) {
             headers.add(ParseUtil.SET_COOKIE_HEADER, ParseUtil.cookieToHeader(cookie));
         }
-        return responseData;
+        return data;
     }
 }
