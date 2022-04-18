@@ -34,6 +34,7 @@ public class ProcessHeadersAction extends PipelineAction<SunResponseData, SunRes
         for (Cookie cookie : cookies) {
             headers.add(ParseUtil.SET_COOKIE_HEADER, ParseUtil.cookieToHeader(cookie));
         }
+        data.complete();
         return data;
     }
 }
