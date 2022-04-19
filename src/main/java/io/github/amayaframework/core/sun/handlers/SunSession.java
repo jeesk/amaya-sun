@@ -13,6 +13,7 @@ import io.github.amayaframework.core.routers.MethodRouter;
 import io.github.amayaframework.core.routes.MethodRoute;
 import io.github.amayaframework.core.sun.actions.SunRequestData;
 import io.github.amayaframework.core.sun.actions.SunResponseData;
+import io.github.amayaframework.core.util.IOUtil;
 import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.server.interfaces.HttpExchange;
 
@@ -31,7 +32,7 @@ public class SunSession implements Session {
     public SunSession(HttpExchange exchange, Controller controller, AmayaConfig config) {
         this.exchange = exchange;
         router = controller.getRouter();
-        length = controller.getPath().length();
+        length = controller.getRoute().length();
         this.config = config;
     }
 
@@ -57,7 +58,7 @@ public class SunSession implements Session {
         }
         URI uri = exchange.getRequestURI();
         String path = uri.getPath().substring(length);
-        path = ParseUtil.normalizePath(path);
+        path = ParseUtil.normalizeRoute(path);
         MethodRoute route = router.follow(method, path);
         if (route == null) {
             HttpCode code = HttpCode.NOT_FOUND;
@@ -78,10 +79,10 @@ public class SunSession implements Session {
         HttpCode code = HttpCode.INTERNAL_SERVER_ERROR;
         String message = code.getMessage() + "\n";
         if (e != null && config.isDebug()) {
-            message += ParseUtil.throwableToString(e) + "\n";
+            message += IOUtil.throwableToString(e) + "\n";
             Throwable caused = e.getCause();
             if (caused != null) {
-                message += "Caused by: \n" + ParseUtil.throwableToString(caused);
+                message += "Caused by: \n" + IOUtil.throwableToString(caused);
             }
         }
         reject(code, message);
@@ -94,7 +95,7 @@ public class SunSession implements Session {
     @Override
     public void reject(HttpCode code, String message) throws IOException {
         Charset charset = config.getCharset();
-        String header = ParseUtil.generateContentHeader(ContentType.PLAIN, charset);
+        String header = IOUtil.generateContentHeader(ContentType.PLAIN, charset);
         exchange.getResponseHeaders().set(ParseUtil.CONTENT_HEADER, header);
         String toSend;
         if (message != null) {
