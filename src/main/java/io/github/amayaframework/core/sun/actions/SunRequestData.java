@@ -1,6 +1,6 @@
 package io.github.amayaframework.core.sun.actions;
 
-import io.github.amayaframework.core.config.ConfigProvider;
+import io.github.amayaframework.core.ConfigProvider;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.pipeline.AbstractRequestData;
 import io.github.amayaframework.core.routes.MethodRoute;

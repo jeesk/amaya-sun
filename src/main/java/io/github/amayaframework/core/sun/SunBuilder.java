@@ -199,6 +199,7 @@ public class SunBuilder extends AmayaBuilder<HttpServer> {
             server.createContext(path, handler);
         });
         resetValues();
+        resetConfig();
         return new SunAmaya(server);
     }
 }
