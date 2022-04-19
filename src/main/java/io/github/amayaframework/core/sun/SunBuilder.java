@@ -31,15 +31,14 @@ public class SunBuilder extends AmayaBuilder<HttpServer> {
 
     public SunBuilder() {
         super(ACTIONS_PREFIX);
-        resetValues();
     }
 
     protected void resetValues() {
-        super.resetValues();
         executor = Executors.newWorkStealingPool();
         address = new InetSocketAddress(8000);
         configurator = null;
         backlog = 0;
+        super.resetValues();
     }
 
     /**
