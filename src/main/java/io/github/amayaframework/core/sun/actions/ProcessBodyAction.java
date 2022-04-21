@@ -1,6 +1,6 @@
 package io.github.amayaframework.core.sun.actions;
 
-import com.github.romanqed.jutils.util.Handler;
+import com.github.romanqed.jutils.lambdas.Handler;
 import io.github.amayaframework.core.ConfigProvider;
 import io.github.amayaframework.core.contexts.ContentType;
 import io.github.amayaframework.core.contexts.FixedOutputStream;
