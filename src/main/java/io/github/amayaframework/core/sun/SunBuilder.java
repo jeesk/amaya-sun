@@ -1,6 +1,6 @@
 package io.github.amayaframework.core.sun;
 
-import com.github.romanqed.jutils.util.Checks;
+import com.github.romanqed.util.Checks;
 import io.github.amayaframework.core.Amaya;
 import io.github.amayaframework.core.AmayaBuilder;
 import io.github.amayaframework.core.configurators.Configurator;

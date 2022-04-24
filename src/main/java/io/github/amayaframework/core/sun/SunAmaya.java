@@ -1,7 +1,6 @@
 package io.github.amayaframework.core.sun;
 
 import io.github.amayaframework.core.Amaya;
-import io.github.amayaframework.core.util.IOUtil;
 import io.github.amayaframework.server.interfaces.HttpServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +20,6 @@ public class SunAmaya implements Amaya<HttpServer> {
     private static void printHelloMessage() throws IOException {
         LOGGER.info("Amaya started successfully");
         LOGGER.info("\n" + IOUtil.readLogo());
-        LOGGER.info("We are glad to welcome you, senpai!");
         LOGGER.info("\n" + IOUtil.readArt());
     }
 

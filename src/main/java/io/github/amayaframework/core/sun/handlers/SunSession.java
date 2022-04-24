@@ -1,7 +1,7 @@
 package io.github.amayaframework.core.sun.handlers;
 
-import com.github.romanqed.jutils.http.HttpCode;
-import com.github.romanqed.jutils.lambdas.Action;
+import com.github.romanqed.util.Action;
+import com.github.romanqed.util.http.HttpCode;
 import io.github.amayaframework.core.config.AmayaConfig;
 import io.github.amayaframework.core.contexts.ContentType;
 import io.github.amayaframework.core.contexts.HttpResponse;

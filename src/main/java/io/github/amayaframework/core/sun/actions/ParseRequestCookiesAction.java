@@ -1,6 +1,6 @@
 package io.github.amayaframework.core.sun.actions;
 
-import com.github.romanqed.jutils.util.Checks;
+import com.github.romanqed.util.Checks;
 import io.github.amayaframework.core.pipeline.InputAction;
 import io.github.amayaframework.core.util.ParseUtil;
 
