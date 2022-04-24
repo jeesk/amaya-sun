@@ -1,19 +1,19 @@
 package io.github.amayaframework.core.sun;
 
-import io.github.amayaframework.core.Amaya;
+import io.github.amayaframework.core.AbstractAmaya;
+import io.github.amayaframework.core.handlers.EventManager;
 import io.github.amayaframework.server.interfaces.HttpServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 
-public class SunAmaya implements Amaya<HttpServer> {
+public class SunAmaya extends AbstractAmaya<HttpServer> {
     private static final Logger LOGGER = LoggerFactory.getLogger(SunAmaya.class);
     private final HttpServer server;
 
-    protected SunAmaya(HttpServer server) {
+    protected SunAmaya(EventManager manager, HttpServer server) {
+        super(manager);
         this.server = server;
     }
 
@@ -39,18 +39,16 @@ public class SunAmaya implements Amaya<HttpServer> {
     }
 
     @Override
-    public void start() throws IOException {
+    public void start() throws Throwable {
         server.start();
         printHelloMessage();
+        super.start();
     }
 
     @Override
-    public void close() {
+    public void close() throws Exception {
         server.stop(0);
-        Executor executor = server.getExecutor();
-        if (executor instanceof ExecutorService) {
-            ((ExecutorService) executor).shutdown();
-        }
         LOGGER.info("Amaya server stopped");
+        super.close();
     }
 }

@@ -5,6 +5,8 @@ import io.github.amayaframework.core.Amaya;
 import io.github.amayaframework.core.AmayaBuilder;
 import io.github.amayaframework.core.configurators.Configurator;
 import io.github.amayaframework.core.controllers.Controller;
+import io.github.amayaframework.core.handlers.EventManager;
+import io.github.amayaframework.core.handlers.PipelineHandler;
 import io.github.amayaframework.core.sun.handlers.SunHandler;
 import io.github.amayaframework.server.Servers;
 import io.github.amayaframework.server.interfaces.HttpServer;
@@ -16,6 +18,7 @@ import java.lang.annotation.Annotation;
 import java.net.InetSocketAddress;
 import java.util.Objects;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
@@ -25,7 +28,7 @@ import java.util.function.Consumer;
 public class SunBuilder extends AmayaBuilder<HttpServer> {
     private static final String ACTIONS_PREFIX = "io.github.amayaframework.core.sun.actions";
     private InetSocketAddress address;
-    private Executor executor;
+    private ExecutorService executor;
     private HttpsConfigurator configurator;
     private int backlog;
 
@@ -94,7 +97,7 @@ public class SunBuilder extends AmayaBuilder<HttpServer> {
      * @param executor {@link Executor} can be easily created with {@link Executors}. Must be not null.
      * @return {@link SunBuilder} instance
      */
-    public SunBuilder executor(Executor executor) {
+    public SunBuilder executor(ExecutorService executor) {
         this.executor = Objects.requireNonNull(executor);
         if (config.isDebug()) {
             logger.debug("Set Executor to " + executor.getClass().getSimpleName());
@@ -188,17 +191,19 @@ public class SunBuilder extends AmayaBuilder<HttpServer> {
             server = Servers.httpServer(address, backlog);
         }
         server.setExecutor(executor);
+        EventManager manager = new EventManager(executor);
         findControllers();
         controllers.forEach((path, controller) -> {
-            SunHandler handler = new SunHandler(controller);
-            configure(handler.getHandler(), controller);
+            PipelineHandler handler = new PipelineHandler(manager);
+            SunHandler sunHandler = new SunHandler(controller, handler);
+            configure(handler, controller);
             if (path.equals("")) {
                 path = "/";
             }
-            server.createContext(path, handler);
+            server.createContext(path, sunHandler);
         });
         resetValues();
         resetConfig();
-        return new SunAmaya(server);
+        return new SunAmaya(manager, server);
     }
 }

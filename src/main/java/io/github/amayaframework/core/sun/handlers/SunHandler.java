@@ -21,14 +21,10 @@ public class SunHandler implements HttpHandler {
     private final Controller controller;
     private final AmayaConfig config;
 
-    public SunHandler(Controller controller) {
-        handler = new PipelineHandler();
+    public SunHandler(Controller controller, PipelineHandler handler) {
         this.controller = controller;
+        this.handler = handler;
         config = ConfigProvider.getConfig();
-    }
-
-    public PipelineHandler getHandler() {
-        return handler;
     }
 
     @Override
