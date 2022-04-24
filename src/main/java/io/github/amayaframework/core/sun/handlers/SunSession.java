@@ -1,9 +1,7 @@
 package io.github.amayaframework.core.sun.handlers;
 
 import com.github.romanqed.util.Action;
-import com.github.romanqed.util.http.HttpCode;
 import io.github.amayaframework.core.config.AmayaConfig;
-import io.github.amayaframework.core.contexts.ContentType;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.contexts.Responses;
 import io.github.amayaframework.core.controllers.Controller;
@@ -15,6 +13,9 @@ import io.github.amayaframework.core.sun.actions.SunRequestData;
 import io.github.amayaframework.core.sun.actions.SunResponseData;
 import io.github.amayaframework.core.util.IOUtil;
 import io.github.amayaframework.core.util.ParseUtil;
+import io.github.amayaframework.http.ContentType;
+import io.github.amayaframework.http.HttpCode;
+import io.github.amayaframework.http.HttpUtil;
 import io.github.amayaframework.server.interfaces.HttpExchange;
 
 import java.io.BufferedWriter;
@@ -95,7 +96,7 @@ public class SunSession implements Session {
     @Override
     public void reject(HttpCode code, String message) throws IOException {
         Charset charset = config.getCharset();
-        String header = IOUtil.generateContentHeader(ContentType.PLAIN, charset);
+        String header = HttpUtil.generateContentHeader(ContentType.PLAIN, charset);
         exchange.getResponseHeaders().set(ParseUtil.CONTENT_HEADER, header);
         String toSend;
         if (message != null) {

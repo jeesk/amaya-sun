@@ -1,10 +1,10 @@
 package io.github.amayaframework.core.sun.actions;
 
 import com.github.romanqed.util.Checks;
-import com.github.romanqed.util.http.HttpCode;
 import io.github.amayaframework.core.pipeline.InputAction;
 import io.github.amayaframework.core.sun.contexts.SunHttpRequest;
 import io.github.amayaframework.core.util.ParseUtil;
+import io.github.amayaframework.http.HttpCode;
 import io.github.amayaframework.server.interfaces.HttpExchange;
 
 import java.util.HashMap;

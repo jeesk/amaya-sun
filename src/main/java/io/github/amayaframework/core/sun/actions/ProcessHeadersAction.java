@@ -1,12 +1,13 @@
 package io.github.amayaframework.core.sun.actions;
 
-import com.github.romanqed.util.http.HeaderMap;
 import io.github.amayaframework.core.ConfigProvider;
-import io.github.amayaframework.core.contexts.ContentType;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.pipeline.PipelineAction;
 import io.github.amayaframework.core.util.IOUtil;
 import io.github.amayaframework.core.util.ParseUtil;
+import io.github.amayaframework.http.ContentType;
+import io.github.amayaframework.http.HeaderMap;
+import io.github.amayaframework.http.HttpUtil;
 import io.github.amayaframework.server.interfaces.HttpExchange;
 
 import javax.servlet.http.Cookie;
@@ -29,7 +30,7 @@ public class ProcessHeadersAction extends PipelineAction<SunResponseData, SunRes
         headers.putAll(response.getHeaderMap());
         ContentType type = response.getContentType();
         if (response.getBody() != null || (type != null && !type.isString())) {
-            headers.set(ParseUtil.CONTENT_HEADER, IOUtil.generateContentHeader(type, charset));
+            headers.set(ParseUtil.CONTENT_HEADER, HttpUtil.generateContentHeader(type, charset));
         }
         Collection<Cookie> cookies = response.getCookies();
         for (Cookie cookie : cookies) {

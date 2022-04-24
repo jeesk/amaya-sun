@@ -2,11 +2,11 @@ package io.github.amayaframework.core.sun.actions;
 
 import com.github.romanqed.util.Handler;
 import io.github.amayaframework.core.ConfigProvider;
-import io.github.amayaframework.core.contexts.ContentType;
 import io.github.amayaframework.core.contexts.FixedOutputStream;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.pipeline.PipelineAction;
 import io.github.amayaframework.core.sun.handlers.SunSession;
+import io.github.amayaframework.http.ContentType;
 import io.github.amayaframework.server.interfaces.HttpExchange;
 
 import java.io.IOException;
