@@ -1,7 +1,7 @@
 package io.github.amayaframework.core.sun.actions;
 
 import com.github.romanqed.util.Handler;
-import io.github.amayaframework.core.ConfigProvider;
+import io.github.amayaframework.core.config.AmayaConfig;
 import io.github.amayaframework.core.contexts.FixedOutputStream;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.pipeline.PipelineAction;
@@ -18,7 +18,11 @@ import java.nio.charset.Charset;
  * <p>Returns: {@link Void}</p>
  */
 public class ProcessBodyAction extends PipelineAction<SunResponseData, Void> {
-    private final Charset charset = ConfigProvider.getConfig().getCharset();
+    private final Charset charset;
+
+    public ProcessBodyAction(AmayaConfig config) {
+        this.charset = config.getCharset();
+    }
 
     @Override
     public Void execute(SunResponseData responseData) throws Throwable {

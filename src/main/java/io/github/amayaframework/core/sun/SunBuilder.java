@@ -3,8 +3,8 @@ package io.github.amayaframework.core.sun;
 import com.github.romanqed.util.Checks;
 import io.github.amayaframework.core.Amaya;
 import io.github.amayaframework.core.AmayaBuilder;
+import io.github.amayaframework.core.config.AmayaConfig;
 import io.github.amayaframework.core.configurators.Configurator;
-import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.handlers.EventManager;
 import io.github.amayaframework.core.handlers.PipelineHandler;
 import io.github.amayaframework.core.sun.handlers.SunHandler;
@@ -28,16 +28,14 @@ import java.util.function.Consumer;
 public class SunBuilder extends AmayaBuilder<HttpServer> {
     private static final String ACTIONS_PREFIX = "io.github.amayaframework.core.sun.actions";
     private InetSocketAddress address;
-    private ExecutorService executor;
     private HttpsConfigurator configurator;
     private int backlog;
 
-    public SunBuilder() {
-        super(ACTIONS_PREFIX);
+    public SunBuilder(AmayaConfig config) {
+        super(config, ACTIONS_PREFIX);
     }
 
     protected void resetValues() {
-        executor = Executors.newWorkStealingPool();
         address = new InetSocketAddress(8000);
         configurator = null;
         backlog = 0;
@@ -98,11 +96,7 @@ public class SunBuilder extends AmayaBuilder<HttpServer> {
      * @return {@link SunBuilder} instance
      */
     public SunBuilder executor(ExecutorService executor) {
-        this.executor = Objects.requireNonNull(executor);
-        if (config.isDebug()) {
-            logger.debug("Set Executor to " + executor.getClass().getSimpleName());
-        }
-        return this;
+        return (SunBuilder) super.executor(executor);
     }
 
     /**
@@ -130,12 +124,13 @@ public class SunBuilder extends AmayaBuilder<HttpServer> {
     /**
      * Adds the controller to the list of processed
      *
-     * @param controller {@link Controller} controller to be added. Must be not null.
+     * @param route  route of the controller
+     * @param object object to be packed into controller
      * @return {@link SunBuilder} builder instance
      */
     @Override
-    public SunBuilder addController(Controller controller) {
-        return (SunBuilder) super.addController(controller);
+    public SunBuilder addController(String route, Object object) throws Throwable {
+        return (SunBuilder) super.addController(route, object);
     }
 
     /**
@@ -183,7 +178,7 @@ public class SunBuilder extends AmayaBuilder<HttpServer> {
      * @throws IOException in case of unsuccessful initialization of the server
      */
     @Override
-    public Amaya<HttpServer> build() throws IOException {
+    public Amaya<HttpServer> build() throws Throwable {
         HttpServer server;
         if (configurator != null) {
             server = makeHttpsServer();
@@ -191,11 +186,11 @@ public class SunBuilder extends AmayaBuilder<HttpServer> {
             server = Servers.httpServer(address, backlog);
         }
         server.setExecutor(executor);
-        EventManager manager = new EventManager(executor);
+        EventManager manager = new EventManager(executor, config.isDebug());
         findControllers();
         controllers.forEach((path, controller) -> {
-            PipelineHandler handler = new PipelineHandler(manager);
-            SunHandler sunHandler = new SunHandler(controller, handler);
+            PipelineHandler handler = new PipelineHandler(config.useAsync(), manager);
+            SunHandler sunHandler = new SunHandler(controller, handler, config);
             configure(handler, controller);
             if (path.equals("")) {
                 path = "/";
@@ -203,7 +198,6 @@ public class SunBuilder extends AmayaBuilder<HttpServer> {
             server.createContext(path, sunHandler);
         });
         resetValues();
-        resetConfig();
         return new SunAmaya(manager, server);
     }
 }

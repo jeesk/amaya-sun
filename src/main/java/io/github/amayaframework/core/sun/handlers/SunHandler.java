@@ -1,6 +1,5 @@
 package io.github.amayaframework.core.sun.handlers;
 
-import io.github.amayaframework.core.ConfigProvider;
 import io.github.amayaframework.core.config.AmayaConfig;
 import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.handlers.PipelineHandler;
@@ -21,10 +20,10 @@ public class SunHandler implements HttpHandler {
     private final Controller controller;
     private final AmayaConfig config;
 
-    public SunHandler(Controller controller, PipelineHandler handler) {
+    public SunHandler(Controller controller, PipelineHandler handler, AmayaConfig config) {
         this.controller = controller;
         this.handler = handler;
-        config = ConfigProvider.getConfig();
+        this.config = config;
     }
 
     @Override
