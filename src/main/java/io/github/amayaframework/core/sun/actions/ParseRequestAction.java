@@ -1,7 +1,6 @@
 package io.github.amayaframework.core.sun.actions;
 
 import com.github.romanqed.util.Checks;
-import io.github.amayaframework.core.config.AmayaConfig;
 import io.github.amayaframework.core.pipeline.InputAction;
 import io.github.amayaframework.core.sun.contexts.SunHttpRequest;
 import io.github.amayaframework.core.util.ParseUtil;
@@ -19,10 +18,6 @@ import java.util.Map;
  * <p>Returns: {@link SunRequestData}</p>
  */
 public class ParseRequestAction extends InputAction<SunRequestData, SunRequestData> {
-    public ParseRequestAction(AmayaConfig config) {
-        // Unused config
-    }
-
     @Override
     public SunRequestData execute(SunRequestData data) throws Throwable {
         HttpExchange exchange = data.exchange;

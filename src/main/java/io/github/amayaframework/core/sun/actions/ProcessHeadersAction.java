@@ -1,5 +1,6 @@
 package io.github.amayaframework.core.sun.actions;
 
+import io.github.amayaframework.core.actions.WithConfig;
 import io.github.amayaframework.core.config.AmayaConfig;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.pipeline.PipelineAction;
@@ -19,6 +20,7 @@ import java.util.Collection;
  * <p>Receives: {@link SunResponseData}</p>
  * <p>Returns: {@link SunResponseData}</p>
  */
+@WithConfig
 public class ProcessHeadersAction extends PipelineAction<SunResponseData, SunResponseData> {
     private final Charset charset;
 

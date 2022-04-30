@@ -1,7 +1,6 @@
 package io.github.amayaframework.core.sun.actions;
 
 import com.github.romanqed.util.Checks;
-import io.github.amayaframework.core.config.AmayaConfig;
 import io.github.amayaframework.core.pipeline.InputAction;
 import io.github.amayaframework.core.util.ParseUtil;
 
@@ -16,10 +15,6 @@ import java.util.Map;
  * <p>Returns: {@link SunRequestData}</p>
  */
 public class ParseRequestCookiesAction extends InputAction<SunRequestData, SunRequestData> {
-    public ParseRequestCookiesAction(AmayaConfig config) {
-        // Unused config
-    }
-
     @Override
     public SunRequestData execute(SunRequestData data) {
         String header = data.getRequest().getHeader(ParseUtil.COOKIE_HEADER);
