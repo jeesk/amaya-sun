@@ -13,26 +13,23 @@ java {
 }
 
 group = 'io.github.amayaframework'
-archivesBaseName = 'core-sun'
+archivesBaseName = 'amaya-sun'
 version = System.getenv('RELEASE_VERSION') ?: '1.0.0'
 
 repositories {
     mavenCentral()
     maven {
-        url "https://s01.oss.sonatype.org/content/repositories/iogithubamayaframework-1178"
+        url "https://s01.oss.sonatype.org/content/repositories/iogithubamayaframework-1181"
     }
 }
 
 dependencies {
     api group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
     annotationProcessor group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
-    api group: 'io.github.amayaframework', name: 'http-utils', version: '1.0.0'
-    api group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.35'
     implementation group: 'com.github.romanqed', name: 'java-utils', version: '1.1.0'
     implementation group: 'io.github.amayaframework', name: 'http-server', version: '1.1.0'
-    implementation group: 'io.github.amayaframework', name: 'filters', version: '1.0.8'
-    implementation group: 'io.github.amayaframework', name: 'core-api', version: '5-DEV'
+    implementation group: 'io.github.amayaframework', name: 'amaya-core', version: '5-DEV'
 }
 
 jar {
@@ -57,25 +54,25 @@ publishing {
                 name.set(archivesBaseName)
                 description.set('Amaya is a fairly lightweight web framework for Java, which guarantees speed, ' +
                         'ease of creating plugins/addons, flexibility and ease of use. Sun server implementation.')
-                url.set('https://github.com/AmayaFramework/amaya-core-sun')
+                url.set('https://github.com/AmayaFramework/amaya-sun')
                 organization {
                     name.set('io.github.amayaframework')
                     url.set('https://github.com/AmayaFramework')
                 }
                 issueManagement {
                     system.set('GitHub')
-                    url.set('https://github.com/AmayaFramework/amaya-core-sun/issues')
+                    url.set('https://github.com/AmayaFramework/amaya-sun/issues')
                 }
                 licenses {
                     license {
                         name.set('GNU General Public License v3.0')
-                        url.set('https://github.com/AmayaFramework/amaya-core-sun/blob/main/LICENSE')
+                        url.set('https://github.com/AmayaFramework/amaya-sun/blob/main/LICENSE')
                     }
                 }
                 scm {
-                    url.set('https://github.com/AmayaFramework/amaya-core-sun')
-                    connection.set('scm:https://github.com/AmayaFramework/amaya-core-sun.git')
-                    developerConnection.set('scm:https://github.com/AmayaFramework/amaya-core-sun.git')
+                    url.set('https://github.com/AmayaFramework/amaya-sun')
+                    connection.set('scm:https://github.com/AmayaFramework/amaya-sun.git')
+                    developerConnection.set('scm:https://github.com/AmayaFramework/amaya-sun.git')
                 }
                 developers {
                     developer {
