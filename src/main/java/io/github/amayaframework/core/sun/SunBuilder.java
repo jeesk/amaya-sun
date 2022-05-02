@@ -26,17 +26,17 @@ import java.util.function.Consumer;
  * A builder that helps to instantiate a properly configured Amaya Server.
  */
 public class SunBuilder extends AmayaBuilder<HttpServer> {
-    private static final String ACTIONS_PREFIX = "io.github.amayaframework.core.sun.actions";
+    private static final String PREFIX = "io.github.amayaframework.core.sun.actions";
     private InetSocketAddress address;
     private HttpsConfigurator configurator;
     private int backlog;
 
     public SunBuilder(AmayaConfig config) {
-        super(config, ACTIONS_PREFIX);
+        super(config, PREFIX);
     }
 
     public SunBuilder() {
-        super();
+        super(new AmayaConfig(), PREFIX);
     }
 
     protected void resetValues() {
