@@ -1,4 +1,4 @@
-# amaya-sun [![maven-central](https://img.shields.io/maven-central/v/io.github.amayaframework/amaya-sun?color=blue)](https://repo1.maven.org/maven2/io/github/amayaframework/core-sun/)
+# amaya-sun [![maven-central](https://img.shields.io/maven-central/v/io.github.amayaframework/amaya-sun?color=blue)](https://repo1.maven.org/maven2/io/github/amayaframework/amaya-sun/)
 
 Amaya is a fairly lightweight web framework for Java, which guarantees speed, ease of creating plugins/addons, 
 flexibility and ease of use.
