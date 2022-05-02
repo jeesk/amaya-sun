@@ -18,16 +18,13 @@ version = System.getenv('RELEASE_VERSION') ?: '1.0.0'
 
 repositories {
     mavenCentral()
-    maven {
-        url "https://s01.oss.sonatype.org/content/repositories/iogithubamayaframework-1197"
-    }
 }
 
 dependencies {
-    api group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.35'
+    api group: 'org.atteo.classindex', name: 'classindex', version: '3.11'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.36'
     implementation group: 'io.github.amayaframework', name: 'http-server', version: '1.1.1'
-    implementation group: 'io.github.amayaframework', name: 'amaya-core', version: '1-DEV'
+    implementation group: 'io.github.amayaframework', name: 'amaya-core', version: '1.0.1'
 }
 
 jar {

@@ -1,4 +1,4 @@
-# amaya-sun [![maven-central](https://img.shields.io/maven-central/v/io.github.amayaframework/core-sun?color=blue)](https://repo1.maven.org/maven2/io/github/amayaframework/core-sun/)
+# amaya-sun [![maven-central](https://img.shields.io/maven-central/v/io.github.amayaframework/amaya-sun?color=blue)](https://repo1.maven.org/maven2/io/github/amayaframework/core-sun/)
 
 Amaya is a fairly lightweight web framework for Java, which guarantees speed, ease of creating plugins/addons, 
 flexibility and ease of use.
@@ -27,7 +27,7 @@ To install it, you will need:
 
 ```Groovy
 dependencies {
-    annotationProcessor group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
+    annotationProcessor group: 'org.atteo.classindex', name: 'classindex', version: '3.11'
     implementation group: 'io.github.amayaframework', name: 'amaya-core', version: '1+'
     implementation group: 'io.github.amayaframework', name: 'amaya-sun', version: 'LATEST'
 }
@@ -63,7 +63,7 @@ compileJava {
 ```Java
 public class Server {
     public static void main(String[] args) throws Throwable {
-        Amaya<?> amaya = new SunBuilder().
+        Amaya<HttpServer> amaya = new SunBuilder().
                 bind(8080).
                 build();
         amaya.start();
@@ -107,7 +107,6 @@ To learn more about the core capabilities, check [this](https://github.com/Amaya
 * [classindex](https://github.com/atteo/classindex) - Annotation scanning
 * [slf4j](https://www.slf4j.org) - Logging facade
 * [javax.servlet](https://docs.oracle.com/javaee/7/api/javax/servlet/Servlet.html) - Servlets
-* [java-utils](https://github.com/RomanQed/java-utils) - Pipelines and other stuff
 * [amaya-core](https://github.com/AmayaFramework/amaya-core) - Basic framework utilities
 * [sun-http-server](https://github.com/AmayaFramework/sun-http-server) - Server part
 
