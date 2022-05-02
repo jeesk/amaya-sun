@@ -5,6 +5,7 @@ import io.github.amayaframework.core.pipeline.InputAction;
 import io.github.amayaframework.core.sun.contexts.SunHttpRequest;
 import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.http.HttpCode;
+import io.github.amayaframework.http.HttpUtil;
 import io.github.amayaframework.server.interfaces.HttpExchange;
 
 import java.util.HashMap;
@@ -19,11 +20,11 @@ import java.util.Map;
  */
 public class ParseRequestAction extends InputAction<SunRequestData, SunRequestData> {
     @Override
-    public SunRequestData execute(SunRequestData data) throws Throwable {
+    public SunRequestData execute(SunRequestData data) {
         HttpExchange exchange = data.exchange;
-        Map<String, List<String>> query = Checks.requireNonException(
-                () -> ParseUtil.parseQueryString(exchange.getRequestURI().getQuery(), data.getCharset()),
-                HashMap::new
+        Map<String, List<String>> query = Checks.safetyCall(
+                () -> HttpUtil.parseQueryString(exchange.getRequestURI().getQuery(), data.getCharset()),
+                () -> new HashMap<>()
         );
         Map<String, Object> params = null;
         try {

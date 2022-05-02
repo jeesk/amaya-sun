@@ -35,6 +35,10 @@ public class SunBuilder extends AmayaBuilder<HttpServer> {
         super(config, ACTIONS_PREFIX);
     }
 
+    public SunBuilder() {
+        super();
+    }
+
     protected void resetValues() {
         address = new InetSocketAddress(8000);
         configurator = null;

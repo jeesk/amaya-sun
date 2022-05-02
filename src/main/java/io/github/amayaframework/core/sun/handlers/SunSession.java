@@ -1,6 +1,7 @@
 package io.github.amayaframework.core.sun.handlers;
 
 import com.github.romanqed.util.Action;
+import com.github.romanqed.util.IOUtil;
 import io.github.amayaframework.core.config.AmayaConfig;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.contexts.Responses;
@@ -12,7 +13,6 @@ import io.github.amayaframework.core.routers.MethodRouter;
 import io.github.amayaframework.core.routes.MethodRoute;
 import io.github.amayaframework.core.sun.actions.SunRequestData;
 import io.github.amayaframework.core.sun.actions.SunResponseData;
-import io.github.amayaframework.core.util.IOUtil;
 import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.http.ContentType;
 import io.github.amayaframework.http.HttpCode;
@@ -82,24 +82,20 @@ public class SunSession implements Session {
         HttpCode code = HttpCode.INTERNAL_SERVER_ERROR;
         String message = code.getMessage() + "\n";
         if (e != null && config.isDebug()) {
-            message += IOUtil.throwableToString(e) + "\n";
+            message += IOUtil.getStackTrace(e) + "\n";
             Throwable caused = e.getCause();
             if (caused != null) {
-                message += "Caused by: \n" + IOUtil.throwableToString(caused);
+                message += "Caused by: \n" + IOUtil.getStackTrace(caused);
             }
         }
         reject(code, message);
-    }
-
-    public void reject(HttpCode code) throws IOException {
-        reject(code, code.getMessage());
     }
 
     @Override
     public void reject(HttpCode code, String message) throws IOException {
         Charset charset = config.getCharset();
         String header = HttpUtil.generateContentHeader(ContentType.PLAIN, charset);
-        exchange.getResponseHeaders().set(ParseUtil.CONTENT_HEADER, header);
+        exchange.getResponseHeaders().set(HttpUtil.CONTENT_HEADER, header);
         String toSend;
         if (message != null) {
             toSend = message;

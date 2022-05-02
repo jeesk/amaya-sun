@@ -16,7 +16,7 @@ inconvenience is the need to specify classindex in dependencies, but this is the
 other similar libraries are incomparably slow.
 
 To install it, you will need:
-* any build of the JDK no older than version 8
+* java 8+
 * [classindex](https://github.com/atteo/classindex)
 * some implementation of slf4j
 * Maven/Gradle
@@ -28,9 +28,8 @@ To install it, you will need:
 ```Groovy
 dependencies {
     annotationProcessor group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
-    implementation group: 'io.github.amayaframework', name: 'http-server', version: '1.0.5'
-    implementation group: 'io.github.amayaframework', name: 'core-api', version: 'LATEST'
-    implementation group: 'io.github.amayaframework', name: 'core-sun', version: 'LATEST'
+    implementation group: 'io.github.amayaframework', name: 'amaya-core', version: '1+'
+    implementation group: 'io.github.amayaframework', name: 'amaya-sun', version: 'LATEST'
 }
 ```
 
@@ -39,49 +38,51 @@ dependencies {
 ```
 <dependency>
     <groupId>io.github.amayaframework</groupId>
-    <artifactId>http-server</artifactId>
-    <version>1.0.5</version>
+    <artifactId>amaya-core</artifactId>
+    <version>1+</version>
 </dependency>
 
 <dependency>
     <groupId>io.github.amayaframework</groupId>
-    <artifactId>core-api</artifactId>
-    <version>LATEST</version>
-</dependency>
-
-<dependency>
-    <groupId>io.github.amayaframework</groupId>
-    <artifactId>core-sun</artifactId>
+    <artifactId>amaya-sun</artifactId>
     <version>LATEST</version>
 </dependency>
 ```
 
 ## Usage example
+### Build manifest
+<p>To support getting method parameter names, add to your build.gradle the following</p>
+
+```Groovy
+compileJava {
+    options.compilerArgs << '-parameters'
+}
+```
 
 ### Server class
 ```Java
 public class Server {
-    public static void main(String[] args) throws IOException {
-        HttpServer server = new AmayaBuilder().
+    public static void main(String[] args) throws Throwable {
+        Amaya<?> amaya = new SunBuilder().
                 bind(8080).
                 build();
-        server.start();
+        amaya.start();
     }
 }
 ```
 
 ### MyController class
 ```Java
-@Endpoint("/my-end-point")
-public class MyController extends AbstractController {
-    @Get("/{count:int}")
-    public HttpResponse get(HttpRequest request, @Path("count") Integer count) {
+@Endpoint
+public class ExampleController {
+    @Get("/hello/{count:int}")
+    public HttpResponse get(HttpRequest request, @Path Integer count) {
         String helloWorld = "Hello, world!";
         StringBuilder response = new StringBuilder();
         for (int i = 0; i < count; ++i) {
             response.append(helloWorld).append('\n');
         }
-        return ok(response.toString());
+        return Responses.ok(response);
     }
 }
 ```
@@ -98,25 +99,23 @@ There is nothing complicated or requiring a long study in this construction. How
 provided with a convenient tool that allows you to quickly and easily create an api without thinking 
 about unnecessary things.
 
-To learn more about the core capabilities, check [this](https://github.com/AmayaFramework/amaya-core-api)
+To learn more about the core capabilities, check [this](https://github.com/AmayaFramework/amaya-core)
 
 ## Built With
 
 * [Gradle](https://gradle.org) - Dependency management
 * [classindex](https://github.com/atteo/classindex) - Annotation scanning
-* [cglib](https://github.com/cglib/cglib) - Method wrapping
 * [slf4j](https://www.slf4j.org) - Logging facade
 * [javax.servlet](https://docs.oracle.com/javaee/7/api/javax/servlet/Servlet.html) - Servlets
 * [java-utils](https://github.com/RomanQed/java-utils) - Pipelines and other stuff
-* [amaya-core-api](https://github.com/AmayaFramework/amaya-core-api) - Basic framework utilities
+* [amaya-core](https://github.com/AmayaFramework/amaya-core) - Basic framework utilities
 * [sun-http-server](https://github.com/AmayaFramework/sun-http-server) - Server part
-* [amaya-filters](https://github.com/AmayaFramework/amaya-filters) - Implementation of string and content filters
 
 ## Authors
 * **RomanQed** - *Main work* - [RomanQed](https://github.com/RomanQed)
 * **max0000402** - *Technical advices and ideas for features* - [max0000402](https://github.com/max0000402)
 
-See also the list of [contributors](https://github.com/AmayaFramework/amaya-core/contributors) 
+See also the list of [contributors](https://github.com/AmayaFramework/amaya-sun/contributors) 
 who participated in this project.
 
 ## License

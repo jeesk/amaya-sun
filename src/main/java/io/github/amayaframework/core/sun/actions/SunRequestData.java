@@ -1,7 +1,7 @@
 package io.github.amayaframework.core.sun.actions;
 
 import io.github.amayaframework.core.pipeline.AbstractRequestData;
-import io.github.amayaframework.core.util.ParseUtil;
+import io.github.amayaframework.http.HttpUtil;
 import io.github.amayaframework.server.interfaces.HttpExchange;
 
 import java.io.InputStream;
@@ -18,7 +18,7 @@ public class SunRequestData extends AbstractRequestData {
     public SunRequestData(HttpExchange exchange, RouteData data, Charset charset) {
         super(data);
         this.exchange = exchange;
-        this.contentHeader = exchange.getRequestHeaders().getFirst(ParseUtil.CONTENT_HEADER);
+        this.contentHeader = exchange.getRequestHeaders().getFirst(HttpUtil.CONTENT_HEADER);
         this.charset = charset;
     }
 
@@ -52,6 +52,6 @@ public class SunRequestData extends AbstractRequestData {
         if (position < 0) {
             return charset;
         }
-        return ParseUtil.parseCharsetHeader(contentHeader.substring(position + 1), charset);
+        return HttpUtil.parseCharsetHeader(contentHeader.substring(position + 1), charset);
     }
 }
