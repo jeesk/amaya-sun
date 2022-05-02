@@ -4,8 +4,7 @@ import java.io.IOException;
 
 import static com.github.romanqed.util.IOUtil.readResourceFile;
 
-
-class IOUtil {
+final class IOUtil {
     private static final String ART = "art.txt";
     private static final String LOGO = "logo.txt";
 
