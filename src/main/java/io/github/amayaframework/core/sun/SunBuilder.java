@@ -14,7 +14,6 @@ import io.github.amayaframework.server.interfaces.HttpsServer;
 import io.github.amayaframework.server.utils.HttpsConfigurator;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.net.InetSocketAddress;
 import java.util.Objects;
 import java.util.concurrent.Executor;
@@ -146,18 +145,6 @@ public class SunBuilder extends AmayaBuilder<HttpServer> {
     @Override
     public SunBuilder removeController(String path) {
         return (SunBuilder) super.removeController(path);
-    }
-
-    /**
-     * Sets the annotation by which the controllers will be scanned.
-     * If value will be null, the scan will not be performed.
-     *
-     * @param annotation {@link Class} of annotation
-     * @return {@link SunBuilder} instance
-     */
-    @Override
-    public SunBuilder controllerAnnotation(Class<? extends Annotation> annotation) {
-        return (SunBuilder) super.controllerAnnotation(annotation);
     }
 
     public SunBuilder setBacklog(int backlog) {
