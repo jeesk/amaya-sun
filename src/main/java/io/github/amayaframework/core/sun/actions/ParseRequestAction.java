@@ -8,6 +8,7 @@ import io.github.amayaframework.http.HttpCode;
 import io.github.amayaframework.http.HttpUtil;
 import io.github.amayaframework.server.interfaces.HttpExchange;
 
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,8 +23,9 @@ public class ParseRequestAction extends InputAction<SunRequestData, SunRequestDa
     @Override
     public SunRequestData execute(SunRequestData data) {
         HttpExchange exchange = data.exchange;
+        Charset charset = data.getCharset();
         Map<String, List<String>> query = Checks.safetyCall(
-                () -> HttpUtil.parseQueryString(exchange.getRequestURI().getQuery(), data.getCharset()),
+                () -> HttpUtil.parseQueryString(exchange.getRequestURI().getQuery(), charset),
                 () -> new HashMap<>()
         );
         Map<String, Object> params = null;
@@ -33,6 +35,7 @@ public class ParseRequestAction extends InputAction<SunRequestData, SunRequestDa
             reject(HttpCode.BAD_REQUEST);
         }
         SunHttpRequest request = new SunHttpRequest();
+        request.setCharset(charset);
         request.setHeaders(exchange.getRequestHeaders());
         request.setQuery(query);
         request.setPathParameters(params);

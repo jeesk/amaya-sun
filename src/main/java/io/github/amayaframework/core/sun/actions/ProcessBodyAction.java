@@ -12,6 +12,7 @@ import io.github.amayaframework.server.interfaces.HttpExchange;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Optional;
 
 /**
  * <p>The output action during which the response body is sent.</p>
@@ -30,6 +31,7 @@ public class ProcessBodyAction extends PipelineAction<SunResponseData, Void> {
     public Void execute(SunResponseData responseData) throws Throwable {
         HttpExchange exchange = responseData.exchange;
         HttpResponse response = responseData.getResponse();
+        Charset charset = Optional.ofNullable(response.getCharset()).orElse(this.charset);
         ContentType type = response.getContentType();
         Handler<FixedOutputStream> handler = response.getOutputStreamHandler();
         if (handler != null) {
