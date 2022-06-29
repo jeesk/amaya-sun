@@ -10,9 +10,7 @@ import io.github.amayaframework.core.sun.handlers.SunSession;
 import io.github.amayaframework.http.ContentType;
 import io.github.amayaframework.server.interfaces.HttpExchange;
 
-import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.Optional;
 
 /**
  * <p>The output action during which the response body is sent.</p>
@@ -28,25 +26,24 @@ public class ProcessBodyAction extends PipelineAction<SunResponseData, Void> {
     }
 
     @Override
-    public Void execute(SunResponseData responseData) throws Throwable {
-        HttpExchange exchange = responseData.exchange;
-        HttpResponse response = responseData.getResponse();
-        Charset charset = Optional.ofNullable(response.getCharset()).orElse(this.charset);
+    public Void execute(SunResponseData data) throws Throwable {
+        HttpExchange exchange = data.exchange;
+        HttpResponse response = data.getResponse();
         ContentType type = response.getContentType();
         Handler<FixedOutputStream> handler = response.getOutputStreamHandler();
         if (handler != null) {
-            FixedOutputStream outputStream = new FixedOutputStream(exchange.getResponseBody()) {
-                @Override
-                public void specifyLength(long length) throws IOException {
-                    exchange.sendResponseHeaders(response.getCode(), length);
-                }
-            };
-            handler.handle(outputStream);
-            outputStream.flush();
+            FixedOutputStream stream = new SunOutputStream(exchange, response.getCode());
+            handler.handle(stream);
+            long remaining = stream.getRemainingLength();
+            if (remaining != 0) {
+                throw new IllegalStateException("Not all data has been sent, " + remaining + " bytes are left");
+            }
+            stream.flush();
             return null;
         }
         if (type != null && type.isString()) {
-            SunSession.send(exchange, charset, response.getCode(), response.getBody());
+            Charset charset = response.getCharset();
+            SunSession.send(exchange, charset == null ? this.charset : charset, response.getCode(), response.getBody());
             return null;
         }
         exchange.sendResponseHeaders(response.getCode(), 0);

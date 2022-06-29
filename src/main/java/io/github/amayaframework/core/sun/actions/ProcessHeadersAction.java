@@ -13,7 +13,6 @@ import io.github.amayaframework.server.interfaces.HttpExchange;
 import javax.servlet.http.Cookie;
 import java.nio.charset.Charset;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * <p>The output action during which the response headers is sent.</p>
@@ -32,12 +31,18 @@ public class ProcessHeadersAction extends PipelineAction<SunResponseData, SunRes
     public SunResponseData execute(SunResponseData data) {
         HttpExchange exchange = data.exchange;
         HttpResponse response = data.getResponse();
-        Charset charset = Optional.ofNullable(response.getCharset()).orElse(this.charset);
         HeaderMap headers = exchange.getResponseHeaders();
         headers.putAll(response.getHeaderMap());
         ContentType type = response.getContentType();
-        if (response.getBody() != null || (type != null && !type.isString())) {
-            headers.set(HttpUtil.CONTENT_HEADER, HttpUtil.generateContentHeader(type, charset));
+        if (type != null && (response.getOutputStreamHandler() != null || response.getBody() != null)) {
+            String header;
+            if (type.isString()) {
+                Charset charset = response.getCharset();
+                header = HttpUtil.generateContentHeader(type, charset == null ? this.charset : charset);
+            } else {
+                header = type.getHeader();
+            }
+            headers.set(HttpUtil.CONTENT_HEADER, header);
         }
         Collection<Cookie> cookies = response.getCookies();
         for (Cookie cookie : cookies) {

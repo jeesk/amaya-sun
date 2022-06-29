@@ -30,6 +30,7 @@ public class SunSession implements Session {
     private final MethodRouter router;
     private final int length;
     private final AmayaConfig config;
+    private boolean isCompleted;
 
     public SunSession(HttpExchange exchange, Controller controller, AmayaConfig config) {
         this.exchange = exchange;
@@ -59,8 +60,7 @@ public class SunSession implements Session {
             return Responses.responseWithCode(code, code.getMessage());
         }
         URI uri = exchange.getRequestURI();
-        String path = uri.getPath().substring(length);
-        path = ParseUtil.normalizeRoute(path);
+        String path = ParseUtil.normalizeRoute(uri.getPath().substring(length));
         MethodRoute route = router.follow(method, path);
         if (route == null) {
             HttpCode code = HttpCode.NOT_FOUND;
@@ -80,13 +80,11 @@ public class SunSession implements Session {
     @Override
     public void reject(Throwable e) throws IOException {
         HttpCode code = HttpCode.INTERNAL_SERVER_ERROR;
-        String message = code.getMessage() + "\n";
-        if (e != null && config.isDebug()) {
-            message += IOUtil.getStackTrace(e) + "\n";
-            Throwable caused = e.getCause();
-            if (caused != null) {
-                message += "Caused by: \n" + IOUtil.getStackTrace(caused);
-            }
+        String message;
+        if (config.isDebug()) {
+            message = IOUtil.getStackTrace(e);
+        } else {
+            message = e.getMessage();
         }
         reject(code, message);
     }
@@ -96,12 +94,16 @@ public class SunSession implements Session {
         Charset charset = config.getCharset();
         String header = HttpUtil.generateContentHeader(ContentType.PLAIN, charset);
         exchange.getResponseHeaders().set(HttpUtil.CONTENT_HEADER, header);
-        String toSend;
-        if (message != null) {
-            toSend = message;
-        } else {
-            toSend = code.getMessage();
-        }
-        send(exchange, charset, code, toSend);
+        send(exchange, charset, code, message);
+    }
+
+    @Override
+    public void complete() {
+        isCompleted = true;
+    }
+
+    @Override
+    public boolean isCompleted() {
+        return isCompleted;
     }
 }
